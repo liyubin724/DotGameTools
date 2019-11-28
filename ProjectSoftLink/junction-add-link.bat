@@ -1,4 +1,6 @@
-junction64 ../../DotGameArt/ArtRes ../../DotGameClient/Assets/ArtRes
-junction64 ../../DotGameScripts/Scripts ../../DotGameClient/Assets/Scripts
+call junction-del-link.bat
+
+junction64  ../../DotGameClient/Assets/ArtRes ../../DotGameArt/ArtRes
+junction64  ../../DotGameClient/Assets/Scripts ../../DotGameScripts/Scripts
 
 pause
