@@ -1,0 +1,25 @@
+//namespace Dot.Core.Asset;
+
+table BundleDescData{
+    path:string;
+    time33:uint;
+    
+    crc:uint;
+    md5:string;
+
+    isPreload:bool;
+    dontDestroy:bool;
+}
+
+table AssetInBundleData{
+    path:string;
+    bundlePath:string;
+    bundleTime33:uint;
+}
+
+table AssetDescData{
+    bundleDetails:[BundleDescData];
+    assetDetails:[AssetInBundleData];
+}
+
+root_type AssetDescData;
