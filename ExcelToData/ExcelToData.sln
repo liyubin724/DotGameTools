@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToData", "ExcelToData\ExcelToData.csproj", "{F37DBBDC-EA1F-4F49-814C-3335E79446F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		.net 2 Release|Any CPU = .net 2 Release|Any CPU
+		.net 4 Release|Any CPU = .net 4 Release|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}..net 2 Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}..net 2 Release|Any CPU.Build.0 = Release|Any CPU
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}..net 4 Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}..net 4 Release|Any CPU.Build.0 = Release|Any CPU
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F37DBBDC-EA1F-4F49-814C-3335E79446F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B3DE7DB-2C32-4E29-BA94-0652D0A9D725}
+	EndGlobalSection
+EndGlobal
