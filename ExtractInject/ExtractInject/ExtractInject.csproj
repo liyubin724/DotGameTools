@@ -53,4 +53,8 @@
     <Compile Include="ExtractInjectTarget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetDir)$(TargetName).dll $(SolutionDir)..\output\libs\
+xcopy $(TargetDir)$(TargetName).pdb $(SolutionDir)..\output\libs\</PostBuildEvent>
+  </PropertyGroup>
 </Project>
