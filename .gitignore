@@ -1,8 +1,9 @@
 .vs
 *.bak
 *.temp
-bin
-obj
+bin/
+obj/
+temp/
 
 # Office »º´æÎÄ¼þ
 ~'$'*.docx
