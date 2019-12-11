@@ -1,6 +1,6 @@
 ﻿namespace ExtractInject
 {
-    public interface IExtractInjectObject
+    public interface IEIContextObject
     {
     }
 }

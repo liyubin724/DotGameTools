@@ -5,7 +5,7 @@ namespace ExtractInject
     /// <summary>
     /// 设定字段使用方式
     /// </summary>
-    public enum ExtractInjectUsage
+    public enum EIFieldUsage
     {
         InOut,//字段即作为注入也做为提取
         In,//字段作为注入
@@ -16,12 +16,12 @@ namespace ExtractInject
     /// 
     /// </summary>
     [AttributeUsage(AttributeTargets.Field,AllowMultiple =false)]
-    public class ExtractInjectField : Attribute
+    public class EIField : Attribute
     {
-        public ExtractInjectUsage Usage { get; set; }
+        public EIFieldUsage Usage { get; set; }
         public bool IsOptional { get; set; }
 
-        public ExtractInjectField(ExtractInjectUsage usage = ExtractInjectUsage.InOut,bool optional = false)
+        public EIField(EIFieldUsage usage = EIFieldUsage.InOut,bool optional = false)
         {
             Usage = usage;
             IsOptional = optional;

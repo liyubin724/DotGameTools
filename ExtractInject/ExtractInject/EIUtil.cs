@@ -3,9 +3,9 @@ using System.Reflection;
 
 namespace ExtractInject
 {
-    public static class ExtractInjectUtil
+    public static class EIUtil
     {
-        public static void Inject(IExtractInjectContext context,object obj)
+        public static void Inject(IEIContext context,object obj)
         {
             if(obj == null || context == null)
             {
@@ -15,23 +15,23 @@ namespace ExtractInject
             FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             foreach(var field in fields)
             {
-                var attrs = field.GetCustomAttributes(typeof(ExtractInjectField), true);
+                var attrs = field.GetCustomAttributes(typeof(EIField), true);
                 if(attrs == null || attrs.Length == 0)
                 {
                     continue;
                 }
 
-                if (!(attrs[0] is ExtractInjectField attr) || attr.Usage == ExtractInjectUsage.Out)
+                if (!(attrs[0] is EIField attr) || attr.Usage == EIFieldUsage.Out)
                     continue;
 
                 object fieldValue = null;
                 Type fieldType = field.FieldType;
-                if(typeof(IExtractInjectContext).IsAssignableFrom(fieldType))
+                if(typeof(IEIContext).IsAssignableFrom(fieldType))
                 {
                     fieldValue = context;
                 }else
                 {
-                    if(context.TryGetObject(fieldType,out IExtractInjectObject cachedValue))
+                    if(context.TryGetObject(fieldType,out IEIContextObject cachedValue))
                     {
                         fieldValue = cachedValue;
                     }
@@ -46,7 +46,7 @@ namespace ExtractInject
             }
         }
 
-        public static void Extract(IExtractInjectContext context,object obj)
+        public static void Extract(IEIContext context,object obj)
         {
             if (obj == null || context == null)
             {
@@ -55,21 +55,21 @@ namespace ExtractInject
             FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             foreach (var field in fields)
             {
-                var attrs = field.GetCustomAttributes(typeof(ExtractInjectField), true);
+                var attrs = field.GetCustomAttributes(typeof(EIField), true);
                 if (attrs == null || attrs.Length == 0)
                 {
                     continue;
                 }
-                if (!(attrs[0] is ExtractInjectField attr) || attr.Usage == ExtractInjectUsage.In)
+                if (!(attrs[0] is EIField attr) || attr.Usage == EIFieldUsage.In)
                     continue;
 
                 Type fieldType = field.FieldType;
-                if (typeof(IExtractInjectContext).IsAssignableFrom(fieldType))
+                if (typeof(IEIContext).IsAssignableFrom(fieldType))
                 {
                     throw new InvalidOperationException("IExtractInjectContext can only be used with the ExtractInjectUsage.In option.");
                 }
 
-                IExtractInjectObject fieldValue = field.GetValue(obj) as IExtractInjectObject;
+                IEIContextObject fieldValue = field.GetValue(obj) as IEIContextObject;
                 if(!attr.IsOptional)
                 {
                     context.AddObject(fieldType, fieldValue);

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace ExtractInject
 {
-    public class ExtractInjectContext : IExtractInjectContext
+    public class EIContext : IEIContext
     {
-        private Dictionary<Type, IExtractInjectObject> typeToObjectDic;
+        private Dictionary<Type, IEIContextObject> typeToObjectDic;
 
-        public ExtractInjectContext()
+        public EIContext()
         {
-            typeToObjectDic = new Dictionary<Type, IExtractInjectObject>();
+            typeToObjectDic = new Dictionary<Type, IEIContextObject>();
         }
 
-        public ExtractInjectContext(params IExtractInjectObject[] objs) : this()
+        public EIContext(params IEIContextObject[] objs) : this()
         {
             if(objs != null)
             {
@@ -26,7 +26,7 @@ namespace ExtractInject
             }
         }
 
-        public bool ContainsObject<T>() where T : IExtractInjectObject
+        public bool ContainsObject<T>() where T : IEIContextObject
         {
             return ContainsObject(typeof(T));
         }
@@ -39,9 +39,9 @@ namespace ExtractInject
             return typeToObjectDic.ContainsKey(type);
         }
 
-        public T GetObject<T>() where T : IExtractInjectObject
+        public T GetObject<T>() where T : IEIContextObject
         {
-            IExtractInjectObject obj = GetObject(typeof(T));
+            IEIContextObject obj = GetObject(typeof(T));
             if(obj !=null)
             {
                 return (T)obj;
@@ -49,12 +49,12 @@ namespace ExtractInject
             return default(T);
         }
 
-        public IExtractInjectObject GetObject(Type type)
+        public IEIContextObject GetObject(Type type)
         {
             if (type == null)
                 throw new ArgumentNullException("ExtractInjectContext:GetObject->Argument is Null");
 
-            if(TryGetObject(type,out IExtractInjectObject obj))
+            if(TryGetObject(type,out IEIContextObject obj))
             {
                 return obj;
             }
@@ -62,7 +62,7 @@ namespace ExtractInject
             return null;
         }
 
-        public void AddObject(IExtractInjectObject obj)
+        public void AddObject(IEIContextObject obj)
         {
             if (obj == null)
             {
@@ -71,12 +71,12 @@ namespace ExtractInject
             AddObject(obj.GetType(), obj);
         }
 
-        public void AddObject<T>(T obj) where T : IExtractInjectObject
+        public void AddObject<T>(T obj) where T : IEIContextObject
         {
             AddObject(typeof(T), obj);
         }
 
-        public void AddObject(Type type, IExtractInjectObject obj)
+        public void AddObject(Type type, IEIContextObject obj)
         {
             if(obj== null)
             {
@@ -98,9 +98,9 @@ namespace ExtractInject
             }
         }
 
-        public bool TryGetObject<T>(out T obj) where T : IExtractInjectObject
+        public bool TryGetObject<T>(out T obj) where T : IEIContextObject
         {
-            if (typeToObjectDic.TryGetValue(typeof(T), out IExtractInjectObject value))
+            if (typeToObjectDic.TryGetValue(typeof(T), out IEIContextObject value))
             {
                 obj = (T)value;
                 return true;
@@ -110,9 +110,9 @@ namespace ExtractInject
             return false;
         }
 
-        public bool TryGetObject(Type type, out IExtractInjectObject obj)
+        public bool TryGetObject(Type type, out IEIContextObject obj)
         {
-            if(typeToObjectDic.TryGetValue(type,out IExtractInjectObject value) && type.IsInstanceOfType(value))
+            if(typeToObjectDic.TryGetValue(type,out IEIContextObject value) && type.IsInstanceOfType(value))
             {
                 obj = value;
                 return true;
@@ -121,12 +121,12 @@ namespace ExtractInject
             return false;
         }
 
-        public void DeleteObject<T>() where T : IExtractInjectObject
+        public void DeleteObject<T>() where T : IEIContextObject
         {
             DeleteObject(typeof(T));
         }
 
-        public void DeleteObject(IExtractInjectObject obj)
+        public void DeleteObject(IEIContextObject obj)
         {
             if (obj == null)
             {

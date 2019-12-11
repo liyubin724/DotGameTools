@@ -41,16 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\ExtractInjectField.cs" />
+    <Compile Include="Attributes\EIField.cs" />
     <Compile Include="Exceptions\DataNotFoundException.cs" />
-    <Compile Include="ExtractInjectContext.cs" />
-    <Compile Include="ExtractInjectObject.cs" />
-    <Compile Include="ExtractInjectUtil.cs" />
-    <Compile Include="Interfaces\IExtractInjectContext.cs" />
-    <Compile Include="Interfaces\IExtractInjectObject.cs" />
-    <Compile Include="Interfaces\IExtractInjectTarget.cs" />
+    <Compile Include="EIContext.cs" />
+    <Compile Include="EIContextObject.cs" />
+    <Compile Include="EIUtil.cs" />
+    <Compile Include="Interfaces\IEIContext.cs" />
+    <Compile Include="Interfaces\IEIContextObject.cs" />
+    <Compile Include="Interfaces\IEIObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ExtractInjectTarget.cs" />
+    <Compile Include="EIObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

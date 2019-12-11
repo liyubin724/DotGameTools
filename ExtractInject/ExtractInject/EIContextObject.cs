@@ -1,16 +1,16 @@
 ﻿namespace ExtractInject
 {
-    public abstract class ExtractInjectObject : IExtractInjectObject
+    public abstract class EIContextObject : IEIContextObject
     {
-        public ExtractInjectObject()
+        public EIContextObject()
         { }
 
-        public ExtractInjectObject(IExtractInjectContext context)
+        public EIContextObject(IEIContext context)
         {
             AddToContext(context);
         }
 
-        public void AddToContext(IExtractInjectContext context)
+        public void AddToContext(IEIContext context)
         {
             if (context != null)
             {
@@ -18,7 +18,7 @@
             }
         }
 
-        public void RemoveFromContext(IExtractInjectContext context)
+        public void RemoveFromContext(IEIContext context)
         {
             if (context != null)
             {
