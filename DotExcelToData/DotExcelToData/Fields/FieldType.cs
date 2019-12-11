@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dot.Tools.ETD.Datas
+namespace Dot.Tools.ETD.Fields
 {
     public enum FieldType
     {
@@ -18,7 +18,8 @@ namespace Dot.Tools.ETD.Datas
         String,
         Stringt,
         Res,
-        Arr,
+        Lua,
+        Array,
         Dic,
 
         Max,

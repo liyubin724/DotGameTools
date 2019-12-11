@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dot.Tools.ETD</RootNamespace>
     <AssemblyName>DotExcelToData</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExtractInject">
+      <HintPath>..\..\libs\ExtractInject.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\libs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\libs\NPOI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,8 +52,41 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Datas\FieldType.cs" />
+    <Compile Include="Datas\CellContent.cs" />
+    <Compile Include="Datas\CellLine.cs" />
+    <Compile Include="Datas\Sheet.cs" />
+    <Compile Include="Datas\SheetField.cs" />
+    <Compile Include="Datas\SheetLine.cs" />
+    <Compile Include="Datas\Workbook.cs" />
+    <Compile Include="Fields\AField.cs" />
+    <Compile Include="Fields\ArrayField.cs" />
+    <Compile Include="Fields\BoolField.cs" />
+    <Compile Include="Fields\DicField.cs" />
+    <Compile Include="Fields\ErrorField.cs" />
+    <Compile Include="Fields\FieldPlatform.cs" />
+    <Compile Include="Fields\FieldType.cs" />
+    <Compile Include="Fields\FloatField.cs" />
+    <Compile Include="Fields\IntField.cs" />
+    <Compile Include="Fields\LongField.cs" />
+    <Compile Include="Fields\LuaField.cs" />
+    <Compile Include="Fields\RefField.cs" />
+    <Compile Include="Factorys\FieldFactroy.cs" />
+    <Compile Include="Factorys\ValidationFactory.cs" />
+    <Compile Include="Fields\ResField.cs" />
+    <Compile Include="Fields\StringField.cs" />
+    <Compile Include="Fields\StringtField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\AssemblyUtil.cs" />
+    <Compile Include="Utils\FieldTypeUtil.cs" />
+    <Compile Include="Validations\DicKeyValidation.cs" />
+    <Compile Include="Validations\ErrorValidation.cs" />
+    <Compile Include="Validations\IntValueValidation.cs" />
+    <Compile Include="Validations\NotNullValidation.cs" />
+    <Compile Include="Validations\RefExistValidation.cs" />
+    <Compile Include="Validations\ResultCode.cs" />
+    <Compile Include="Validations\IValidation.cs" />
+    <Compile Include="Validations\StringMaxLenValidatoin.cs" />
+    <Compile Include="Validations\UniqueValueValidation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Attributes\" />
