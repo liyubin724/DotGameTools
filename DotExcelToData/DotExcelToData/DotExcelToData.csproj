@@ -70,7 +70,7 @@
     <Compile Include="Fields\LongField.cs" />
     <Compile Include="Fields\LuaField.cs" />
     <Compile Include="Fields\RefField.cs" />
-    <Compile Include="Factorys\FieldFactroy.cs" />
+    <Compile Include="Factorys\FieldFactory.cs" />
     <Compile Include="Factorys\ValidationFactory.cs" />
     <Compile Include="Fields\ResField.cs" />
     <Compile Include="Fields\StringField.cs" />

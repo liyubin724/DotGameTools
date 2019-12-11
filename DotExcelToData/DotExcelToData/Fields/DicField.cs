@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dot.Tools.ETD.Datas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,15 @@ using System.Threading.Tasks;
 
 namespace Dot.Tools.ETD.Fields
 {
-    class DicField
+    public class DicField : AField
     {
+        public DicField(int c, string n, string d, string t, string p, string dv, string vr) : base(c, n, d, t, p, dv, vr)
+        {
+        }
+
+        public override object GetValue(CellContent cell)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

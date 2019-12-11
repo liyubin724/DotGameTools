@@ -16,7 +16,7 @@ namespace Dot.Tools.ETD.Factorys
         /// </summary>
         /// <param name="multiRule"></param>
         /// <returns></returns>
-        public static List<IValidation> ParseRules(string multiRule)
+        public static List<IValidation> GetValidations(string multiRule)
         {
             List<IValidation> validations = new List<IValidation>();
             if(string.IsNullOrEmpty(multiRule))
@@ -36,7 +36,7 @@ namespace Dot.Tools.ETD.Factorys
 
             foreach(var rule in rules)
             {
-                IValidation validation = ParseRule(rule);
+                IValidation validation = GetValidation(rule);
                 if(validation == null)
                 {
                     validation = new ErrorValidation();
@@ -48,7 +48,7 @@ namespace Dot.Tools.ETD.Factorys
             return validations;
         }
 
-        public static IValidation ParseRule(string rule)
+        public static IValidation GetValidation(string rule)
         {
             if(string.IsNullOrEmpty(rule))
             {

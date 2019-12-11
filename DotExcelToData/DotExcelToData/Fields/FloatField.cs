@@ -13,14 +13,6 @@ namespace Dot.Tools.ETD.Fields
         {
         }
 
-        public override FieldType Type => FieldType.Float;
-
-        public override FieldType InnerValueType => throw new NotImplementedException();
-
-        public override FieldType InnerKeyType => throw new NotImplementedException();
-
-        public override string RefTargetName => throw new NotImplementedException();
-
         public override object GetValue(CellContent cell)
         {
             throw new NotImplementedException();

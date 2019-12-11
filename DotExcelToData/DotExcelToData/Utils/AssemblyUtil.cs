@@ -18,14 +18,22 @@ namespace Dot.Tools.ETD.Utils
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach(var assembly in assemblies)
             {
-                foreach(var type in assembly.GetTypes())
+                try
                 {
-                    string typeName = ingnoreCase ? type.Name.ToLower() : type.Name;
-                    if(typeName == name)
+                    foreach (var type in assembly.GetTypes())
                     {
-                        return type;
+                        string typeName = ingnoreCase ? type.Name.ToLower() : type.Name;
+                        if (typeName == name)
+                        {
+                            return type;
+                        }
                     }
                 }
+                catch
+                {
+
+                }
+                
             }
 
             return null;
