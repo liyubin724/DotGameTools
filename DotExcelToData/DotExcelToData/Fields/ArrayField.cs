@@ -30,14 +30,18 @@ namespace Dot.Tools.ETD.Fields
             IList list = (IList)Activator.CreateInstance(listType);
 
             string content = GetContent(cell);
-            if(!string.IsNullOrEmpty(content))
+            if(!string.IsNullOrEmpty(content) && content.Length > 2)
             {
-                string[] contents = ContentUtil.SplitContent(content, new char[] { ',' });
-                if(contents!=null && contents.Length>0)
+                if (content[0] == '[' && content[content.Length - 1] == ']')
                 {
-                    foreach(var c in contents)
+                    content = content.Substring(1, content.Length - 2);
+                    string[] contents = ContentUtil.SplitContent(content, new char[] { ','});
+                    if(contents!=null && contents.Length>0)
                     {
-                        list.Add(ContentUtil.GetValue(c, valueFieldType));
+                        foreach(var c in contents)
+                        {
+                            list.Add(ContentUtil.GetValue(c, valueFieldType));
+                        }
                     }
                 }
             }

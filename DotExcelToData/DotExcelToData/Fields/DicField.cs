@@ -38,16 +38,21 @@ namespace Dot.Tools.ETD.Fields
             IDictionary dic = (IDictionary)Activator.CreateInstance(dicType);
 
             string content = GetContent(cell);
-            if(!string.IsNullOrEmpty(content))
+            if(!string.IsNullOrEmpty(content) && content.Length>2)
             {
-                string[] contents = ContentUtil.SplitContent(content, new char[] { ',' ,';'});
-                if (contents != null && contents.Length > 0)
+                if(content[0] =='{' && content[content.Length-1]=='}')
                 {
-                    for(int i =0;i<contents.Length;i+=2)
+                    content = content.Substring(1, content.Length - 2);
+                    string[] contents = ContentUtil.SplitContent(content, new char[] { ',', ';' });
+                    if (contents != null && contents.Length > 0)
                     {
-                        dic.Add(ContentUtil.GetValue(contents[i], keyFieldType), ContentUtil.GetValue(contents[i + 1], valueFieldType));
+                        for (int i = 0; i < contents.Length; i += 2)
+                        {
+                            dic.Add(ContentUtil.GetValue(contents[i], keyFieldType), ContentUtil.GetValue(contents[i + 1], valueFieldType));
+                        }
                     }
                 }
+                
             }
             return dic;
         }
