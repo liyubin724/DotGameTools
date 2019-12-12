@@ -25,7 +25,7 @@ namespace DotExcelToDataTest.Fields
             string value = "11";
             string validation = "IntValue";
 
-            AField field = FieldFactory.GetField(col, name, desc, type, platform, value, validation);
+            AField field = FieldFactory.GetField(col, name, desc,  platform, type, value, validation);
             Assert.AreEqual(typeof(ArrayField), field.GetType());
 
             CellContent content = new CellContent()

@@ -38,8 +38,20 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\libs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI">
       <HintPath>..\..\libs\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\libs\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\libs\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\libs\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,13 +63,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Datas\CellContent.cs" />
     <Compile Include="Datas\CellLine.cs" />
     <Compile Include="Datas\Sheet.cs" />
     <Compile Include="Datas\SheetField.cs" />
     <Compile Include="Datas\SheetLine.cs" />
     <Compile Include="Datas\Workbook.cs" />
+    <Compile Include="ExcelReader.cs" />
     <Compile Include="Fields\AField.cs" />
     <Compile Include="Fields\ArrayField.cs" />
     <Compile Include="Fields\BoolField.cs" />
@@ -80,6 +92,7 @@
     <Compile Include="Utils\ContentUtil.cs" />
     <Compile Include="Utils\FieldTypeUtil.cs" />
     <Compile Include="Validations\DicKeyValidation.cs" />
+    <Compile Include="Validations\ErrorValidation.cs" />
     <Compile Include="Validations\IntRangeValidation.cs" />
     <Compile Include="Validations\IntValueValidation.cs" />
     <Compile Include="Validations\NotNullValidation.cs" />

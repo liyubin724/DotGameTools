@@ -6,8 +6,9 @@ namespace Dot.Tools.ETD.Factorys
 {
     public static class FieldFactory
     {
-        public static AField GetField(int col, string name, string desc,
-            string type, string platform, string value, string validation)
+        public static AField GetField(int col, string name, string type,
+            string platform,string desc,
+            string value, string validation)
         {
             if(string.IsNullOrEmpty(type))
             {

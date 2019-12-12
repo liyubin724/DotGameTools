@@ -16,6 +16,6 @@ namespace Dot.Tools.ETD.Validations
         ContentIsNull = -3,
         ParseContentFailed = -4,
         NumberRangeError = -5,
-        MaxLenError = -6;
+        MaxLenError = -6,
     }
 }

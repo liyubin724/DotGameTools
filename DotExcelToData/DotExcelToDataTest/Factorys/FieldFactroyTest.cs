@@ -18,13 +18,13 @@ namespace DotExcelToDataTest.Factorys
             string value = "11";
             string validation = "IntValue";
 
-            AField field = FieldFactory.GetField(col, name, desc, type, platform, value, validation);
+            AField field = FieldFactory.GetField(col, name,  type, platform, desc, value, validation);
             Assert.IsNotNull(field, "Field is Null");
             Assert.AreEqual(typeof(IntField), field.GetType());
 
             type = "array[ref<table0>]";
 
-            field = FieldFactory.GetField(col, name, desc, type, platform, value, validation);
+            field = FieldFactory.GetField(col, name,  type, platform, desc, value, validation);
             Assert.IsNotNull(field, "Field is Null");
             Assert.AreEqual(typeof(ArrayField), field.GetType());
         }
