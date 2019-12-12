@@ -9,9 +9,13 @@ namespace Dot.Tools.ETD.Validations
     public enum ResultCode
     {
         Success = 0,
+        Pass = 1,
 
         Failed= -1,
         ArgIsNull = -2,
         ContentIsNull = -3,
+        ParseContentFailed = -4,
+        NumberRangeError = -5,
+        MaxLenError = -6;
     }
 }

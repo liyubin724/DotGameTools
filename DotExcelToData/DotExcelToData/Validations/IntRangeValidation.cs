@@ -22,38 +22,70 @@ namespace Dot.Tools.ETD.Validations
         public int min;
         public int max;
 
-        public bool IsValid => throw new NotImplementedException();
+        private bool isValid = true;
+        public bool IsValid => isValid;
 
-        public bool SetData(string rule)
+        public void SetData(string rule)
         {
+            if(field.Type != FieldType.Int || field.Type != FieldType.Ref)
+            {
+                isValid = false;
+                return;
+            }
+
             Match match = new Regex(RANGE_REGEX).Match(rule);
             Group group = match.Groups["min"];
-            if(group.Success)
+            if (group.Success)
             {
-                if(!int.TryParse(group.Value,out min))
+                if (!int.TryParse(group.Value, out min))
                 {
-                    return false;
+                    isValid = false;
                 }
             }
             group = match.Groups["max"];
-            if(group.Success)
+            if (group.Success)
             {
-                if(!int.TryParse(group.Value,out max))
+                if (!int.TryParse(group.Value, out max))
                 {
-                    return false;
+                    isValid = false;
                 }
             }
-            return true;
         }
 
         public ResultCode Verify(out string msg)
         {
-            throw new NotImplementedException();
-        }
+            msg = null;
 
-        void IValidation.SetData(string rule)
-        {
-            throw new NotImplementedException();
+            if (field == null || cell == null)
+            {
+                msg = "IntRangeValidation::Verify->Argument is null!";
+                return ResultCode.ArgIsNull;
+            }
+
+            string content = field.GetContent(cell);
+            if (string.IsNullOrEmpty(content))
+            {
+                msg = $"IntRangeValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                return ResultCode.ContentIsNull;
+            }
+
+            if (!int.TryParse(content, out int value))
+            {
+                msg = $"IntRangeValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                return ResultCode.ParseContentFailed;
+            }
+            else
+            {
+                if (value >= min && value <= max)
+                {
+                    return ResultCode.Success;
+                }
+                else
+                {
+                    msg = $"IntRangeValidation::Verify->Compare error.Row = {cell.Row},Col = {cell.Col},Compare={min}--{value}--{max}";
+                    return ResultCode.NumberRangeError;
+                }
+            }
         }
     }
 }
