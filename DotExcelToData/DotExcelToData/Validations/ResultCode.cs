@@ -11,5 +11,7 @@ namespace Dot.Tools.ETD.Validations
         Success = 0,
 
         Failed= -1,
+        ArgIsNull = -2,
+        ContentIsNull = -3,
     }
 }

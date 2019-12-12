@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dot.Tools.ETD.Datas;
+﻿using Dot.Tools.ETD.Datas;
+using System;
 
 namespace Dot.Tools.ETD.Fields
 {

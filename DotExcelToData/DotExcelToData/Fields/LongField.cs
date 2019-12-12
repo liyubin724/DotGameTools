@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dot.Tools.ETD.Datas;
+﻿using Dot.Tools.ETD.Datas;
 
 namespace Dot.Tools.ETD.Fields
 {
@@ -15,7 +10,16 @@ namespace Dot.Tools.ETD.Fields
 
         public override object GetValue(CellContent cell)
         {
-            throw new NotImplementedException();
+            string content = GetContent(cell);
+            if (string.IsNullOrEmpty(content))
+            {
+                return 0L;
+            }
+            if (long.TryParse(content, out long result))
+            {
+                return result;
+            }
+            return 0L;
         }
     }
 }

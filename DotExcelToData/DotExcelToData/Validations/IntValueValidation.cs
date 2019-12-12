@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dot.Tools.ETD.Datas;
+﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
 using ExtractInject;
 
@@ -13,22 +8,26 @@ namespace Dot.Tools.ETD.Validations
     {
         [EIField(EIFieldUsage.In, false)]
         public AField field;
-        [EIField]
+        [EIField(EIFieldUsage.In,false)]
         public CellContent cell;
 
-        public string GetRule()
+        private bool isValid = true;
+        public bool IsValid => isValid;
+
+        public void SetData(string rule)
         {
-            return "IntValue";
         }
 
-        public void SetRule(string rule)
-        {
-            
-        }
-
-        public ResultCode Valid(out string msg)
+        public ResultCode Verify(out string msg)
         {
             msg = null;
+
+            if(field == null || cell == null)
+            {
+                msg = "Argument is null!";
+                return ResultCode.ArgIsNull;
+            }
+
             return ResultCode.Success;
         }
     }

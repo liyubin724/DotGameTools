@@ -40,7 +40,7 @@ namespace Dot.Tools.ETD.Factorys
                 if(validation == null)
                 {
                     validation = new ErrorValidation();
-                    validation.SetRule(rule);
+                    validation.SetData(rule);
                 }
                 validations.Add(validation);
             }
@@ -75,7 +75,7 @@ namespace Dot.Tools.ETD.Factorys
                     return null;
                 }
                 IValidation validation = (IValidation)Activator.CreateInstance(type);
-                validation.SetRule(rule);
+                validation.SetData(rule);
                 return validation;
             }
 

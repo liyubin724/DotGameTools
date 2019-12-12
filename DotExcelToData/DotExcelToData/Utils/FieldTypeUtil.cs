@@ -6,6 +6,28 @@ namespace Dot.Tools.ETD.Utils
 {
     public static class FieldTypeUtil
     {
+        public static Type GetType(FieldType fieldType)
+        {
+            switch(fieldType)
+            {
+                case FieldType.Int:
+                case FieldType.Ref:
+                    return typeof(int);
+                case FieldType.Long:
+                    return typeof(long);
+                case FieldType.Float:
+                    return typeof(float);
+                case FieldType.String:
+                case FieldType.Stringt:
+                case FieldType.Res:
+                case FieldType.Lua:
+                    return typeof(string);
+                case FieldType.Bool:
+                    return typeof(bool);
+            }
+            return null;
+        }
+
         private static FieldType StrToFieldType(string typeStr)
         {
             if (string.IsNullOrEmpty(typeStr))

@@ -2,8 +2,8 @@
 {
     public interface IValidation
     {
-        void SetRule(string rule);
-        string GetRule();
-        ResultCode Valid(out string msg);
+        bool IsValid { get; }
+        void SetData(string rule);
+        ResultCode Verify(out string msg);
     }
 }

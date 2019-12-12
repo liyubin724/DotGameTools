@@ -80,6 +80,7 @@
     <Compile Include="Utils\FieldTypeUtil.cs" />
     <Compile Include="Validations\DicKeyValidation.cs" />
     <Compile Include="Validations\ErrorValidation.cs" />
+    <Compile Include="Validations\IntRangeValidation.cs" />
     <Compile Include="Validations\IntValueValidation.cs" />
     <Compile Include="Validations\NotNullValidation.cs" />
     <Compile Include="Validations\RefExistValidation.cs" />

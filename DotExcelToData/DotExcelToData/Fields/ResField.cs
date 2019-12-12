@@ -15,7 +15,12 @@ namespace Dot.Tools.ETD.Fields
 
         public override object GetValue(CellContent cell)
         {
-            throw new NotImplementedException();
+            string content = GetContent(cell);
+            if (string.IsNullOrEmpty(content))
+            {
+                return string.Empty;
+            }
+            return content;
         }
     }
 }

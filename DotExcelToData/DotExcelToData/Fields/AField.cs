@@ -3,6 +3,7 @@ using Dot.Tools.ETD.Factorys;
 using Dot.Tools.ETD.Utils;
 using Dot.Tools.ETD.Validations;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Dot.Tools.ETD.Fields
 {
@@ -62,6 +63,41 @@ namespace Dot.Tools.ETD.Fields
             validationRule = vr;
         }
 
+        public bool VerifyContent(CellContent cell,out string msg)
+        {
+            StringBuilder msgSB = new StringBuilder();
+            bool result = true;
+
+            foreach(var validation in Validations)
+            {
+                ResultCode resultCode = validation.Verify(out string tMsg);
+                if((int)resultCode<0)
+                {
+                    if(result)
+                    {
+                        result = false;
+                    }
+                    msgSB.AppendLine(tMsg);
+                }
+            }
+            msg = msgSB.ToString();
+            return result;
+        }
+
+        public string GetContent(CellContent cell)
+        {
+            if (cell == null)
+                return null;
+
+            string content = cell.Content;
+            if(string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(DefaultValue))
+            {
+                content = DefaultValue;
+            }
+            return content;
+        }
+
         public abstract object GetValue(CellContent cell);
+        
     }
 }
