@@ -1,28 +1,28 @@
-﻿using System;
+﻿using Dot.Tools.ETD.Datas;
+using Dot.Tools.ETD.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dot.Tools.ETD.Datas;
-using Dot.Tools.ETD.Utils;
 
 namespace Dot.Tools.ETD.Fields
 {
     public class ArrayField : AField
     {
-        private FieldType innerFieldType = FieldType.None;
+        private FieldType valueFieldType = FieldType.None;
+        public FieldType ValueFieldType { get => valueFieldType; }
+
         private string refName = string.Empty;
+        public string RefName { get => refName; }
 
         public ArrayField(int c, string n, string d, string t, string p, string dv, string vr) : base(c, n, d, t, p, dv, vr)
         {
-            innerFieldType = FieldTypeUtil.GetArrayInnerType(t, out refName);
+            valueFieldType = FieldTypeUtil.GetArrayInnerType(t, out refName);
         }
 
         public override object GetValue(CellContent cell)
         {
             Type genericType = typeof(List<>);
-            Type valueType = FieldTypeUtil.GetType(innerFieldType);
+            Type valueType = FieldTypeUtil.GetType(valueFieldType);
             
             if (valueType == null) return null;
 
@@ -32,13 +32,13 @@ namespace Dot.Tools.ETD.Fields
             string content = GetContent(cell);
             if(!string.IsNullOrEmpty(content))
             {
-                List<string> splitList = new List<string>();
-
-                int startIndex = 0;
-                int curIndex = 0;
-                while(curIndex>=content.Length)
+                string[] contents = ContentUtil.SplitContent(content, new char[] { ',' });
+                if(contents!=null && contents.Length>0)
                 {
-
+                    foreach(var c in contents)
+                    {
+                        list.Add(ContentUtil.GetValue(c, valueFieldType));
+                    }
                 }
             }
 

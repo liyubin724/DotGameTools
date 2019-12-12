@@ -39,8 +39,8 @@ namespace Dot.Tools.ETD.Factorys
                 IValidation validation = GetValidation(rule);
                 if(validation == null)
                 {
-                    validation = new ErrorValidation();
-                    validation.SetData(rule);
+                    //validation = new ErrorValidation();
+                    //validation.SetData(rule);
                 }
                 validations.Add(validation);
             }

@@ -77,9 +77,9 @@
     <Compile Include="Fields\StringtField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AssemblyUtil.cs" />
+    <Compile Include="Utils\ContentUtil.cs" />
     <Compile Include="Utils\FieldTypeUtil.cs" />
     <Compile Include="Validations\DicKeyValidation.cs" />
-    <Compile Include="Validations\ErrorValidation.cs" />
     <Compile Include="Validations\IntRangeValidation.cs" />
     <Compile Include="Validations\IntValueValidation.cs" />
     <Compile Include="Validations\NotNullValidation.cs" />

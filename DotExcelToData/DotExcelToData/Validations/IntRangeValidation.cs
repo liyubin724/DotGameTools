@@ -22,6 +22,8 @@ namespace Dot.Tools.ETD.Validations
         public int min;
         public int max;
 
+        public bool IsValid => throw new NotImplementedException();
+
         public bool SetData(string rule)
         {
             Match match = new Regex(RANGE_REGEX).Match(rule);
@@ -45,6 +47,11 @@ namespace Dot.Tools.ETD.Validations
         }
 
         public ResultCode Verify(out string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IValidation.SetData(string rule)
         {
             throw new NotImplementedException();
         }
