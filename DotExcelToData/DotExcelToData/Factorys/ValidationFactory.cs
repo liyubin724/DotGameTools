@@ -70,7 +70,7 @@ namespace Dot.Tools.ETD.Factorys
                 }
                 validationName += "Validation";
                 Type type = AssemblyUtil.GetTypeByName(validationName, true);
-                if(type == null)
+                if(type == null || !typeof(IValidation).IsAssignableFrom(type))
                 {
                     return null;
                 }

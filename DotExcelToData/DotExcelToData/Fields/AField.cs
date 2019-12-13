@@ -47,7 +47,7 @@ namespace Dot.Tools.ETD.Fields
 
         protected List<IValidation> validations;
 
-        public AField(int c,string n,string d,string t,string p,string dv,string vr)
+        protected AField(int c,string n,string d,string t,string p,string dv,string vr)
         {
             col = c;
             Name = n;

@@ -4,7 +4,7 @@ using ExtractInject;
 
 namespace Dot.Tools.ETD.Validations
 {
-    public class UniqueValueValidation : IValidation
+    public class UniqueValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
         public Sheet sheet;
