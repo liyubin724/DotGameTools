@@ -4,7 +4,7 @@ using ExtractInject;
 
 namespace Dot.Tools.ETD.Validations
 {
-    public class IntValueValidation : IValidation
+    public class LongValueValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
         public AField field;
@@ -18,9 +18,9 @@ namespace Dot.Tools.ETD.Validations
 
         public void SetData(string rule)
         {
-            if(field.Type != FieldType.Int || field.Type != FieldType.Ref)
+            if (field.Type != FieldType.Long)
             {
-                ErrorMsg = "FileType is not <FieldType.Int/FieldType.Ref>";
+                ErrorMsg = "FileType is not <FieldType.Long>";
                 isValid = false;
             }
         }
@@ -31,20 +31,20 @@ namespace Dot.Tools.ETD.Validations
 
             if (field == null || cell == null)
             {
-                msg = "IntValueValidation::Verify->Argument is null!";
+                msg = "LongValueValidation::Verify->Argument is null!";
                 return ResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"IntValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"LongValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
                 return ResultCode.ContentIsNull;
             }
 
-            if (!int.TryParse(content, out int value))
+            if (!long.TryParse(content, out long value))
             {
-                msg = $"IntValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                msg = $"LongValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
                 return ResultCode.ParseContentFailed;
             }
 

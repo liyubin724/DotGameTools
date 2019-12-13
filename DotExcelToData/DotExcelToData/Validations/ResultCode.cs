@@ -17,5 +17,9 @@ namespace Dot.Tools.ETD.Validations
         ParseContentFailed = -4,
         NumberRangeError = -5,
         MaxLenError = -6,
+        ContentRepeatError = -7,
+        ContentDicFormatError = -8,
+        ContentDicKeyValueCountError = -9,
+        ContentDicKeyRepeatError = -10,
     }
 }

@@ -29,6 +29,10 @@ namespace Dot.Tools.ETD.Factorys
             }
 
             AField field = (AField)Activator.CreateInstance(resultType, col, name, desc, type, platform, value, validation);
+            if(field.GetType() == typeof(ErrorField))
+            {
+                ((ErrorField)field).ErrorMsg = "Type not found";
+            }
             return field;
         }
     }

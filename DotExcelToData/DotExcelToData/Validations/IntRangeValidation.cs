@@ -1,12 +1,7 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
 using ExtractInject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Dot.Tools.ETD.Validations
 {
@@ -25,10 +20,13 @@ namespace Dot.Tools.ETD.Validations
         private bool isValid = true;
         public bool IsValid => isValid;
 
+        public string ErrorMsg { get; set; }
+
         public void SetData(string rule)
         {
             if(field.Type != FieldType.Int || field.Type != FieldType.Ref)
             {
+                ErrorMsg = "FileType is not <FieldType.Int/FieldType.Ref>";
                 isValid = false;
                 return;
             }
@@ -39,6 +37,7 @@ namespace Dot.Tools.ETD.Validations
             {
                 if (!int.TryParse(group.Value, out min))
                 {
+                    ErrorMsg = "Parse Min value error";
                     isValid = false;
                 }
             }
@@ -47,8 +46,15 @@ namespace Dot.Tools.ETD.Validations
             {
                 if (!int.TryParse(group.Value, out max))
                 {
+                    ErrorMsg = "Parse Max value error";
                     isValid = false;
                 }
+            }
+
+            if(max<min)
+            {
+                ErrorMsg = "the value of max is less then min";
+                isValid = false;
             }
         }
 

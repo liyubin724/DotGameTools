@@ -4,7 +4,7 @@ using ExtractInject;
 
 namespace Dot.Tools.ETD.Validations
 {
-    public class IntValueValidation : IValidation
+    public class FloatValueValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
         public AField field;
@@ -18,9 +18,9 @@ namespace Dot.Tools.ETD.Validations
 
         public void SetData(string rule)
         {
-            if(field.Type != FieldType.Int || field.Type != FieldType.Ref)
+            if (field.Type != FieldType.Float)
             {
-                ErrorMsg = "FileType is not <FieldType.Int/FieldType.Ref>";
+                ErrorMsg = "FileType is not <FieldType.Float>";
                 isValid = false;
             }
         }
@@ -31,20 +31,20 @@ namespace Dot.Tools.ETD.Validations
 
             if (field == null || cell == null)
             {
-                msg = "IntValueValidation::Verify->Argument is null!";
+                msg = "FloatValueValidation::Verify->Argument is null!";
                 return ResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"IntValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"FloatValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
                 return ResultCode.ContentIsNull;
             }
 
-            if (!int.TryParse(content, out int value))
+            if (!float.TryParse(content, out float value))
             {
-                msg = $"IntValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                msg = $"FloatValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
                 return ResultCode.ParseContentFailed;
             }
 

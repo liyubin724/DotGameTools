@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dot.Tools.ETD.Datas;
+﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
 using ExtractInject;
 using System.Text.RegularExpressions;
@@ -22,11 +17,14 @@ namespace Dot.Tools.ETD.Validations
         private bool isValid = true;
         public bool IsValid => isValid;
 
+        public string ErrorMsg { get; set; }
+
         public int maxLen = int.MaxValue;
         public void SetData(string rule)
         {
             if(field.Type != FieldType.String || field.Type != FieldType.Stringt ||field.Type != FieldType.Res)
             {
+                ErrorMsg = "FileType is not <FieldType.String/FieldType.Stringt/FieldType.Res>";
                 isValid =false;
                 return;
             }
@@ -37,6 +35,7 @@ namespace Dot.Tools.ETD.Validations
             {
                 if (!int.TryParse(group.Value, out maxLen))
                 {
+                    ErrorMsg = "Parse Len value error";
                     isValid = false;
                 }
             }

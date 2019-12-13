@@ -19,6 +19,8 @@ namespace Dot.Tools.ETD.Validations
         private bool isValid = true;
         public bool IsValid => isValid;
 
+        public string ErrorMsg { get; set; }
+
         public void SetData(string rule)
         {
         }
