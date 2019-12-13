@@ -112,7 +112,7 @@ namespace Dot.Tools.ETD.Datas
                 return true;
             }else
             {
-                msg = $"Workbook::Verify->ExcelPath = {Name}\r\n" + msg;
+                msg = $"Workbook::Verify->ExcelPath = {Name}\n" + msg;
                 return false;
             }
         }

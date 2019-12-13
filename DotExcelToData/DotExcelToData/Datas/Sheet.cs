@@ -71,7 +71,7 @@ namespace Dot.Tools.ETD.Datas
                 return true;
             }else
             {
-                msg =  $"Sheet::Verify->SheetName = {Name}\r\n" + msg;
+                msg =  $"Sheet::Verify->SheetName = {Name}\n" + msg;
                 return false;
             }
         }

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Dot.Tools.ETD.Validations
 {
-    public class StringMaxLenValidatoin: IValidation
+    public class StringMaxLenValidation: IValidation
     {
         private const string MAX_LEN_REGEX = @"StringMaxLen{(?<len>[0-9]+)}";
 
@@ -22,7 +22,7 @@ namespace Dot.Tools.ETD.Validations
         public int maxLen = int.MaxValue;
         public void SetData(string rule)
         {
-            if(field.Type != FieldType.String || field.Type != FieldType.Stringt ||field.Type != FieldType.Res)
+            if(field.Type != FieldType.String && field.Type != FieldType.Stringt && field.Type != FieldType.Res)
             {
                 ErrorMsg = "FileType is not <FieldType.String/FieldType.Stringt/FieldType.Res>";
                 isValid =false;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dot.Tools.ETD.Datas;
+using Dot.Tools.ETD.Validations;
 
 namespace Dot.Tools.ETD.Fields
 {
@@ -11,6 +12,11 @@ namespace Dot.Tools.ETD.Fields
     {
         public RefField(int c, string n, string d, string t, string p, string dv, string vr) : base(c, n, d, t, p, dv, vr)
         {
+        }
+
+        protected override void AddExtraValidation(List<IValidation> validationList)
+        {
+            validationList.Add(new IntValueValidation());
         }
 
         public override object GetValue(CellContent cell)

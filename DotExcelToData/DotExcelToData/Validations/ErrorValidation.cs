@@ -8,12 +8,12 @@
 
         public void SetData(string rule)
         {
-            ErrorMsg = "The type of Validation is Error";
+            ErrorMsg = "The type of Validation is Error.rule = "+rule;
         }
 
         public ResultCode Verify(out string msg)
         {
-            msg = "Error Validation";
+            msg = ErrorMsg;
             return ResultCode.Failed;
         }
     }

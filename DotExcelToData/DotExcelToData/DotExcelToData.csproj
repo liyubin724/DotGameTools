@@ -92,6 +92,7 @@
     <Compile Include="Utils\AssemblyUtil.cs" />
     <Compile Include="Utils\ContentUtil.cs" />
     <Compile Include="Utils\FieldTypeUtil.cs" />
+    <Compile Include="Validations\BoolValueValidation.cs" />
     <Compile Include="Validations\DicKeyValidation.cs" />
     <Compile Include="Validations\ErrorValidation.cs" />
     <Compile Include="Validations\FloatValueValidation.cs" />
@@ -102,7 +103,7 @@
     <Compile Include="Validations\RefExistValidation.cs" />
     <Compile Include="Validations\ResultCode.cs" />
     <Compile Include="Validations\IValidation.cs" />
-    <Compile Include="Validations\StringMaxLenValidatoin.cs" />
+    <Compile Include="Validations\StringMaxLenValidation.cs" />
     <Compile Include="Validations\UniqueValidation.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -46,6 +46,8 @@ namespace Dot.Tools.ETD.Fields
         public string DefaultValue { get; set; }
         protected string validationRule;
 
+        private IValidation[] validations = null;
+        
         protected AField(int c,string n,string d,string t,string p,string dv,string vr)
         {
             col = c;
@@ -57,14 +59,30 @@ namespace Dot.Tools.ETD.Fields
             validationRule = vr;
         }
 
+        private IValidation[] GetValidations(IEIContext context)
+        {
+            if(validations == null)
+            {
+                List<IValidation> validationList = ValidationFactory.GetValidations(validationRule,context);
+                AddExtraValidation(validationList);
+                validations = validationList.ToArray();
+            }
+            return validations;
+        }
+
+        protected virtual void AddExtraValidation(List<IValidation> validationList)
+        {
+
+        }
+
         public bool VerifyContent(IEIContext context,CellContent cell,out string msg)
         {
             StringBuilder msgSB = new StringBuilder();
             bool result = true;
 
-            List<IValidation> validations = ValidationFactory.GetValidations(validationRule,context);
+            IValidation[] validtionArr = GetValidations(context);
 
-            foreach (var validation in validations)
+            foreach (var validation in validtionArr)
             {
                 EIUtil.Inject(context, validation);
 

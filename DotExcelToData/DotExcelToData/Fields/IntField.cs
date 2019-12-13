@@ -1,4 +1,6 @@
-﻿using Dot.Tools.ETD.Datas;
+﻿using System.Collections.Generic;
+using Dot.Tools.ETD.Datas;
+using Dot.Tools.ETD.Validations;
 
 namespace Dot.Tools.ETD.Fields
 {
@@ -6,6 +8,11 @@ namespace Dot.Tools.ETD.Fields
     {
         public IntField(int c, string n, string d, string t, string p, string dv, string vr) : base(c, n, d, t, p, dv, vr)
         {
+        }
+
+        protected override void AddExtraValidation(List<IValidation> validationList)
+        {
+            validationList.Add(new IntValueValidation());
         }
 
         public override object GetValue(CellContent cell)

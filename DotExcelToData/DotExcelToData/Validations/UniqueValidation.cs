@@ -55,7 +55,7 @@ namespace Dot.Tools.ETD.Validations
                 }
             }
 
-            return ResultCode.Failed;
+            return ResultCode.Success;
         }
     }
 }

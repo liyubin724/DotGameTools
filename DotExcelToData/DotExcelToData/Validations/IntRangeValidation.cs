@@ -24,7 +24,7 @@ namespace Dot.Tools.ETD.Validations
 
         public void SetData(string rule)
         {
-            if(field.Type != FieldType.Int || field.Type != FieldType.Ref)
+            if(field.Type != FieldType.Int && field.Type != FieldType.Ref)
             {
                 ErrorMsg = "FileType is not <FieldType.Int/FieldType.Ref>";
                 isValid = false;

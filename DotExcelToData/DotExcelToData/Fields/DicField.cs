@@ -1,5 +1,6 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Utils;
+using Dot.Tools.ETD.Validations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace Dot.Tools.ETD.Fields
         public DicField(int c, string n, string d, string t, string p, string dv, string vr) : base(c, n, d, t, p, dv, vr)
         {
             FieldTypeUtil.GetDicInnerType(t, out keyFieldType, out keyRefName, out valueFieldType, out valueRefName);
+        }
+
+        protected override void AddExtraValidation(List<IValidation> validationList)
+        {
+            validationList.Add(new DicKeyValidation());
         }
 
         public override object GetValue(CellContent cell)

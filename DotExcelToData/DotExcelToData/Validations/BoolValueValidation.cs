@@ -4,23 +4,23 @@ using ExtractInject;
 
 namespace Dot.Tools.ETD.Validations
 {
-    public class IntValueValidation : IValidation
+    public class BoolValueValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
         public AField field;
         [EIField(EIFieldUsage.In, false)]
         public CellContent cell;
 
+        public string ErrorMsg { get; set; }
+
         private bool isValid = true;
         public bool IsValid => isValid;
 
-        public string ErrorMsg { get; set; } = null;
-
         public void SetData(string rule)
         {
-            if(field.Type != FieldType.Int && field.Type != FieldType.Ref)
+            if(field.Type != FieldType.Bool)
             {
-                ErrorMsg = "FileType is not <FieldType.Int/FieldType.Ref>";
+                ErrorMsg = "FieldType is not bool";
                 isValid = false;
             }
         }
@@ -31,20 +31,20 @@ namespace Dot.Tools.ETD.Validations
 
             if (field == null || cell == null)
             {
-                msg = "IntValueValidation::Verify->Argument is null!";
+                msg = "BoolValidation::Verify->Argument is null!";
                 return ResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"IntValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"BoolValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
                 return ResultCode.ContentIsNull;
             }
 
-            if (!int.TryParse(content, out int value))
+            if (!bool.TryParse(content, out bool value))
             {
-                msg = $"IntValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                msg = $"BoolValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
                 return ResultCode.ParseContentFailed;
             }
 
