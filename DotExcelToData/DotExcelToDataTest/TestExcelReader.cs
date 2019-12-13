@@ -16,7 +16,7 @@ namespace DotExcelToDataTest
         [Test]
         public void TestReadExcel()
         {
-            string excelPath = @"D:\WorkSpace\DotGameProject\DotGameTools\cofing.xlsx";
+            string excelPath = @"E:\DotGameProject\DotGameTools\cofing.xlsx";
             Workbook book = ExcelReader.ReadExcel(excelPath,out string msg);
             Assert.IsNotNull(book);
             Assert.AreEqual(1, book.sheets.Count);

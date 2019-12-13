@@ -4,6 +4,7 @@ using Dot.Tools.ETD.Fields;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -117,7 +118,7 @@ namespace Dot.Tools.ETD
             Sheet dataSheet = new Sheet();
             dataSheet.Name = sheet.SheetName;
             dataSheet.Field = GetSheetField(sheet, firstRow,lastRow,firstCol,lastCol,msgSB);
-            dataSheet.Line = GetSheetLine(sheet, firstRow, lastRow, firstCol, lastCol, msgSB);
+            dataSheet.Line = GetSheetLine(sheet, dataSheet.Field, firstRow, lastRow, firstCol, lastCol, msgSB);
             return dataSheet;
         }
 
@@ -128,30 +129,44 @@ namespace Dot.Tools.ETD
             SheetField sheetField = new SheetField();
             MethodInfo getFieldMI = typeof(FieldFactory).GetMethod("GetField", BindingFlags.Public | BindingFlags.Static);
 
-            int rowCount = lastRow - firstRow;
-            int colCount = lastCol - firstCol;
+            int colCount = lastCol - firstCol+1;
             for(int i =1;i<colCount;i++)
             {
-                object[] values = new object[MIN_ROW_COUNT + 1];
-                values[0] = firstCol + i;
+                List<object> values = new List<object>();
+                values.Add(firstCol + i);
                 for(int j = 0;j<MIN_ROW_COUNT;j++)
                 {
                     IRow row = sheet.GetRow(firstRow + j);
-                    ICell cell = row.GetCell(j);
-                    values[j + 1] = GetCellStringValue(cell);
+                    ICell cell = row.GetCell(i);
+                    if(j== 0)
+                    {
+                        if(cell == null)
+                        {
+                            break;
+                        }else
+                        {
+                            string content = GetCellStringValue(cell);
+                            if(string.IsNullOrEmpty(content) || content.StartsWith("#"))
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    values.Add(GetCellStringValue(cell));
                 }
-                AField field = (AField)getFieldMI.Invoke(null, values);
-                sheetField.fields.Add(field);
+                if(values.Count == MIN_ROW_COUNT+1)
+                {
+                    AField field = (AField)getFieldMI.Invoke(null, values.ToArray());
+                    sheetField.fields.Add(field);
+                }
             }
             return sheetField;
         }
 
-        private static SheetLine GetSheetLine(ISheet sheet,
-            int firstRow, int lastRow,
-            int firstCol, int lastCol, StringBuilder msgSB)
+        private static SheetLine GetSheetLine(ISheet sheet, SheetField sheetField,
+            int firstRow, int lastRow, int firstCol, int lastCol, StringBuilder msgSB)
         {
-            int rowCount = lastRow - firstRow - MIN_ROW_COUNT;
-            int colCount = lastCol - firstCol;
+            int rowCount = lastRow - firstRow - MIN_ROW_COUNT+1;
 
             SheetLine sheetLine = new SheetLine();
             bool isStart = false;
@@ -177,31 +192,38 @@ namespace Dot.Tools.ETD
                             break;
                         }
                     }
-                }else
+                }
+                if(isStart)
                 {
                     CellLine line = new CellLine();
                     line.Row = firstRow + i;
 
-                    for (int j = 1; j < colCount; j++)
+                    foreach(var field in sheetField.fields)
                     {
-                        ICell cell = row.GetCell(firstCol+j);
+
+                    }
+
+                    for(int j =0;j<sheetField.fields.Count;j++)
+                    {
+                        AField field = sheetField.fields[j];
+                        ICell cell = row.GetCell(field.Col);
                         string content = GetCellStringValue(cell);
-                        if (j==1)
+                        if (j == 0)
                         {
-                            if(cell == null || string.IsNullOrEmpty(content))
+                            if (string.IsNullOrEmpty(content))
                             {
-                                msgSB.AppendLine($"ExcelReader::GetSheetLine->fist cell is null.row = {firstRow + i},col={firstCol + j}");
+                                msgSB.AppendLine($"ExcelReader::GetSheetLine->fist cell is null.row = {firstRow + i},col={field.Col}");
                                 break;
                             }
                         }
 
                         CellContent cellContent = new CellContent();
                         cellContent.Row = firstRow + i;
-                        cellContent.Col = firstCol + j;
+                        cellContent.Col = field.Col;
                         cellContent.Content = content;
                         line.cells.Add(cellContent);
                     }
-                    if(line.cells.Count>0)
+                    if (line.cells.Count == sheetField.fields.Count)
                     {
                         sheetLine.lines.Add(line);
                     }
