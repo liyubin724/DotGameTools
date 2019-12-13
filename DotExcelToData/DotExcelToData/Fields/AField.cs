@@ -45,8 +45,6 @@ namespace Dot.Tools.ETD.Fields
         public string DefaultValue { get; set; }
         protected string validationRule;
 
-        protected List<IValidation> validations;
-
         protected AField(int c,string n,string d,string t,string p,string dv,string vr)
         {
             col = c;
@@ -56,8 +54,6 @@ namespace Dot.Tools.ETD.Fields
             platform = p == null ? "cs" : p.ToLower();
             DefaultValue = dv;
             validationRule = vr;
-
-            validations = ValidationFactory.GetValidations(validationRule);
         }
 
         public bool VerifyContent(CellContent cell,out string msg)
@@ -65,7 +61,9 @@ namespace Dot.Tools.ETD.Fields
             StringBuilder msgSB = new StringBuilder();
             bool result = true;
 
-            foreach(var validation in validations)
+            List<IValidation> validations = ValidationFactory.GetValidations(validationRule);
+
+            foreach (var validation in validations)
             {
                 ResultCode resultCode = validation.Verify(out string tMsg);
                 if((int)resultCode<0)

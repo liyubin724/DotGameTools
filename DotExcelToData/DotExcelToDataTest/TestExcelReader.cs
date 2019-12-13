@@ -23,5 +23,17 @@ namespace DotExcelToDataTest
             Assert.AreEqual("Sheet1", book.sheets[0].Name);
 
         }
+
+        [Test]
+        public void TestWorkbook()
+        {
+            string excelPath = @"E:\DotGameProject\DotGameTools\cofing.xlsx";
+            Workbook book = new Workbook();
+            bool result = book.LoadExcel(excelPath, out string msg);
+            Assert.IsTrue(result);
+            Assert.IsNotNull(book);
+            Assert.AreEqual(1, book.sheets.Count);
+            Assert.AreEqual("Sheet1", book.sheets[0].Name);
+        }
     }
 }

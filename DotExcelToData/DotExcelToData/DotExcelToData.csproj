@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Datas\CellContent.cs" />
     <Compile Include="Datas\CellLine.cs" />
+    <Compile Include="Datas\SheetConst.cs" />
     <Compile Include="Datas\Sheet.cs" />
     <Compile Include="Datas\SheetField.cs" />
     <Compile Include="Datas\SheetLine.cs" />

@@ -11,5 +11,8 @@ namespace Dot.Tools.ETD.Datas
         public int Row { get; set; }
 
         public List<CellContent> cells = new List<CellContent>();
+
+
+
     }
 }
