@@ -1,9 +1,10 @@
-﻿using NPOI.SS.UserModel;
+﻿using ExtractInject;
+using NPOI.SS.UserModel;
 using System.Text;
 
 namespace Dot.Tools.ETD.Datas
 {
-    public class Sheet
+    public class Sheet : IEIContextObject
     {
         public string Name { get; set; }
         public SheetField Field { get; set; }
@@ -51,7 +52,7 @@ namespace Dot.Tools.ETD.Datas
             return result;
         }
 
-        public bool Verify(out string msg)
+        public bool Verify(IEIContext context,out string msg)
         {
             msg = string.Empty;
 
@@ -60,7 +61,7 @@ namespace Dot.Tools.ETD.Datas
                 msg += fieldMsg;
             }
 
-            if(!Line.Verify(Field,out string lineMsg))
+            if(!Line.Verify(context,Field,out string lineMsg))
             {
                 msg += lineMsg;
             }

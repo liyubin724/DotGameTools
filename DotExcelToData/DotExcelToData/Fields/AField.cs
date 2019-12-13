@@ -2,12 +2,13 @@
 using Dot.Tools.ETD.Factorys;
 using Dot.Tools.ETD.Utils;
 using Dot.Tools.ETD.Validations;
+using ExtractInject;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Dot.Tools.ETD.Fields
 {
-    public abstract class AField
+    public abstract class AField : IEIContextObject
     {
         protected int col;
         public int Col { get => col; }
@@ -56,15 +57,17 @@ namespace Dot.Tools.ETD.Fields
             validationRule = vr;
         }
 
-        public bool VerifyContent(CellContent cell,out string msg)
+        public bool VerifyContent(IEIContext context,CellContent cell,out string msg)
         {
             StringBuilder msgSB = new StringBuilder();
             bool result = true;
 
-            List<IValidation> validations = ValidationFactory.GetValidations(validationRule);
+            List<IValidation> validations = ValidationFactory.GetValidations(validationRule,context);
 
             foreach (var validation in validations)
             {
+                EIUtil.Inject(context, validation);
+
                 ResultCode resultCode = validation.Verify(out string tMsg);
                 if((int)resultCode<0)
                 {

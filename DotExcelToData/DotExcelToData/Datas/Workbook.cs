@@ -1,4 +1,5 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using ExtractInject;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
@@ -94,12 +95,16 @@ namespace Dot.Tools.ETD.Datas
         {
             msg = string.Empty;
 
+            EIContext context = new EIContext();
+
             foreach(var sheet in sheets)
             {
-                if(!sheet.Verify(out string sMsg))
+                context.AddObject(sheet);
+                if(!sheet.Verify(context,out string sMsg))
                 {
                     msg += sMsg;
                 }
+                context.DeleteObject(sheet);
             }
 
             if(string.IsNullOrEmpty(msg))

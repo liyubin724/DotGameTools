@@ -1,4 +1,5 @@
 ﻿using Dot.Tools.ETD.Fields;
+using ExtractInject;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using System.Text;
@@ -70,7 +71,7 @@ namespace Dot.Tools.ETD.Datas
             }
         }
 
-        public bool Verify(SheetField sheetField, out string msg)
+        public bool Verify(IEIContext context, SheetField sheetField, out string msg)
         {
             msg = string.Empty;
 
@@ -80,10 +81,18 @@ namespace Dot.Tools.ETD.Datas
                 for(int i =0;i<sheetField.fields.Count;i++)
                 {
                     AField field = sheetField.fields[i];
-                    if(!field.VerifyContent(line.cells[i],out string cellMsg))
+
+                    context.AddObject(typeof(AField),field);
+
+                    CellContent cellContent = line.cells[i];
+                    context.AddObject(cellContent);
+
+                    if(!field.VerifyContent(context,cellContent,out string cellMsg))
                     {
                         msgSB.AppendLine(cellMsg);
                     }
+                    context.DeleteObject(cellContent);
+                    context.DeleteObject(typeof(AField));
                 }
             }
             if(msgSB.Length == 0)

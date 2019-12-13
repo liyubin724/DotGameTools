@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ExtractInject;
 
 namespace Dot.Tools.ETD.Datas
 {
-    public class CellContent
+    public class CellContent : IEIContextObject
     {
         public int Row { get; set; }
         public int Col { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Dot.Tools.ETD.Utils;
 using Dot.Tools.ETD.Validations;
+using ExtractInject;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -16,7 +17,7 @@ namespace Dot.Tools.ETD.Factorys
         /// </summary>
         /// <param name="multiRule"></param>
         /// <returns></returns>
-        public static List<IValidation> GetValidations(string multiRule)
+        public static List<IValidation> GetValidations(string multiRule,IEIContext context)
         {
             List<IValidation> validations = new List<IValidation>();
             if(string.IsNullOrEmpty(multiRule))
@@ -40,8 +41,10 @@ namespace Dot.Tools.ETD.Factorys
                 if(validation == null)
                 {
                     validation = new ErrorValidation();
-                    validation.SetData(rule);
                 }
+                EIUtil.Inject(context,validation);
+
+                validation.SetData(rule);
                 validations.Add(validation);
             }
 
@@ -74,9 +77,7 @@ namespace Dot.Tools.ETD.Factorys
                 {
                     return null;
                 }
-                IValidation validation = (IValidation)Activator.CreateInstance(type);
-                validation.SetData(rule);
-                return validation;
+                return (IValidation)Activator.CreateInstance(type); ;
             }
 
             return null;
