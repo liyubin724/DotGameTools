@@ -70,7 +70,8 @@
     <Compile Include="Datas\SheetField.cs" />
     <Compile Include="Datas\SheetLine.cs" />
     <Compile Include="Datas\Workbook.cs" />
-    <Compile Include="ExcelReader.cs" />
+    <Compile Include="Exporter\JsonExporter.cs" />
+    <Compile Include="Exporter\LuaExporter.cs" />
     <Compile Include="Fields\AField.cs" />
     <Compile Include="Fields\ArrayField.cs" />
     <Compile Include="Fields\BoolField.cs" />

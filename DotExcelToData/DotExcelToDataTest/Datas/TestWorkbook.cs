@@ -1,4 +1,5 @@
 ﻿using Dot.Tools.ETD.Datas;
+using Dot.Tools.ETD.Exporter;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -31,6 +32,17 @@ namespace DotExcelToDataTest.Datas
                 File.WriteAllText("D:/result.txt", msg);
             }
             Assert.IsTrue(verifyResult);
+        }
+
+        [Test]
+        public void TestJsonExport()
+        {
+            string excelPath = @"D:\WorkSpace\DotGameProject\DotGameTools\cofing.xlsx";
+            Workbook book = new Workbook();
+            bool result = book.LoadExcel(excelPath, out string msg);
+
+            JsonExporter.Export("D:/", book.sheets[0]);
+
         }
     }
 }
