@@ -3,7 +3,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Dot.Serialize.Binary
 {
-    public static class BinaryReader
+    public static class BinarySerializeReader
     {
         public static T ReadFromBinary<T>(string filePath) where T:class
         {

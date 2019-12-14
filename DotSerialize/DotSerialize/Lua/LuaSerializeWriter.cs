@@ -7,7 +7,10 @@ using System.Text.RegularExpressions;
 
 namespace Dot.Serialize.Lua
 {
-    public static class LuaWriter
+    /// <summary>
+    /// 将C#的数据结构转成Lua脚本文件
+    /// </summary>
+    public static class LuaSerializeWriter
     {
         public static void WriteToLua(string filePath,object data)
         {

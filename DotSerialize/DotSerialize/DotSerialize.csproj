@@ -41,14 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Binary\BinaryReader.cs" />
-    <Compile Include="Binary\BinaryWriter.cs" />
+    <Compile Include="Binary\BinarySerializeReader.cs" />
+    <Compile Include="Binary\BinarySerializeWriter.cs" />
     <Compile Include="InnerClass.cs" />
-    <Compile Include="Lua\LuaWriter.cs" />
+    <Compile Include="Lua\LuaSerializeWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)..\libs\</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName)==Release (
+  xcopy $(TargetPath) $(SolutionDir)..\libs\
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>

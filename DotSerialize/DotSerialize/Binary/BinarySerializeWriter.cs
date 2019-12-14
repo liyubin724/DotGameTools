@@ -3,7 +3,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Dot.Serialize.Binary
 {
-    public static class BinaryWriter
+    public static class BinarySerializeWriter
     {
         public static void WriteToBinary<T>(string filePath,T data) where T:class
         {

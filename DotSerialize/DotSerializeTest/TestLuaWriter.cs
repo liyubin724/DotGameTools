@@ -1,15 +1,10 @@
 ﻿using Dot.Serialize.Lua;
 using NUnit.Framework;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotSerializeTest
 {
-    public class TestData
+    public class TestLuaSerializeData
     {
         public List<int> intList = new List<int>()
         {
@@ -24,10 +19,10 @@ namespace DotSerializeTest
         public float floatValue = 1.30f;
         public string testStr = "test";
 
-        public InnerData innerData = new InnerData();
+        public TestLuaSerializeChildData childData = new TestLuaSerializeChildData();
     }
 
-    public class InnerData
+    public class TestLuaSerializeChildData
     {
         public Dictionary<int, string> dic = new Dictionary<int, string>()
         {
@@ -46,7 +41,7 @@ namespace DotSerializeTest
             List<int> intList = new List<int>();
             intList.AddRange(new int[] { 1, 2, 3, 4, 4 });
 
-            LuaWriter.WriteToLua("D:/lua.txt", intList);
+            LuaSerializeWriter.WriteToLua("D:/lua.txt", intList);
         }
         [Test]
         public void TestDicToLua()
@@ -57,15 +52,14 @@ namespace DotSerializeTest
             dic.Add("S", 3);
             dic.Add("B", 4);
 
-            LuaWriter.WriteToLua("D:/lua.txt", dic);
+            LuaSerializeWriter.WriteToLua("D:/lua.txt", dic);
         }
 
         [Test]
         public void TestClassToLua()
         {
-            TestData data = new TestData();
-           
-            LuaWriter.WriteToLua("D:/lua.txt", data);
+            TestLuaSerializeData data = new TestLuaSerializeData();
+            LuaSerializeWriter.WriteToLua("D:/lua.txt", data);
         }
     }
 }
