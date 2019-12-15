@@ -48,18 +48,18 @@
     dic.Add("S", 3);
     dic.Add("B", 4);
 
-    LuaSerializeWriter.WriteToLua("D:/lua.txt", dic);
+    string luaStr = LuaSerializeWriter.WriteToLua(dic);
+    File.WriteAllText("D:/dic-lua.txt", luaStr);
 
     ```
     生成的Lua脚本
     ```lua
-    local lua = {
+    {
         T=1,
         D=2,
         S=3,
         B=4,
     }
-    return lua
     ```
 
 - 将List类型的C#数据存储为Lua脚本
@@ -67,18 +67,18 @@
     List<int> intList = new List<int>();
     intList.AddRange(new int[] { 1, 2, 3, 4, 4 });
 
-    LuaSerializeWriter.WriteToLua("D:/lua.txt", intList);
+    string luaStr = LuaSerializeWriter.WriteToLua(intList);
+    File.WriteAllText("D:/list-lua.txt", luaStr);
     ```
     生成的Lua脚本
     ```lua
-    local lua = {
+    {
         1,
         2,
         3,
         4,
         4,
     }
-    return lua
     ```
 
 - 将自定义C#数据结构存储为Lua脚本
@@ -89,12 +89,12 @@
         public int age;
     }
 
+    StudentData data = new StudentData();
+    string luaStr = LuaSerializeWriter.WriteToLua(data,"test",true,false);
+    File.WriteAllText("D:/obj-lua.txt", luaStr);
     ```
 
 注意：
-  - 生成的Lua脚本中，数据指定的变量以局部变量形式存储，如上述中的:local lua = ....
-  - 变量的名称为输出的文件的名称
-  - 目前支持List，尚未支持Array类型的数据
   - 无法根据Lua脚本再重新生成C#对应的数据
 
 # API详解
@@ -115,7 +115,13 @@
 
 ## LuaSerializeWriter
 
-- public static void WriteToLua(string filePath,object data)
+- public static string WriteToLua(object data,string paramName,bool isGlobal,bool isReturn)
 
-    + filePath : 转换成的Lua脚本所在的位置
     + data : 需要转换的C#的对象
+    + paramName : Lua中变量的名称
+    + isGlobal : 是否以全局变量的形式存储
+    + isReturn : 如果不以全局变量的形式存储的话，是否需要返回对应的变量
+
+
+-  public static string WriteToLua(object data)
+   -  data : 需要转换的C#的对象

@@ -1,6 +1,7 @@
 ﻿using Dot.Serialize.Lua;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DotSerializeTest
 {
@@ -15,7 +16,7 @@ namespace DotSerializeTest
             {"ss",0 },
             {"FFFF",123 },
         };
-
+        public int[] intArray = new int[] { 5, 6, 7 };
         public float floatValue = 1.30f;
         public string testStr = "test";
 
@@ -41,7 +42,8 @@ namespace DotSerializeTest
             List<int> intList = new List<int>();
             intList.AddRange(new int[] { 1, 2, 3, 4, 4 });
 
-            LuaSerializeWriter.WriteToLua("D:/lua.txt", intList);
+            string luaStr = LuaSerializeWriter.WriteToLua(intList);
+            File.WriteAllText("D:/list-lua.txt", luaStr);
         }
         [Test]
         public void TestDicToLua()
@@ -52,14 +54,16 @@ namespace DotSerializeTest
             dic.Add("S", 3);
             dic.Add("B", 4);
 
-            LuaSerializeWriter.WriteToLua("D:/lua.txt", dic);
+            string luaStr = LuaSerializeWriter.WriteToLua(dic);
+            File.WriteAllText("D:/dic-lua.txt", luaStr);
         }
 
         [Test]
         public void TestClassToLua()
         {
             TestLuaSerializeData data = new TestLuaSerializeData();
-            LuaSerializeWriter.WriteToLua("D:/lua.txt", data);
+            string luaStr = LuaSerializeWriter.WriteToLua(data,"test",true,false);
+            File.WriteAllText("D:/obj-lua.txt", luaStr);
         }
     }
 }
