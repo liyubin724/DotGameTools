@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotSerialize">
+      <HintPath>..\..\libs\DotSerialize.dll</HintPath>
+    </Reference>
     <Reference Include="ExtractInject">
       <HintPath>..\..\libs\ExtractInject.dll</HintPath>
     </Reference>
@@ -72,6 +75,7 @@
     <Compile Include="Datas\Workbook.cs" />
     <Compile Include="Exporter\JsonExporter.cs" />
     <Compile Include="Exporter\LuaExporter.cs" />
+    <Compile Include="Exporter\LuaOptimizeExporter.cs" />
     <Compile Include="Fields\AField.cs" />
     <Compile Include="Fields\ArrayField.cs" />
     <Compile Include="Fields\BoolField.cs" />

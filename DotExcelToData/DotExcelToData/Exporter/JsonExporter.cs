@@ -31,7 +31,7 @@ namespace Dot.Tools.ETD.Exporter
             return jObject;
         }
 
-        public static void Export(string outputDirPath,Sheet sheet)
+        public static void Export(string outputDirPath,Sheet sheet,FieldPlatform platform)
         {
             if(!Directory.Exists(outputDirPath))
             {
@@ -49,6 +49,17 @@ namespace Dot.Tools.ETD.Exporter
                 for (int i = 0; i < sheet.Field.fields.Count; i++)
                 {
                     AField field = sheet.Field.fields[i];
+                    if(platform!= FieldPlatform.All)
+                    {
+                        if(platform == FieldPlatform.Client && field.Platform == FieldPlatform.Server)
+                        {
+                            continue;
+                        }else if(platform == FieldPlatform.Server && field.Platform == FieldPlatform.Client)
+                        {
+                            continue;
+                        }
+                    }
+
                     CellContent cellContent = line.cells[i];
 
                     var value = field.GetValue(cellContent);

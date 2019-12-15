@@ -1,4 +1,6 @@
-﻿using Dot.Tools.ETD.Factorys;
+﻿using Dot.Tools.ETD.Datas;
+using Dot.Tools.ETD.Exporter;
+using Dot.Tools.ETD.Factorys;
 using Dot.Tools.ETD.Fields;
 using Dot.Tools.ETD.Utils;
 using Dot.Tools.ETD.Validations;
@@ -15,40 +17,45 @@ namespace DotExcelToDataConsole
     {
         static void Main(string[] args)
         {
-            string[] targets = new string[]
-            {
-                "array[ref<tablename>]",
-                "array[string]",
-                "int",
-                "res",
-                "dic{int,float}",
-                "ref<refname>",
-                "dic{ref<tablename>,ref<tablename>}",
-            };
-            string typeNameRegex = @"^(?<typename>[A-Za-z]+)(?<other>\S*)$";
-            string refNameRegex = @"^<(?<refname>[A-Za-z]+)>$";
-            string arrayValueRegex = @"^\[(?<typename>[A-Za-z]+)[<]{0,1}(?<refname>[A-Za-z]*)[>]{0,1}\]$";
+            string excelPath = @"D:\WorkSpace\DotGameProject\DotGameTools\cofing.xlsx";
+            Workbook book = new Workbook();
+            bool result = book.LoadExcel(excelPath, out string msg);
 
-            string tt = @"^(?<typename>[A-Za-z]+)[(<(?<refname>[A-Za-z0-9]+)>)|(\[(?<valuetypename>[A-Za-z]+)[(<(?<refname>[A-Za-z0-9]+)>)]{0,1}\])]{0,1}";
+            LuaOptimizeExporter.Export("D:/", book.sheets[0], FieldPlatform.Server);
+            //string[] targets = new string[]
+            //{
+            //    "array[ref<tablename>]",
+            //    "array[string]",
+            //    "int",
+            //    "res",
+            //    "dic{int,float}",
+            //    "ref<refname>",
+            //    "dic{ref<tablename>,ref<tablename>}",
+            //};
+            //string typeNameRegex = @"^(?<typename>[A-Za-z]+)(?<other>\S*)$";
+            //string refNameRegex = @"^<(?<refname>[A-Za-z]+)>$";
+            //string arrayValueRegex = @"^\[(?<typename>[A-Za-z]+)[<]{0,1}(?<refname>[A-Za-z]*)[>]{0,1}\]$";
 
-            foreach(var target in targets)
-            {
-                Match match = new Regex(tt).Match(target);
+            //string tt = @"^(?<typename>[A-Za-z]+)[(<(?<refname>[A-Za-z0-9]+)>)|(\[(?<valuetypename>[A-Za-z]+)[(<(?<refname>[A-Za-z0-9]+)>)]{0,1}\])]{0,1}";
 
-                if (match.Groups["typename"].Success)
-                {
-                    Console.Write(match.Groups["typename"].Value);
-                }
-                if(match.Groups["refname"].Success)
-                {
-                    Console.Write("----"+match.Groups["refname"].Value);
-                }
-                if(match.Groups["valuetypename"].Success)
-                {
-                    Console.Write("----"+match.Groups["valuetypename"].Value);
-                }
-                Console.WriteLine();
-            }
+            //foreach(var target in targets)
+            //{
+            //    Match match = new Regex(tt).Match(target);
+
+            //    if (match.Groups["typename"].Success)
+            //    {
+            //        Console.Write(match.Groups["typename"].Value);
+            //    }
+            //    if(match.Groups["refname"].Success)
+            //    {
+            //        Console.Write("----"+match.Groups["refname"].Value);
+            //    }
+            //    if(match.Groups["valuetypename"].Success)
+            //    {
+            //        Console.Write("----"+match.Groups["valuetypename"].Value);
+            //    }
+            //    Console.WriteLine();
+            //}
 
             //foreach (var target in targets)
             //{

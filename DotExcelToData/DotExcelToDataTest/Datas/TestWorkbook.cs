@@ -1,5 +1,6 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Exporter;
+using Dot.Tools.ETD.Fields;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -41,8 +42,17 @@ namespace DotExcelToDataTest.Datas
             Workbook book = new Workbook();
             bool result = book.LoadExcel(excelPath, out string msg);
 
-            JsonExporter.Export("D:/", book.sheets[0]);
+            JsonExporter.Export("D:/", book.sheets[0],FieldPlatform.Client);
 
+        }
+        [Test]
+        public void TestLuaExporter()
+        {
+            string excelPath = @"D:\WorkSpace\DotGameProject\DotGameTools\cofing.xlsx";
+            Workbook book = new Workbook();
+            bool result = book.LoadExcel(excelPath, out string msg);
+
+            LuaExporter.Export("D:/", book.sheets[0]);
         }
     }
 }

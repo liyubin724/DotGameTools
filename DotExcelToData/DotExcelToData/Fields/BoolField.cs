@@ -15,6 +15,16 @@ namespace Dot.Tools.ETD.Fields
             validationList.Add(new BoolValueValidation());
         }
 
+        public override string GetContent(CellContent cell)
+        {
+            string content = base.GetContent(cell);
+            if(string.IsNullOrEmpty(content))
+            {
+                return "false";
+            }
+            return content.ToLower();
+        }
+
         public override object GetValue(CellContent cell)
         {
             string content = GetContent(cell);
@@ -22,6 +32,7 @@ namespace Dot.Tools.ETD.Fields
             {
                 return false;
             }
+            content = content.ToLower();
             if (bool.TryParse(content.ToLower(), out bool result))
             {
                 return result;

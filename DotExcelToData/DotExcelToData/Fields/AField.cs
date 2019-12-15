@@ -100,7 +100,7 @@ namespace Dot.Tools.ETD.Fields
             return result;
         }
 
-        public string GetContent(CellContent cell)
+        public virtual string GetContent(CellContent cell)
         {
             if (cell == null)
                 return null;
