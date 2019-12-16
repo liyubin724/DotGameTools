@@ -125,39 +125,19 @@ list(APPEND THIRDPART_INC  lua-rapidjson)
 set (THIRDPART_SRC ${THIRDPART_SRC} ${RAPIDJSON_SRC})
 #end lua-rapidjson
 
-#begin pbc
-set (PBC_SRC 
-    pbc/src/alloc.c
-    pbc/src/array.c
-    pbc/src/array.c
-    pbc/src/bootstrap.c
-    pbc/src/context.c
-    pbc/src/decode.c
-    pbc/src/map.c
-    pbc/src/pattern.c
-    pbc/src/proto.c
-    pbc/src/register.c
-    pbc/src/rmessage.c
-    pbc/src/stringpool.c
-    pbc/src/varint.c
-    pbc/src/wmessage.c
+#begin lua-profobuf
+set (LPB_SRC 
+    lua-protobuf/pb.c
 )
-
-if (USING_LUAJIT)
-    list(APPEND PBC_SRC pbc/src/pbc-lua.c)
-else ()
-    list(APPEND PBC_SRC pbc/src/pbc-lua53.c)
-endif ()
-
 set_property(
-	SOURCE ${PBC_SRC}
-	APPEND
-	PROPERTY COMPILE_DEFINITIONS
-	LUA_LIB
+    SOURCE ${LPB_SRC}
+    APPEND
+    PROPERTY COMPILE_DEFINITIONS
+    LUA_LIB
 )
-list(APPEND THIRDPART_INC pbc/src)
-set (THIRDPART_SRC ${THIRDPART_SRC} ${PBC_SRC})
-#end pbc
+list(APPEND THIRDPART_INC lua-protobuf)
+set (THIRDPART_SRC ${THIRDPART_SRC} ${LPB_SRC})
+#end lua-protobuf
 
 macro(source_group_by_dir proj_dir source_files)
     if(MSVC OR APPLE)
