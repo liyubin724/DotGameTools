@@ -1,126 +1,146 @@
-﻿using Dot.Tools.ETD.Datas;
+﻿using CommandLine;
+using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Exporter;
-using Dot.Tools.ETD.Factorys;
 using Dot.Tools.ETD.Fields;
-using Dot.Tools.ETD.Utils;
-using Dot.Tools.ETD.Validations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Console = Colorful.Console;
 
 namespace DotExcelToDataConsole
 {
+    public enum ETDFormat
+    {
+        Json,
+        Lua,
+    }
+
+    public class ETDOption
+    {
+        [Option('f',"file",Required =true,HelpText = "input files which must be excel(.xlsx|.xls)")]
+        public IEnumerable<string> Files { get; set; }
+
+        [Option('o',"output",Required =false,HelpText ="out put dir")]
+        public string OutputDir { get; set; }
+        
+        [Option("format",Required =false,HelpText ="Json or Lua")]
+        public ETDFormat Format { get; set; }
+
+        [Option("verify",Required =false,HelpText ="Is it need verify")]
+        public bool IsVerify { get; set; }
+        [Option("optimize",Required =false,HelpText ="Optimize")]
+        public bool IsOptimize { get; set; }
+        [Option("platform",Required =false,HelpText ="Platform(Server,Client,All)")]
+        public FieldPlatform Platform { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder str = new StringBuilder();
+            str.Append("Files = ");
+            IEnumerator<string> enumerator = Files.GetEnumerator();
+            while(enumerator.MoveNext())
+            {
+                str.Append(enumerator.Current+",");
+            }
+            str.Append("\n");
+            str.AppendLine($"Output = {OutputDir}");
+            str.AppendLine($"Format = {Format}");
+            str.AppendLine($"IsVerify = {IsVerify}");
+            str.AppendLine($"IsOptimize = {IsOptimize}");
+            str.AppendLine($"Platform = {Platform}");
+            return str.ToString();
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            string excelPath = @"D:\WorkSpace\DotGameProject\DotGameTools\cofing.xlsx";
-            Workbook book = new Workbook();
-            bool result = book.LoadExcel(excelPath, out string msg);
+            Parser.Default.ParseArguments<ETDOption>(args).WithParsed(Run);
 
-            LuaOptimizeExporter.Export("D:/", book.sheets[0], FieldPlatform.Server);
-            //string[] targets = new string[]
-            //{
-            //    "array[ref<tablename>]",
-            //    "array[string]",
-            //    "int",
-            //    "res",
-            //    "dic{int,float}",
-            //    "ref<refname>",
-            //    "dic{ref<tablename>,ref<tablename>}",
-            //};
-            //string typeNameRegex = @"^(?<typename>[A-Za-z]+)(?<other>\S*)$";
-            //string refNameRegex = @"^<(?<refname>[A-Za-z]+)>$";
-            //string arrayValueRegex = @"^\[(?<typename>[A-Za-z]+)[<]{0,1}(?<refname>[A-Za-z]*)[>]{0,1}\]$";
-
-            //string tt = @"^(?<typename>[A-Za-z]+)[(<(?<refname>[A-Za-z0-9]+)>)|(\[(?<valuetypename>[A-Za-z]+)[(<(?<refname>[A-Za-z0-9]+)>)]{0,1}\])]{0,1}";
-
-            //foreach(var target in targets)
-            //{
-            //    Match match = new Regex(tt).Match(target);
-
-            //    if (match.Groups["typename"].Success)
-            //    {
-            //        Console.Write(match.Groups["typename"].Value);
-            //    }
-            //    if(match.Groups["refname"].Success)
-            //    {
-            //        Console.Write("----"+match.Groups["refname"].Value);
-            //    }
-            //    if(match.Groups["valuetypename"].Success)
-            //    {
-            //        Console.Write("----"+match.Groups["valuetypename"].Value);
-            //    }
-            //    Console.WriteLine();
-            //}
-
-            //foreach (var target in targets)
-            //{
-            //    Match match = new Regex(typeNameRegex).Match(target);
-            //    if(match.Groups["typename"].Success)
-            //    {
-            //        FieldType fieldType = FieldTypeUtil.GetFieldType(match.Groups["typename"].Value);
-            //        Console.Write(fieldType);
-            //        if(match.Groups["other"].Success)
-            //        {
-            //            string other = match.Groups["other"].Value;
-            //            if(fieldType == FieldType.Ref)
-            //            {
-            //                match = new Regex(refNameRegex).Match(other);
-            //                if(match.Success)
-            //                {
-            //                    Console.Write("----" + match.Groups["refname"].Value);
-            //                }
-            //            }else if(fieldType == FieldType.Array)
-            //            {
-            //                match = new Regex(arrayValueRegex).Match(other);
-            //                if(match.Groups["typename"].Success)
-            //                {
-            //                    Console.Write("----" + match.Groups["typename"].Value);
-            //                }
-            //                if(match.Groups["refname"].Success)
-            //                {
-            //                    Console.Write("----" + match.Groups["refname"].Value);
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    Console.WriteLine();
-            //}
-
-            //string[] targets = new string[]
-            //{
-            //    "array[ref<tablename>]",
-            //    "array[string]",
-            //};
-            //foreach(var target in targets)
-            //{
-            //    string regexStr = @"^array\[(?<typename>[A-Za-z]+)";
-            //    Match match = new Regex(regexStr).Match(target);
-            //    Console.WriteLine(match.Groups["typename"].Value);
-
-            //    FieldType fieldType = FieldTypeUtil.GetFieldType(target);
-            //    Console.WriteLine(fieldType.ToString());
-            //}
-
-
-            //string validationValue = "Range{100.0,100}";
-            //Match match1 = new Regex(@"(?<name>[A-Za-z]+)").Match(validationValue);//@"\w*{(?<min>.[0-9]*[.]?[0-9]*?),(?<max>.[0-9]*[.]?[0-9]*?)}").Match(validationValue);
-            //Console.WriteLine(match1.Groups["name"].Value);
-            //Console.WriteLine(match1.Groups["max"].Value);
-
-            //string temp = "ErrorCode:-1,Message:{\"UserId\" : \"1000\",\"userName\" : \"ZhangSan\"}";
-            //Regex reg = new Regex("ErrorCode:(?<key1>.*?),Message:{(?<key2>.*?)}");
-            //Match match = reg.Match(temp);
-            //string tempStr = match.Groups["key1"].Value + "--" + match.Groups["key2"].Value;
-
-            //Console.WriteLine(tempStr);
-
+            Console.WriteLine("Press any key to continue");
             Console.ReadKey();
+        }
+
+        static void Run(ETDOption option)
+        {
+            List<Workbook> books = new List<Workbook>();
+
+            IEnumerator<string> enumerator = option.Files.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                Console.WriteLine($"----Load Excel({enumerator.Current})");
+
+                Workbook book = new Workbook();
+                bool result = book.LoadExcel(enumerator.Current, out string msg);
+                if(!result)
+                {
+                    Console.WriteLine(msg,Color.Red);
+                    Console.WriteLine("----Load Error.",Color.Red);
+                }else
+                {
+                    books.Add(book);
+                    Console.WriteLine("----Finished");
+                }
+            }
+
+            if(books.Count==0)
+            {
+                Console.WriteLine("----Workbok not found.",Color.Yellow);
+                return;
+            }
+
+            bool verifyResult = true;
+            if(option.IsVerify)
+            {
+                foreach(var book in books)
+                {
+                    Console.WriteLine($"----Begin verify the book{book.Name}");
+
+                    bool result = book.Verify(out string msg);
+                    if(!result)
+                    {
+                        Console.WriteLine(msg,Color.Red);
+
+                        Console.WriteLine("----Verify Failed",Color.OrangeRed);
+
+                        if (verifyResult)
+                        {
+                            verifyResult = !verifyResult;
+                        }
+                    }else
+                    {
+                        Console.WriteLine("----Verify success");
+                    }
+                }
+            }
+
+            if(verifyResult)
+            {
+                foreach(var book in books)
+                {
+                    Console.WriteLine($"----Begin export book({book.Name})");
+                    foreach(var sheet in book.sheets)
+                    {
+                        Console.WriteLine($"--------Begin export Sheet({sheet.Name})");
+                        if(option.Format == ETDFormat.Json)
+                        {
+                            JsonExporter.Export(option.OutputDir, sheet, option.Platform);
+                        }else
+                        {
+                            if(option.IsOptimize)
+                            {
+                                LuaOptimizeExporter.Export(option.OutputDir, sheet, option.Platform);
+                            }else
+                            {
+                                LuaExporter.Export(option.OutputDir, sheet, option.Platform);
+                            }
+                        }
+                        Console.WriteLine("--------Export sheet Success");
+                    }
+                    Console.WriteLine($"----End export book");
+                }
+            }
         }
     }
 }

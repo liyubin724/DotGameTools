@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Colorful.Console">
+      <HintPath>..\..\libs\Colorful.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="CommandLine">
+      <HintPath>..\..\libs\CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="ExtractInject">
       <HintPath>..\..\libs\ExtractInject.dll</HintPath>
     </Reference>
@@ -45,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
