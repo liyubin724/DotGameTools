@@ -1,8 +1,24 @@
-echo OFF
+echo off
 
-for /R %%f in (protos/*.proto) do (
-    protoc-3.11.2.exe --descriptor_set_out lua/%%~nf.pb protos/%%~nxf
-    echo protos/%%f Finished
+set LUA_PROTO_DIR=.\lua-proto
+set LUA_PROTO_EXT=.pb
+set PROTO_DIR=.\protos
+set PROTO_EXT=.proto
+
+if exist %LUA_PROTO_DIR% (
+    rd /s /q %LUA_PROTO_DIR%
+)
+
+mkdir %LUA_PROTO_DIR%
+
+for /R %%f in (%PROTO_DIR%\*%PROTO_EXT%) do (
+    protoc-3.11.2.exe --descriptor_set_out %LUA_PROTO_DIR%\%%~nf%LUA_PROTO_EXT% %PROTO_DIR%\%%~nxf
+
+    if exist %LUA_PROTO_DIR%\%%~nf%LUA_PROTO_EXT% (
+        echo %%~nxf Success
+    ) else (
+        echo %%~nxf Failed
+    )
 )
 
 pause
