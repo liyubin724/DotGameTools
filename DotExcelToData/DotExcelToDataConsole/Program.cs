@@ -57,9 +57,6 @@ namespace DotExcelToDataConsole
         static void Main(string[] args)
         {
             Parser.Default.ParseArguments<ETDOption>(args).WithParsed(Run);
-
-            Console.WriteLine("Press any key to continue");
-            Console.ReadKey();
         }
 
         static void Run(ETDOption option)

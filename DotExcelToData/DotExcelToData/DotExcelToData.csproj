@@ -111,8 +111,6 @@
     <Compile Include="Validations\StringMaxLenValidation.cs" />
     <Compile Include="Validations\UniqueValidation.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Attributes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
