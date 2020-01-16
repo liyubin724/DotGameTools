@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Validations
         [EIField(EIFieldUsage.In, false)]
         public AField field;
         [EIField(EIFieldUsage.In, false)]
-        public CellContent cell;
+        public LineCell cell;
 
         public void SetRule(string rule)
         {

@@ -172,7 +172,7 @@ namespace Dot.Tools.ETD.IO
                     }
                 }
 
-                LineCell line = new LineCell(i);
+                SheetLine line = new SheetLine(i);
                 int fieldCount = sheetData.FieldCount;
                 for (int j = 0; j < fieldCount; ++j)
                 {

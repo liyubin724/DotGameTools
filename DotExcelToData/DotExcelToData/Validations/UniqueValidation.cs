@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Validations
         [EIField(EIFieldUsage.In, false)]
         public AField field;
         [EIField(EIFieldUsage.In, false)]
-        public CellContent cell;
+        public LineCell cell;
 
         private bool isValid = true;
         public bool IsValid => isValid;
@@ -42,7 +42,7 @@ namespace Dot.Tools.ETD.Validations
 
             foreach(var line in sheet.Line.lines)
             {
-                CellContent cc = line.cells[index];
+                LineCell cc = line.cells[index];
                 if(cc.row == cell.row)
                 {
                     continue;

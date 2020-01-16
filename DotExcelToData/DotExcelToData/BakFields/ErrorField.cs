@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Fields
         {
         }
 
-        public override object GetValue(CellContent cell)
+        public override object GetValue(LineCell cell)
         {
             throw new NotImplementedException();
         }

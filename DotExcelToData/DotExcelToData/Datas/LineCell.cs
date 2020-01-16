@@ -1,32 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using Dot.Tools.ETD.Fields;
+using ExtractInject;
 
 namespace Dot.Tools.ETD.Datas
 {
-    public class LineCell
+    public class LineCell : IEIContextObject
     {
         public int row;
+        public int col;
+        public string value;
 
-        private List<CellContent> cells = new List<CellContent>();
-
-        public LineCell(int r)
+        public LineCell(int r,int c,string v)
         {
             row = r;
+            col = c;
+            value = v;
         }
 
-        public void AddCell(int c,string v)
+        public string GetContent(AFieldData field)
         {
-            CellContent cell = new CellContent(row, c, v);
-            cells.Add(cell);
-        }
-
-        public CellContent GetCell(int index)
-        {
-            if(index>=0&&index<cells.Count)
+            if(string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(field.defaultValue))
             {
-                return cells[index];
+                return field.defaultValue;
             }
-            return null;
+            return value;
         }
-
     }
 }

@@ -20,7 +20,7 @@ namespace Dot.Tools.ETD.Fields
             valueFieldType = FieldTypeUtil.GetArrayInnerType(t, out refName);
         }
 
-        public override object GetValue(CellContent cell)
+        public override object GetValue(LineCell cell)
         {
             Type genericType = typeof(List<>);
             Type valueType = FieldTypeUtil.GetType(valueFieldType);

@@ -15,7 +15,7 @@ namespace Dot.Tools.ETD.Fields
             validationList.Add(new BoolValueValidation());
         }
 
-        public override string GetContent(CellContent cell)
+        public override string GetContent(LineCell cell)
         {
             string content = base.GetContent(cell);
             if(string.IsNullOrEmpty(content))
@@ -25,7 +25,7 @@ namespace Dot.Tools.ETD.Fields
             return content.ToLower();
         }
 
-        public override object GetValue(CellContent cell)
+        public override object GetValue(LineCell cell)
         {
             string content = GetContent(cell);
             if (string.IsNullOrEmpty(content))

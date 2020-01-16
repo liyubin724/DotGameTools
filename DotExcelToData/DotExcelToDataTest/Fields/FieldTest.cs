@@ -28,7 +28,7 @@ namespace DotExcelToDataTest.Fields
             AField field = FieldFactory.GetField(col, name, desc,  platform, type, value, validation);
             Assert.AreEqual(typeof(ArrayField), field.GetType());
 
-            CellContent content = new CellContent()
+            LineCell content = new LineCell()
             {
                 col = 1,
                 row = 1,

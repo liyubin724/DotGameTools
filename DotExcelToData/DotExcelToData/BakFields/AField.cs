@@ -75,7 +75,7 @@ namespace Dot.Tools.ETD.Fields
 
         }
 
-        public bool VerifyContent(IEIContext context,CellContent cell,out string msg)
+        public bool VerifyContent(IEIContext context,LineCell cell,out string msg)
         {
             StringBuilder msgSB = new StringBuilder();
             bool result = true;
@@ -100,7 +100,7 @@ namespace Dot.Tools.ETD.Fields
             return result;
         }
 
-        public virtual string GetContent(CellContent cell)
+        public virtual string GetContent(LineCell cell)
         {
             if (cell == null)
                 return null;
@@ -113,7 +113,7 @@ namespace Dot.Tools.ETD.Fields
             return content;
         }
 
-        public abstract object GetValue(CellContent cell);
+        public abstract object GetValue(LineCell cell);
         
     }
 }

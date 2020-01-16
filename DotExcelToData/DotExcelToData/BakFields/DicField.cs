@@ -29,7 +29,7 @@ namespace Dot.Tools.ETD.Fields
             validationList.Add(new DicKeyValidation());
         }
 
-        public override object GetValue(CellContent cell)
+        public override object GetValue(LineCell cell)
         {
             Type genericType = typeof(Dictionary<,>);
             Type keyType = FieldTypeUtil.GetType(keyFieldType);

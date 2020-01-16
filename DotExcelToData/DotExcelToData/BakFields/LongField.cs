@@ -15,7 +15,7 @@ namespace Dot.Tools.ETD.Fields
             validationList.Add(new LongValueValidation());
         }
 
-        public override object GetValue(CellContent cell)
+        public override object GetValue(LineCell cell)
         {
             string content = GetContent(cell);
             if (string.IsNullOrEmpty(content))

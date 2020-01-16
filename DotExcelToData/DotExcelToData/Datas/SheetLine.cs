@@ -1,110 +1,32 @@
-﻿using Dot.Tools.ETD.Fields;
-using ExtractInject;
-using NPOI.SS.UserModel;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Dot.Tools.ETD.Datas
 {
     public class SheetLine
     {
-        private List<LineCell> lines = new List<LineCell>();
-        //----------
+        public int row;
 
-        public void LoadFromSheet(ISheet sheet, SheetField sheetField,
-            int firstRow, int lastRow, int firstCol, int lastCol)
+        private List<LineCell> cells = new List<LineCell>();
+
+        public SheetLine(int r)
         {
-            int rowCount = lastRow - firstRow - SheetConst.MIN_ROW_COUNT + 1;
-
-            bool isStart = false;
-            for (int i = 0; i < rowCount; i++)
-            {
-                IRow row = sheet.GetRow(SheetConst.MIN_ROW_COUNT + i);
-                if (!isStart)
-                {
-                    ICell cell = row.GetCell(firstCol);
-                    if (cell == null)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        string cellContent = SheetConst.GetCellStringValue(cell);
-                        if (cellContent == SheetConst.ROW_START_FLAG)
-                        {
-                            isStart = true;
-                        }
-                        else if (cellContent == SheetConst.ROW_END_FLAG)
-                        {
-                            break;
-                        }
-                    }
-                }
-                if (isStart)
-                {
-                    LineCell line = new LineCell();
-                    line.row = firstRow + i;
-
-                    for (int j = 0; j < sheetField.fields.Count; j++)
-                    {
-                        AField field = sheetField.fields[j];
-                        ICell cell = row.GetCell(field.Col);
-                        string content = SheetConst.GetCellStringValue(cell);
-                        if (j == 0)
-                        {
-                            if (string.IsNullOrEmpty(content))
-                            {
-                                break;
-                            }
-                        }
-
-                        CellContent cellContent = new CellContent();
-                        cellContent.row = firstRow + i;
-                        cellContent.col = field.Col;
-                        cellContent.value = content;
-                        line.cells.Add(cellContent);
-                    }
-                    if (line.cells.Count == sheetField.fields.Count)
-                    {
-                        lines.Add(line);
-                    }
-                }
-            }
+            row = r;
         }
 
-        public bool Verify(IEIContext context, SheetField sheetField, out string msg)
+        public void AddCell(int c,string v)
         {
-            msg = string.Empty;
-
-            StringBuilder msgSB = new StringBuilder();
-            foreach(var line in lines)
-            {
-                for(int i =0;i<sheetField.fields.Count;i++)
-                {
-                    AField field = sheetField.fields[i];
-
-                    context.AddObject(typeof(AField),field);
-
-                    CellContent cellContent = line.cells[i];
-                    context.AddObject(cellContent);
-
-                    if(!field.VerifyContent(context,cellContent,out string cellMsg))
-                    {
-                        msgSB.AppendLine(cellMsg);
-                    }
-                    context.DeleteObject(cellContent);
-                    context.DeleteObject(typeof(AField));
-                }
-            }
-            if(msgSB.Length == 0)
-            {
-                return true;
-            }else
-            {
-                msgSB.Insert(0, "SheetLine::Verify->line Error\n");
-                msg = msgSB.ToString();
-                return false;
-            }
+            LineCell cell = new LineCell(row, c, v);
+            cells.Add(cell);
         }
+
+        public LineCell GetCell(int index)
+        {
+            if(index>=0&&index<cells.Count)
+            {
+                return cells[index];
+            }
+            return null;
+        }
+
     }
 }

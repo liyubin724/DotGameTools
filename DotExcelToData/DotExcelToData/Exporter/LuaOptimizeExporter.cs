@@ -74,7 +74,7 @@ namespace Dot.Tools.ETD.Exporter
                     {
                         continue;
                     }
-                    CellContent cellContent = line.cells[i];
+                    LineCell cellContent = line.cells[i];
                     var content = field.GetContent(cellContent);
                     var value = field.GetValue(cellContent);
                     if (value == null)
@@ -128,7 +128,7 @@ namespace Dot.Tools.ETD.Exporter
                         continue;
                     }
 
-                    CellContent cellContent = line.cells[i];
+                    LineCell cellContent = line.cells[i];
                     var value = field.GetValue(cellContent);
                     if(value == null)
                     {
@@ -207,7 +207,7 @@ namespace Dot.Tools.ETD.Exporter
                         continue;
                     }
 
-                    CellContent cellContent = line.cells[i];
+                    LineCell cellContent = line.cells[i];
                     var content = field.GetContent(cellContent);
                     var value = field.GetValue(cellContent);
                     if(value == null)

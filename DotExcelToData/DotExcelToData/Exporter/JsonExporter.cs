@@ -60,7 +60,7 @@ namespace Dot.Tools.ETD.Exporter
                         }
                     }
 
-                    CellContent cellContent = line.cells[i];
+                    LineCell cellContent = line.cells[i];
 
                     var value = field.GetValue(cellContent);
 
