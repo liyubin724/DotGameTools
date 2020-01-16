@@ -59,7 +59,7 @@ namespace Dot.Tools.ETD.Validations
 
             if(content.Length > maxLen)
             {
-                msg = $"StringMaxLenValidatoin::Verify->Out of maxLen.Row = {cell.Row},Col = {cell.Col},Content = {content},Compare={content.Length}>{maxLen}";
+                msg = $"StringMaxLenValidatoin::Verify->Out of maxLen.Row = {cell.row},Col = {cell.col},Content = {content},Compare={content.Length}>{maxLen}";
                 return ValidationResultCode.MaxLenError;
             }
             return ValidationResultCode.Success;

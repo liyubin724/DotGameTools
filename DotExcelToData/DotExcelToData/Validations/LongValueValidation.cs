@@ -38,13 +38,13 @@ namespace Dot.Tools.ETD.Validations
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"LongValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"LongValueValidation::Verify->Cell Content is null. Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentIsNull;
             }
 
             if (!long.TryParse(content, out long value))
             {
-                msg = $"LongValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                msg = $"LongValueValidation::Verify->Parse content error.Row = {cell.row},Col = {cell.col},Content = {content}";
                 return ValidationResultCode.ParseContentFailed;
             }
 

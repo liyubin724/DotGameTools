@@ -38,7 +38,7 @@ namespace Dot.Tools.ETD.Validations
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"NotNullValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"NotNullValidation::Verify->Cell Content is null. Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentIsNull;
             }
 

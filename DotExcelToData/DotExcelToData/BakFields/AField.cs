@@ -105,7 +105,7 @@ namespace Dot.Tools.ETD.Fields
             if (cell == null)
                 return null;
 
-            string content = cell.Content;
+            string content = cell.value;
             if(string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(DefaultValue))
             {
                 content = DefaultValue;

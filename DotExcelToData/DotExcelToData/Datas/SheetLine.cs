@@ -8,7 +8,8 @@ namespace Dot.Tools.ETD.Datas
 {
     public class SheetLine
     {
-        public List<CellLine> lines = new List<CellLine>();
+        private List<LineCell> lines = new List<LineCell>();
+        //----------
 
         public void LoadFromSheet(ISheet sheet, SheetField sheetField,
             int firstRow, int lastRow, int firstCol, int lastCol)
@@ -41,8 +42,8 @@ namespace Dot.Tools.ETD.Datas
                 }
                 if (isStart)
                 {
-                    CellLine line = new CellLine();
-                    line.Row = firstRow + i;
+                    LineCell line = new LineCell();
+                    line.row = firstRow + i;
 
                     for (int j = 0; j < sheetField.fields.Count; j++)
                     {
@@ -58,9 +59,9 @@ namespace Dot.Tools.ETD.Datas
                         }
 
                         CellContent cellContent = new CellContent();
-                        cellContent.Row = firstRow + i;
-                        cellContent.Col = field.Col;
-                        cellContent.Content = content;
+                        cellContent.row = firstRow + i;
+                        cellContent.col = field.Col;
+                        cellContent.value = content;
                         line.cells.Add(cellContent);
                     }
                     if (line.cells.Count == sheetField.fields.Count)

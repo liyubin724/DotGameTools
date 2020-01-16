@@ -119,7 +119,7 @@ namespace DotExcelToDataConsole
                     Console.WriteLine($"----Begin export book({book.Name})");
                     foreach(var sheet in book.sheets)
                     {
-                        Console.WriteLine($"--------Begin export Sheet({sheet.Name})");
+                        Console.WriteLine($"--------Begin export Sheet({sheet.name})");
                         if(option.Format == ETDFormat.Json)
                         {
                             JsonExporter.Export(option.OutputDir, sheet, option.Platform);

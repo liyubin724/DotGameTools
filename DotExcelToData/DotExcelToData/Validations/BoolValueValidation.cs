@@ -70,13 +70,13 @@ namespace Dot.Tools.ETD.Validations
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"BoolValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"BoolValidation::Verify->Cell Content is null. Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentIsNull;
             }
 
             if (!bool.TryParse(content, out bool value))
             {
-                msg = $"BoolValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                msg = $"BoolValidation::Verify->Parse content error.Row = {cell.row},Col = {cell.col},Content = {content}";
                 return ValidationResultCode.ParseContentFailed;
             }
 

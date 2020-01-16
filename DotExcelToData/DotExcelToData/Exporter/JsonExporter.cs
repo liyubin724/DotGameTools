@@ -89,7 +89,7 @@ namespace Dot.Tools.ETD.Exporter
             }
 
             string json = sheetData.ToString();
-            File.WriteAllText(outputDirPath + "/" + sheet.Name + ".json", json);
+            File.WriteAllText(outputDirPath + "/" + sheet.name + ".json", json);
         }
     }
 }

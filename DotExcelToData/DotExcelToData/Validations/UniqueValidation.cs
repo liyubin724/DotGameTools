@@ -43,14 +43,14 @@ namespace Dot.Tools.ETD.Validations
             foreach(var line in sheet.Line.lines)
             {
                 CellContent cc = line.cells[index];
-                if(cc.Row == cell.Row)
+                if(cc.row == cell.row)
                 {
                     continue;
                 }
                 string c = field.GetContent(cc);
                 if(c == content)
                 {
-                    msg = $"UniqueValueValidation::Verify->Content is Repeat.content = {content},Row={cell.Row}--{cc.Row},Col = {cell.Col}";
+                    msg = $"UniqueValueValidation::Verify->Content is Repeat.content = {content},Row={cell.row}--{cc.row},Col = {cell.col}";
                     return ValidationResultCode.ContentRepeatError;
                 }
             }

@@ -1,12 +1,11 @@
-﻿using Dot.Tools.ETD.Fields;
-using Dot.Tools.ETD.Utils;
+﻿using Dot.Tools.ETD.Utils;
 using System;
 
-namespace Dot.Tools.ETD.Factorys
+namespace Dot.Tools.ETD.Fields
 {
     public static class FieldFactory
     {
-        public static AField GetField(
+        public static AFieldData GetField(
             int col, 
             string name, 
             string type,
@@ -25,20 +24,16 @@ namespace Dot.Tools.ETD.Factorys
             FieldType fieldType = FieldTypeUtil.GetFieldType(type);
             if(fieldType != FieldType.None)
             {
-                string fieldName = fieldType.ToString() + "Field";
+                string fieldName = fieldType.ToString() + "FieldData";
                 resultType = AssemblyUtil.GetTypeByName(fieldName, true);
             }
+
             if(resultType == null)
             {
-                resultType = typeof(ErrorField);
+                return null;
             }
 
-            AField field = (AField)Activator.CreateInstance(resultType, col, name, desc, type, platform, value, validation);
-            if(field.GetType() == typeof(ErrorField))
-            {
-                ((ErrorField)field).ErrorMsg = "Type not found";
-            }
-            return field;
+            return (AFieldData)Activator.CreateInstance(resultType, col, name, desc, type, platform, value, validation);
         }
     }
 }

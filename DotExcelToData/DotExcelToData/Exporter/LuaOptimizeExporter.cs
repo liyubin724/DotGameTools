@@ -60,7 +60,7 @@ namespace Dot.Tools.ETD.Exporter
                 }
             }
 
-            luaSB.AppendLine($"local {sheet.Name} = {{");
+            luaSB.AppendLine($"local {sheet.name} = {{");
             
             foreach (var line in sheet.Line.lines)
             {
@@ -105,9 +105,9 @@ namespace Dot.Tools.ETD.Exporter
                 luaSB.AppendLine("    },");
             }
             luaSB.AppendLine("}");
-            luaSB.AppendLine($"return {sheet.Name}");
+            luaSB.AppendLine($"return {sheet.name}");
 
-            string filePath = $"{outputDirPath}/{sheet.Name}.txt";
+            string filePath = $"{outputDirPath}/{sheet.name}.txt";
             File.WriteAllText(filePath, luaSB.ToString());
 
         }

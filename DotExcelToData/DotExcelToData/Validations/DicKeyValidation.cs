@@ -40,20 +40,20 @@ namespace Dot.Tools.ETD.Validations
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"DicKeyValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"DicKeyValidation::Verify->Cell Content is null. Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentIsNull;
             }
 
             if(content[0]!='{' || content[content.Length-1]!='}')
             {
-                msg = $"DicKeyValidation::Verify->Cell Content should start with {{ and end with }} . Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"DicKeyValidation::Verify->Cell Content should start with {{ and end with }} . Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentDicFormatError;
             }
 
             string[] values = ContentUtil.SplitContent(content, new char[] { ',', ';' });
             if(values!=null && values.Length%2!=0)
             {
-                msg = $"DicKeyValidation::Verify->The length should be Divisible by 2 . Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"DicKeyValidation::Verify->The length should be Divisible by 2 . Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentDicKeyValueCountError;
             }
             List<object> keys = new List<object>();
@@ -62,7 +62,7 @@ namespace Dot.Tools.ETD.Validations
                 var key = ContentUtil.GetValue(values[i], ((DicField)field).KeyFieldType);
                 if(keys.Contains(key))
                 {
-                    msg = $"DicKeyValidation::Verify->Key repeat . Row = {cell.Row},Col = {cell.Col}.key ={key}";
+                    msg = $"DicKeyValidation::Verify->Key repeat . Row = {cell.row},Col = {cell.col}.key ={key}";
                     return ValidationResultCode.ContentDicKeyRepeatError;
                 }
             }

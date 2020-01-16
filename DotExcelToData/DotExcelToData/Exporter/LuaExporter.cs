@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Exporter
 {
     public static class LuaExporter
     {
-        private static void ExportLineToLua(StringBuilder luaSB, CellLine line,List<AField> fields,int indent,FieldPlatform platform)
+        private static void ExportLineToLua(StringBuilder luaSB, LineCell line,List<AField> fields,int indent,FieldPlatform platform)
         {
             string indentStr = GetIndentStr(indent);
 
@@ -91,15 +91,15 @@ namespace Dot.Tools.ETD.Exporter
             }
 
             StringBuilder luaSB = new StringBuilder();
-            luaSB.AppendLine($"local {sheet.Name} = {{");
+            luaSB.AppendLine($"local {sheet.name} = {{");
             foreach(var line in sheet.Line.lines)
             {
                 ExportLineToLua(luaSB, line, sheet.Field.fields, 1, platform);
             }
             luaSB.AppendLine("}");
-            luaSB.AppendLine($"return {sheet.Name}");
+            luaSB.AppendLine($"return {sheet.name}");
 
-            string filePath = $"{outputDirPath}/{sheet.Name}.txt";
+            string filePath = $"{outputDirPath}/{sheet.name}.txt";
             File.WriteAllText(filePath, luaSB.ToString());
         }
     }

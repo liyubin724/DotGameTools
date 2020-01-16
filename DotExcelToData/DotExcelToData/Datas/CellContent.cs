@@ -1,12 +1,28 @@
-﻿using ExtractInject;
+﻿using Dot.Tools.ETD.Fields;
+using ExtractInject;
 
 namespace Dot.Tools.ETD.Datas
 {
     public class CellContent : IEIContextObject
     {
-        public int Row { get; set; }
-        public int Col { get; set; }
+        public int row;
+        public int col;
+        public string value;
 
-        public string Content { get; set; }
+        public CellContent(int r,int c,string v)
+        {
+            row = r;
+            col = c;
+            value = v;
+        }
+
+        public string GetContent(AFieldData field)
+        {
+            if(string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(field.defaultValue))
+            {
+                return field.defaultValue;
+            }
+            return value;
+        }
     }
 }

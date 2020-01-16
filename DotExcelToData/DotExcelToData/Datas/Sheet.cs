@@ -1,12 +1,86 @@
-﻿using ExtractInject;
+﻿using Dot.Tools.ETD.Fields;
+using Dot.Tools.ETD.Verify;
+using ExtractInject;
 using NPOI.SS.UserModel;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Dot.Tools.ETD.Datas
 {
-    public class Sheet : IEIContextObject
+    public class Sheet : IEIContextObject,IVerify
     {
-        public string Name { get; set; }
+        public string name;
+
+        private List<AFieldData> fields = new List<AFieldData>();
+        private List<LineCell> lines = new List<LineCell>();
+
+        public Sheet(string n)
+        {
+            name = n;
+        }
+
+        public int LineCount { get => lines.Count; }
+        public int FieldCount { get => fields.Count; }
+
+        public bool Verify()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddField(AFieldData field)
+        {
+            fields.Add(field);
+        }
+
+        public AFieldData GetFieldByCol(int col)
+        {
+            foreach(var field in fields)
+            {
+                if(field.col == col)
+                {
+                    return field;
+                }
+            }
+            return null;
+        }
+
+        public AFieldData GetFieldByIndex(int index)
+        {
+            if(index>=0&&index<fields.Count)
+            {
+                return fields[index];
+            }
+            return null;
+        }
+
+        public void AddLine(LineCell line)
+        {
+            lines.Add(line);
+        }
+
+        public LineCell GetLineByRow(int row)
+        {
+            foreach(var line in lines)
+            {
+                if(line.row == row)
+                {
+                    return line;
+                }
+            }
+            return null;
+        }
+
+        public LineCell GetLineByIndex(int index)
+        {
+            if(index>=0&&index<lines.Count)
+            {
+                return lines[index];
+            }
+            return null;
+        }
+
+        //-----------------------------
+
         public SheetField Field { get; set; }
         public SheetLine Line { get; set; }
 
@@ -43,7 +117,7 @@ namespace Dot.Tools.ETD.Datas
                 SheetLine sheetLine = new SheetLine();
                 sheetLine.LoadFromSheet(sheet, sheetField, firstRow, lastRow, firstCol, lastCol);
 
-                Name = sheet.SheetName;
+                name = sheet.SheetName;
                 Field = sheetField;
                 Line = sheetLine;
             }
@@ -71,9 +145,11 @@ namespace Dot.Tools.ETD.Datas
                 return true;
             }else
             {
-                msg =  $"Sheet::Verify->SheetName = {Name}\n" + msg;
+                msg =  $"Sheet::Verify->SheetName = {name}\n" + msg;
                 return false;
             }
         }
+
+        
     }
 }

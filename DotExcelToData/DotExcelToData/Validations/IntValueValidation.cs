@@ -38,13 +38,13 @@ namespace Dot.Tools.ETD.Validations
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"IntValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"IntValueValidation::Verify->Cell Content is null. Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentIsNull;
             }
 
             if (!int.TryParse(content, out int value))
             {
-                msg = $"IntValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                msg = $"IntValueValidation::Verify->Parse content error.Row = {cell.row},Col = {cell.col},Content = {content}";
                 return ValidationResultCode.ParseContentFailed;
             }
 

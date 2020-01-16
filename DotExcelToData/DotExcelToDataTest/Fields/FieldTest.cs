@@ -30,9 +30,9 @@ namespace DotExcelToDataTest.Fields
 
             CellContent content = new CellContent()
             {
-                Col = 1,
-                Row = 1,
-                Content = "[1,2,3,4]",
+                col = 1,
+                row = 1,
+                value = "[1,2,3,4]",
             };
 
             var data = field.GetValue(content);

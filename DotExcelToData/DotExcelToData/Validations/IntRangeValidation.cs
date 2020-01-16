@@ -71,13 +71,13 @@ namespace Dot.Tools.ETD.Validations
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"IntRangeValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
+                msg = $"IntRangeValidation::Verify->Cell Content is null. Row = {cell.row},Col = {cell.col}.";
                 return ValidationResultCode.ContentIsNull;
             }
 
             if (!int.TryParse(content, out int value))
             {
-                msg = $"IntRangeValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
+                msg = $"IntRangeValidation::Verify->Parse content error.Row = {cell.row},Col = {cell.col},Content = {content}";
                 return ValidationResultCode.ParseContentFailed;
             }
             else
@@ -88,7 +88,7 @@ namespace Dot.Tools.ETD.Validations
                 }
                 else
                 {
-                    msg = $"IntRangeValidation::Verify->Compare error.Row = {cell.Row},Col = {cell.Col},Compare={min}--{value}--{max}";
+                    msg = $"IntRangeValidation::Verify->Compare error.Row = {cell.row},Col = {cell.col},Compare={min}--{value}--{max}";
                     return ValidationResultCode.NumberRangeError;
                 }
             }
