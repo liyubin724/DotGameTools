@@ -105,12 +105,12 @@ namespace Dot.Tools.ETD.IO
             int colCount = lastCol - firstCol + 1;
             if (rowCount < SheetConst.MIN_ROW_COUNT)
             {
-                Log(LogType.Info, LogConst.LOG_SHEET_ROW_LESS, rowCount);
+                Log(LogType.Info, LogConst.LOG_SHEET_ROW_LESS, rowCount, SheetConst.MIN_ROW_COUNT);
                 return null;
             }
             if (colCount < SheetConst.MIN_COLUMN_COUNT)
             {
-                Log(LogType.Info, LogConst.LOG_SHEET_ROW_LESS, colCount);
+                Log(LogType.Info, LogConst.LOG_SHEET_COL_LESS, colCount, SheetConst.MIN_COLUMN_COUNT);
                 return null;
             }
 
@@ -231,7 +231,7 @@ namespace Dot.Tools.ETD.IO
                 }
                 sheetData.AddLine(line);
 
-                Log(LogType.Info, LogConst.LOG_SHEET_LINE_DETAIL,line.ToString());
+                Log(LogType.Verbose, LogConst.LOG_SHEET_LINE_DETAIL,line.ToString());
             }
 
             Log(LogType.Info, LogConst.LOG_SHEET_LINE_END);

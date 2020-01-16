@@ -25,7 +25,7 @@ namespace Dot.Tools.ETD
         {
             if(string.IsNullOrEmpty(excelPath))
             {
-                Log(LogType.Error, LogConst.LOG_ARG_NULL);
+                Log(LogType.Error, LogConst.LOG_ARG_IS_NULL);
                 return null;
             }
 
