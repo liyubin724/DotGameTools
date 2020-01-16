@@ -12,9 +12,6 @@ namespace ExtractInject
         Out,//字段作为提取
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     [AttributeUsage(AttributeTargets.Field,AllowMultiple =false)]
     public class EIField : Attribute
     {
