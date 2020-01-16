@@ -86,7 +86,7 @@ namespace Dot.Tools.ETD.Fields
             {
                 EIUtil.Inject(context, validation);
 
-                ResultCode resultCode = validation.Verify(out string tMsg);
+                ValidationResultCode resultCode = validation.Verify(out string tMsg);
                 if((int)resultCode<0)
                 {
                     if(result)

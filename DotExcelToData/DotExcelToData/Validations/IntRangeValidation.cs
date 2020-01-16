@@ -58,38 +58,38 @@ namespace Dot.Tools.ETD.Validations
             }
         }
 
-        public ResultCode Verify(out string msg)
+        public ValidationResultCode Verify(out string msg)
         {
             msg = null;
 
             if (field == null || cell == null)
             {
                 msg = "IntRangeValidation::Verify->Argument is null!";
-                return ResultCode.ArgIsNull;
+                return ValidationResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
                 msg = $"IntRangeValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
-                return ResultCode.ContentIsNull;
+                return ValidationResultCode.ContentIsNull;
             }
 
             if (!int.TryParse(content, out int value))
             {
                 msg = $"IntRangeValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
-                return ResultCode.ParseContentFailed;
+                return ValidationResultCode.ParseContentFailed;
             }
             else
             {
                 if (value >= min && value <= max)
                 {
-                    return ResultCode.Success;
+                    return ValidationResultCode.Success;
                 }
                 else
                 {
                     msg = $"IntRangeValidation::Verify->Compare error.Row = {cell.Row},Col = {cell.Col},Compare={min}--{value}--{max}";
-                    return ResultCode.NumberRangeError;
+                    return ValidationResultCode.NumberRangeError;
                 }
             }
         }

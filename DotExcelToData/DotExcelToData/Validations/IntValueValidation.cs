@@ -25,30 +25,30 @@ namespace Dot.Tools.ETD.Validations
             }
         }
 
-        public ResultCode Verify(out string msg)
+        public ValidationResultCode Verify(out string msg)
         {
             msg = null;
 
             if (field == null || cell == null)
             {
                 msg = "IntValueValidation::Verify->Argument is null!";
-                return ResultCode.ArgIsNull;
+                return ValidationResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
                 msg = $"IntValueValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
-                return ResultCode.ContentIsNull;
+                return ValidationResultCode.ContentIsNull;
             }
 
             if (!int.TryParse(content, out int value))
             {
                 msg = $"IntValueValidation::Verify->Parse content error.Row = {cell.Row},Col = {cell.Col},Content = {content}";
-                return ResultCode.ParseContentFailed;
+                return ValidationResultCode.ParseContentFailed;
             }
 
-            return ResultCode.Success;
+            return ValidationResultCode.Success;
         }
     }
 }

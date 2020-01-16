@@ -22,20 +22,20 @@ namespace Dot.Tools.ETD.Validations
         {
         }
 
-        public ResultCode Verify(out string msg)
+        public ValidationResultCode Verify(out string msg)
         {
             msg = null;
             if (field == null || cell == null || sheet == null)
             {
                 msg = "UniqueValueValidation::Verify->Argument is null!";
-                return ResultCode.ArgIsNull;
+                return ValidationResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if(string.IsNullOrEmpty(content))
             {
                 msg = "UniqueValueValidation::Verify->Content is null";
-                return ResultCode.ContentIsNull;
+                return ValidationResultCode.ContentIsNull;
             }
 
             int index = sheet.Field.fields.IndexOf(field);
@@ -51,11 +51,11 @@ namespace Dot.Tools.ETD.Validations
                 if(c == content)
                 {
                     msg = $"UniqueValueValidation::Verify->Content is Repeat.content = {content},Row={cell.Row}--{cc.Row},Col = {cell.Col}";
-                    return ResultCode.ContentRepeatError;
+                    return ValidationResultCode.ContentRepeatError;
                 }
             }
 
-            return ResultCode.Success;
+            return ValidationResultCode.Success;
         }
     }
 }

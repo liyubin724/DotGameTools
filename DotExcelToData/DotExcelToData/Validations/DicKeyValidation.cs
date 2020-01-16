@@ -27,34 +27,34 @@ namespace Dot.Tools.ETD.Validations
             }
         }
 
-        public ResultCode Verify(out string msg)
+        public ValidationResultCode Verify(out string msg)
         {
             msg = null;
 
             if (field == null || cell == null)
             {
                 msg = "DicKeyValidation::Verify->Argument is null!";
-                return ResultCode.ArgIsNull;
+                return ValidationResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
                 msg = $"DicKeyValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
-                return ResultCode.ContentIsNull;
+                return ValidationResultCode.ContentIsNull;
             }
 
             if(content[0]!='{' || content[content.Length-1]!='}')
             {
                 msg = $"DicKeyValidation::Verify->Cell Content should start with {{ and end with }} . Row = {cell.Row},Col = {cell.Col}.";
-                return ResultCode.ContentDicFormatError;
+                return ValidationResultCode.ContentDicFormatError;
             }
 
             string[] values = ContentUtil.SplitContent(content, new char[] { ',', ';' });
             if(values!=null && values.Length%2!=0)
             {
                 msg = $"DicKeyValidation::Verify->The length should be Divisible by 2 . Row = {cell.Row},Col = {cell.Col}.";
-                return ResultCode.ContentDicKeyValueCountError;
+                return ValidationResultCode.ContentDicKeyValueCountError;
             }
             List<object> keys = new List<object>();
             for(int  i=0;i<values.Length;i+=2)
@@ -63,10 +63,10 @@ namespace Dot.Tools.ETD.Validations
                 if(keys.Contains(key))
                 {
                     msg = $"DicKeyValidation::Verify->Key repeat . Row = {cell.Row},Col = {cell.Col}.key ={key}";
-                    return ResultCode.ContentDicKeyRepeatError;
+                    return ValidationResultCode.ContentDicKeyRepeatError;
                 }
             }
-            return ResultCode.Success;
+            return ValidationResultCode.Success;
         }
     }
 }

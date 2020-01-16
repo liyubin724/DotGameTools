@@ -25,24 +25,24 @@ namespace Dot.Tools.ETD.Validations
         {
         }
 
-        public ResultCode Verify(out string msg)
+        public ValidationResultCode Verify(out string msg)
         {
             msg = null;
 
             if (field == null || cell == null)
             {
                 msg = "NotNullValidation::Verify->Argument is null!";
-                return ResultCode.ArgIsNull;
+                return ValidationResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
                 msg = $"NotNullValidation::Verify->Cell Content is null. Row = {cell.Row},Col = {cell.Col}.";
-                return ResultCode.ContentIsNull;
+                return ValidationResultCode.ContentIsNull;
             }
 
-            return ResultCode.Success;
+            return ValidationResultCode.Success;
         }
     }
 }

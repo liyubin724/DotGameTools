@@ -41,28 +41,28 @@ namespace Dot.Tools.ETD.Validations
             }
         }
 
-        public ResultCode Verify(out string msg)
+        public ValidationResultCode Verify(out string msg)
         {
             msg = null;
 
             if (field == null || cell == null)
             {
                 msg = "StringMaxLenValidatoin::Verify->Argument is null!";
-                return ResultCode.ArgIsNull;
+                return ValidationResultCode.ArgIsNull;
             }
 
             string content = field.GetContent(cell);
             if (string.IsNullOrEmpty(content))
             {
-                return ResultCode.Pass;
+                return ValidationResultCode.Pass;
             }
 
             if(content.Length > maxLen)
             {
                 msg = $"StringMaxLenValidatoin::Verify->Out of maxLen.Row = {cell.Row},Col = {cell.Col},Content = {content},Compare={content.Length}>{maxLen}";
-                return ResultCode.MaxLenError;
+                return ValidationResultCode.MaxLenError;
             }
-            return ResultCode.Success;
+            return ValidationResultCode.Success;
         }
     }
 }

@@ -11,10 +11,10 @@
             ErrorMsg = "The type of Validation is Error.rule = "+rule;
         }
 
-        public ResultCode Verify(out string msg)
+        public ValidationResultCode Verify(out string msg)
         {
             msg = ErrorMsg;
-            return ResultCode.Failed;
+            return ValidationResultCode.Failed;
         }
     }
 }
