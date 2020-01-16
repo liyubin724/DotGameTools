@@ -1,7 +1,9 @@
-﻿namespace Dot.Tools.ETD.Verify
+﻿using ExtractInject;
+
+namespace Dot.Tools.ETD.Verify
 {
     public interface IVerify
     {
-        bool Verify();
+        bool Verify(IEIContext context);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Dot.Tools.ETD.Verify;
+using ExtractInject;
 using System.Collections.Generic;
 using System.IO;
 
@@ -50,9 +51,24 @@ namespace Dot.Tools.ETD.Datas
             sheets.Add(sheet);
         }
 
-        public bool Verify()
+        public bool Verify(IEIContext context)
         {
-            throw new System.NotImplementedException();
+            bool result = true;
+
+            foreach(var sheet in sheets)
+            {
+                context.AddObject<Sheet>(sheet);
+
+                bool isValid = sheet.Verify(context);
+                if(result && !isValid)
+                {
+                    result = false;
+                }
+
+                context.DeleteObject<Sheet>();
+            }
+
+            return result;
         }
     }
 }

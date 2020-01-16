@@ -20,9 +20,19 @@ namespace Dot.Tools.ETD.Datas
         public int LineCount { get => lines.Count; }
         public int FieldCount { get => fields.Count; }
 
-        public bool Verify()
+        public bool Verify(IEIContext context)
         {
-            throw new System.NotImplementedException();
+            bool result = true;
+            foreach(var field in fields)
+            {
+                bool isValid = field.Verify(context);
+                if(result && !isValid)
+                {
+                    result = false;
+                }
+            }
+
+            return result;
         }
 
         public void AddField(AFieldData field)

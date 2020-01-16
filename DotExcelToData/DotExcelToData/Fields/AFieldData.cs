@@ -2,6 +2,7 @@
 using Dot.Tools.ETD.Utils;
 using Dot.Tools.ETD.Validations;
 using Dot.Tools.ETD.Verify;
+using ExtractInject;
 using System.Collections.Generic;
 
 namespace Dot.Tools.ETD.Fields
@@ -50,8 +51,9 @@ namespace Dot.Tools.ETD.Fields
 
         protected abstract void AddExtraValidation(List<IValidation> validations);
 
-        public bool Verify()
+        public bool Verify(IEIContext context)
         {
+
             return VerifyField();
         }
 
