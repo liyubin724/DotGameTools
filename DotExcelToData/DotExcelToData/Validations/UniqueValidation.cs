@@ -13,6 +13,19 @@ namespace Dot.Tools.ETD.Validations
         [EIField(EIFieldUsage.In, false)]
         public LineCell cell;
 
+        public void SetRule(string rule)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ValidationResultCode Verify(EIContext context)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        //--------------------------------
+
         private bool isValid = true;
         public bool IsValid => isValid;
 
@@ -38,22 +51,22 @@ namespace Dot.Tools.ETD.Validations
                 return ValidationResultCode.ContentIsNull;
             }
 
-            int index = sheet.Field.fields.IndexOf(field);
+            //int index = sheet.Field.fields.IndexOf(field);
 
-            foreach(var line in sheet.Line.lines)
-            {
-                LineCell cc = line.cells[index];
-                if(cc.row == cell.row)
-                {
-                    continue;
-                }
-                string c = field.GetContent(cc);
-                if(c == content)
-                {
-                    msg = $"UniqueValueValidation::Verify->Content is Repeat.content = {content},Row={cell.row}--{cc.row},Col = {cell.col}";
-                    return ValidationResultCode.ContentRepeatError;
-                }
-            }
+            //foreach(var line in sheet.Line.lines)
+            //{
+            //    LineCell cc = line.cells[index];
+            //    if(cc.row == cell.row)
+            //    {
+            //        continue;
+            //    }
+            //    string c = field.GetContent(cc);
+            //    if(c == content)
+            //    {
+            //        msg = $"UniqueValueValidation::Verify->Content is Repeat.content = {content},Row={cell.row}--{cc.row},Col = {cell.col}";
+            //        return ValidationResultCode.ContentRepeatError;
+            //    }
+            //}
 
             return ValidationResultCode.Success;
         }

@@ -24,5 +24,10 @@ namespace Dot.Tools.ETD.Datas
             }
             return value;
         }
+
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(value) ? "" : value;
+        }
     }
 }

@@ -86,15 +86,15 @@ namespace Dot.Tools.ETD.Fields
             {
                 EIUtil.Inject(context, validation);
 
-                ValidationResultCode resultCode = validation.Verify(out string tMsg);
-                if((int)resultCode<0)
-                {
-                    if(result)
-                    {
-                        result = false;
-                    }
-                    msgSB.AppendLine(tMsg);
-                }
+                //ValidationResultCode resultCode = validation.Verify(out string tMsg);
+                //if((int)resultCode<0)
+                //{
+                //    if(result)
+                //    {
+                //        result = false;
+                //    }
+                //    msgSB.AppendLine(tMsg);
+                //}
             }
             msg = msgSB.ToString();
             return result;

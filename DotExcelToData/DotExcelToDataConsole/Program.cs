@@ -1,7 +1,9 @@
 ﻿using CommandLine;
+using Dot.Tools.ETD;
 using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Exporter;
 using Dot.Tools.ETD.Fields;
+using Dot.Tools.ETD.Log;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -20,7 +22,7 @@ namespace DotExcelToDataConsole
         [Option('f',"file",Required =true,HelpText = "input files which must be excel(.xlsx|.xls)")]
         public IEnumerable<string> Files { get; set; }
 
-        [Option('o',"output",Required =false,HelpText ="out put dir")]
+        [Option('o',"output",Required =false,HelpText ="output dir")]
         public string OutputDir { get; set; }
         
         [Option("format",Required =false,HelpText ="Json or Lua")]
@@ -59,85 +61,73 @@ namespace DotExcelToDataConsole
             Parser.Default.ParseArguments<ETDOption>(args).WithParsed(Run);
         }
 
+        static void Log(LogType logType,string message)
+        {
+            if(logType == LogType.Verbose)
+            {
+                Console.WriteLine(message, Color.GreenYellow);
+            }
+            else if(logType == LogType.Info)
+            {
+                Console.WriteLine(message, Color.White);
+            }else if(logType == LogType.Warning)
+            {
+                Console.WriteLine(message, Color.Yellow);
+            }else if(logType == LogType.Error)
+            {
+                Console.WriteLine(message, Color.Red);
+            }
+        }
+
         static void Run(ETDOption option)
         {
             List<Workbook> books = new List<Workbook>();
+            ETDProxy proxy = new ETDProxy(Log);
 
             IEnumerator<string> enumerator = option.Files.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                Console.WriteLine($"----Load Excel({enumerator.Current})");
+                string excelPath = enumerator.Current;
 
-                Workbook book = new Workbook();
-                bool result = book.LoadExcel(enumerator.Current, out string msg);
-                if(!result)
-                {
-                    Console.WriteLine(msg,Color.Red);
-                    Console.WriteLine("----Load Error.",Color.Red);
-                }else
-                {
-                    books.Add(book);
-                    Console.WriteLine("----Finished");
-                }
+                Workbook book = proxy.ReadWorkbookFromExcel(excelPath);
+                books.Add(book);
             }
 
-            if(books.Count==0)
-            {
-                Console.WriteLine("----Workbok not found.",Color.Yellow);
-                return;
-            }
-
-            bool verifyResult = true;
             if(option.IsVerify)
             {
                 foreach(var book in books)
                 {
-                    Console.WriteLine($"----Begin verify the book{book.Name}");
-
-                    bool result = book.Verify(out string msg);
-                    if(!result)
-                    {
-                        Console.WriteLine(msg,Color.Red);
-
-                        Console.WriteLine("----Verify Failed",Color.OrangeRed);
-
-                        if (verifyResult)
-                        {
-                            verifyResult = !verifyResult;
-                        }
-                    }else
-                    {
-                        Console.WriteLine("----Verify success");
-                    }
+                    
                 }
             }
 
-            if(verifyResult)
-            {
-                foreach(var book in books)
-                {
-                    Console.WriteLine($"----Begin export book({book.Name})");
-                    foreach(var sheet in book.sheets)
-                    {
-                        Console.WriteLine($"--------Begin export Sheet({sheet.name})");
-                        if(option.Format == ETDFormat.Json)
-                        {
-                            JsonExporter.Export(option.OutputDir, sheet, option.Platform);
-                        }else
-                        {
-                            if(option.IsOptimize)
-                            {
-                                LuaOptimizeExporter.Export(option.OutputDir, sheet, option.Platform);
-                            }else
-                            {
-                                LuaExporter.Export(option.OutputDir, sheet, option.Platform);
-                            }
-                        }
-                        Console.WriteLine("--------Export sheet Success");
-                    }
-                    Console.WriteLine($"----End export book");
-                }
-            }
+            Console.ReadKey();
+            //if(verifyResult)
+            //{
+            //    foreach(var book in books)
+            //    {
+            //        Console.WriteLine($"----Begin export book({book.Name})");
+            //        foreach(var sheet in book.sheets)
+            //        {
+            //            Console.WriteLine($"--------Begin export Sheet({sheet.name})");
+            //            if(option.Format == ETDFormat.Json)
+            //            {
+            //                JsonExporter.Export(option.OutputDir, sheet, option.Platform);
+            //            }else
+            //            {
+            //                if(option.IsOptimize)
+            //                {
+            //                    LuaOptimizeExporter.Export(option.OutputDir, sheet, option.Platform);
+            //                }else
+            //                {
+            //                    LuaExporter.Export(option.OutputDir, sheet, option.Platform);
+            //                }
+            //            }
+            //            Console.WriteLine("--------Export sheet Success");
+            //        }
+            //        Console.WriteLine($"----End export book");
+            //    }
+            //}
         }
     }
 }

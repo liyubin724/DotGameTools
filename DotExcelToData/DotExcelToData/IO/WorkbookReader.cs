@@ -1,5 +1,7 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
+using Dot.Tools.ETD.Log;
+using ExtractInject;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -13,11 +15,27 @@ using ETDWorkbook = Dot.Tools.ETD.Datas.Workbook;
 
 namespace Dot.Tools.ETD.IO
 {
-    public class WorkbookReader
+    internal class WorkbookReader
     {
-        public static Workbook ReadExcelToWorkbook(string excelPath)
+        private static EIContext context = null;
+        internal static void InitReader(EIContext context)
         {
-            string ext = Path.GetExtension(excelPath);
+            WorkbookReader.context = context;
+        }
+
+        internal static void DestroyReader()
+        {
+            context = null;
+        }
+
+        private static void Log(LogType type, int logID, params object[] datas)
+        {
+            context.GetObject<LogHandler>()?.Log(type, logID, datas);
+        }
+
+        internal static Workbook ReadExcelToWorkbook(string excelPath)
+        {
+            string ext = Path.GetExtension(excelPath).ToLower();
             using (FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 IWorkbook workbook = null;
@@ -32,8 +50,11 @@ namespace Dot.Tools.ETD.IO
 
                 if (workbook == null || workbook.NumberOfSheets == 0)
                 {
+                    Log(LogType.Warning, LogConst.LOG_WORKBOOK_EMPTY, excelPath);
                     return null;
                 }
+
+                Log(LogType.Info, LogConst.LOG_WORKBOOK_START, excelPath);
 
                 ETDWorkbook bookData = new ETDWorkbook(excelPath);
                 for (int i = 0; i < workbook.NumberOfSheets; i++)
@@ -42,14 +63,18 @@ namespace Dot.Tools.ETD.IO
                     string sheetName = sheet.SheetName;
                     if (string.IsNullOrEmpty(sheetName))
                     {
+                        Log(LogType.Warning, LogConst.LOG_SHEET_NAME_NULL, i);
+
                         continue;
                     }
                     if (sheetName.StartsWith("#"))
                     {
+                        Log(LogType.Info, LogConst.LOG_IGNORE_SHEET, sheetName);
                         continue;
                     }
                     if (!Regex.IsMatch(sheetName, SheetConst.SHEET_NAME_REGEX))
                     {
+                        Log(LogType.Error, LogConst.LOG_SHEET_NAME_NOT_MATCH, sheetName, SheetConst.SHEET_NAME_REGEX);
                         continue;
                     }
 
@@ -59,12 +84,17 @@ namespace Dot.Tools.ETD.IO
                         bookData.AddSheet(dataSheet);
                     }
                 }
+
+                Log(LogType.Info, LogConst.LOG_WORKBOOK_END, excelPath);
+
                 return bookData;
             }
         }
 
         public static ETDSheet ReadFromSheet(ISheet sheet)
         {
+            Log(LogType.Info, LogConst.LOG_SHEET_START, sheet.SheetName);
+
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
 
@@ -75,21 +105,29 @@ namespace Dot.Tools.ETD.IO
             int colCount = lastCol - firstCol + 1;
             if (rowCount < SheetConst.MIN_ROW_COUNT)
             {
+                Log(LogType.Info, LogConst.LOG_SHEET_ROW_LESS, rowCount);
                 return null;
             }
             if (colCount < SheetConst.MIN_COLUMN_COUNT)
             {
+                Log(LogType.Info, LogConst.LOG_SHEET_ROW_LESS, colCount);
                 return null;
             }
+
             ETDSheet sheetData = new ETDSheet(sheet.SheetName);
             ReadFieldFromSheet(sheetData, sheet);
             ReadLineFromSheet(sheetData, sheet);
+
+            Log(LogType.Info, LogConst.LOG_SHEET_END, sheet.SheetName);
+
             return sheetData;
         }
 
         private static void ReadFieldFromSheet(ETDSheet sheetData,ISheet sheet)
         {
             MethodInfo getFieldMI = typeof(FieldFactory).GetMethod("GetField", BindingFlags.Public | BindingFlags.Static);
+
+            Log(LogType.Info, LogConst.LOG_SHEET_FIELD_START);
 
             int firstRow = sheet.FirstRowNum;
             int firstCol = sheet.GetRow(firstRow).FirstCellNum;
@@ -114,26 +152,35 @@ namespace Dot.Tools.ETD.IO
                             string content = SheetConst.GetCellStringValue(cell);
                             if (string.IsNullOrEmpty(content) || content.StartsWith("#"))
                             {
+                                Log(LogType.Info, LogConst.LOG_SHEET_FIELD_IGNORE, content);
                                 break;
                             }
                         }
                     }
                     values.Add(SheetConst.GetCellStringValue(cell));
                 }
-                if (values.Count == SheetConst.MIN_ROW_COUNT + 1)
+                if (values.Count == SheetConst.MIN_ROW_COUNT)
                 {
                     object[] datas = new object[values.Count + 1];
                     datas[0] = firstCol + i;
                     Array.Copy(values.ToArray(), 0, datas, 1, values.Count);
 
+                    Log(LogType.Info, LogConst.LOG_SHEET_FIELD_CREATE, (firstCol + i));
+
                     AFieldData field = (AFieldData)getFieldMI.Invoke(null, datas);
                     sheetData.AddField(field);
+
+                    Log(LogType.Verbose, LogConst.LOG_SHEET_FIELD_DETAIL, field.ToString());
                 }
             }
+
+            Log(LogType.Info, LogConst.LOG_SHEET_FIELD_END);
         }
 
         private static void ReadLineFromSheet(ETDSheet sheetData,ISheet sheet)
         {
+            Log(LogType.Info, LogConst.LOG_SHEET_LINE_START);
+
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
 
@@ -172,6 +219,8 @@ namespace Dot.Tools.ETD.IO
                     }
                 }
 
+                Log(LogType.Info, LogConst.LOG_SHEET_LINE_CREATE,i);
+
                 SheetLine line = new SheetLine(i);
                 int fieldCount = sheetData.FieldCount;
                 for (int j = 0; j < fieldCount; ++j)
@@ -181,7 +230,11 @@ namespace Dot.Tools.ETD.IO
                     line.AddCell(fieldData.col, SheetConst.GetCellStringValue(valueCell));
                 }
                 sheetData.AddLine(line);
+
+                Log(LogType.Info, LogConst.LOG_SHEET_LINE_DETAIL,line.ToString());
             }
+
+            Log(LogType.Info, LogConst.LOG_SHEET_LINE_END);
         }
 
     }

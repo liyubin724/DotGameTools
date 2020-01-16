@@ -13,6 +13,18 @@ namespace Dot.Tools.ETD.Validations
         [EIField(EIFieldUsage.In, false)]
         public LineCell cell;
 
+        public void SetRule(string rule)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ValidationResultCode Verify(EIContext context)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        //--------------------------------
         public string ErrorMsg { get; set; }
 
         private bool isValid = true;
@@ -68,5 +80,7 @@ namespace Dot.Tools.ETD.Validations
             }
             return ValidationResultCode.Success;
         }
+
+
     }
 }

@@ -1,1 +1,1 @@
--f D:\WorkSpace\DotGameProject\DotGameTools\cofing.xlsx -o D:\ --format Json --verify --optimize --platform All
+-f E:\WorkSpace\DotGameProject\DotGameTools\cofing.xlsx -o D:\ --format Json --verify --optimize --platform All

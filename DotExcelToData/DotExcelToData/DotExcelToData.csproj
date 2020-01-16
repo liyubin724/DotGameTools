@@ -41,6 +41,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\libs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\libs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -66,37 +69,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Datas\CellContent.cs" />
-    <Compile Include="Datas\CellLine.cs" />
+    <Compile Include="Datas\LineCell.cs" />
+    <Compile Include="Datas\SheetLine.cs" />
+    <Compile Include="ETDProxy.cs" />
+    <Compile Include="IO\WorkbookReader.cs" />
+    <Compile Include="Log\LogConst.cs" />
+    <Compile Include="Log\LogHandler.cs" />
+    <Compile Include="Validations\ValidationResultMsg.cs" />
+    <Compile Include="Verify\IVerify.cs" />
     <Compile Include="Datas\SheetConst.cs" />
     <Compile Include="Datas\Sheet.cs" />
-    <Compile Include="Datas\SheetField.cs" />
-    <Compile Include="Datas\SheetLine.cs" />
     <Compile Include="Datas\Workbook.cs" />
-    <Compile Include="Exporter\JsonExporter.cs" />
-    <Compile Include="Exporter\LuaExporter.cs" />
-    <Compile Include="Exporter\LuaOptimizeExporter.cs" />
-    <Compile Include="Fields\AField.cs" />
-    <Compile Include="Fields\ArrayField.cs" />
-    <Compile Include="Fields\BoolField.cs" />
-    <Compile Include="Fields\DicField.cs" />
-    <Compile Include="Fields\ErrorField.cs" />
+    <Compile Include="Fields\ArrayFieldData.cs" />
+    <Compile Include="Fields\AFieldData.cs" />
+    <Compile Include="Fields\BoolFieldData.cs" />
+    <Compile Include="Fields\DicFieldData.cs" />
+    <Compile Include="Fields\FloatFieldData.cs" />
+    <Compile Include="Fields\IntFieldData.cs" />
+    <Compile Include="Fields\LongFieldData.cs" />
+    <Compile Include="Fields\LuaFieldData.cs" />
+    <Compile Include="Fields\RefFieldData.cs" />
+    <Compile Include="Fields\ResFieldData.cs" />
+    <Compile Include="Fields\StringFieldData.cs" />
+    <Compile Include="Fields\StringtFieldData.cs" />
+    <Compile Include="IO\JsonExporter.cs" />
+    <Compile Include="IO\LuaExporter.cs" />
+    <Compile Include="IO\LuaOptimizeExporter.cs" />
+    <Compile Include="BakFields\AField.cs" />
+    <Compile Include="BakFields\ArrayField.cs" />
+    <Compile Include="BakFields\BoolField.cs" />
+    <Compile Include="BakFields\DicField.cs" />
+    <Compile Include="BakFields\ErrorField.cs" />
     <Compile Include="Fields\FieldPlatform.cs" />
     <Compile Include="Fields\FieldType.cs" />
-    <Compile Include="Fields\FloatField.cs" />
-    <Compile Include="Fields\IntField.cs" />
-    <Compile Include="Fields\LongField.cs" />
-    <Compile Include="Fields\LuaField.cs" />
-    <Compile Include="Fields\RefField.cs" />
-    <Compile Include="Factorys\FieldFactory.cs" />
-    <Compile Include="Factorys\ValidationFactory.cs" />
-    <Compile Include="Fields\ResField.cs" />
-    <Compile Include="Fields\StringField.cs" />
-    <Compile Include="Fields\StringtField.cs" />
+    <Compile Include="BakFields\FloatField.cs" />
+    <Compile Include="BakFields\IntField.cs" />
+    <Compile Include="BakFields\LongField.cs" />
+    <Compile Include="BakFields\LuaField.cs" />
+    <Compile Include="BakFields\RefField.cs" />
+    <Compile Include="Fields\FieldFactory.cs" />
+    <Compile Include="Validations\ValidationFactory.cs" />
+    <Compile Include="BakFields\ResField.cs" />
+    <Compile Include="BakFields\StringField.cs" />
+    <Compile Include="BakFields\StringtField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AssemblyUtil.cs" />
     <Compile Include="Utils\ContentUtil.cs" />
-    <Compile Include="Utils\FieldTypeUtil.cs" />
+    <Compile Include="Fields\FieldTypeUtil.cs" />
     <Compile Include="Validations\BoolValueValidation.cs" />
     <Compile Include="Validations\DicKeyValidation.cs" />
     <Compile Include="Validations\ErrorValidation.cs" />
@@ -106,7 +125,6 @@
     <Compile Include="Validations\LongValueValidation.cs" />
     <Compile Include="Validations\NotNullValidation.cs" />
     <Compile Include="Validations\RefExistValidation.cs" />
-    <Compile Include="Validations\ResultCode.cs" />
     <Compile Include="Validations\IValidation.cs" />
     <Compile Include="Validations\StringMaxLenValidation.cs" />
     <Compile Include="Validations\UniqueValidation.cs" />

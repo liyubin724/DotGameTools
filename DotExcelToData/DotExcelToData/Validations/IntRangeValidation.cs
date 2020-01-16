@@ -17,6 +17,20 @@ namespace Dot.Tools.ETD.Validations
         public int min;
         public int max;
 
+
+        public void SetRule(string rule)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ValidationResultCode Verify(EIContext context)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        //--------------------------------
+
         private bool isValid = true;
         public bool IsValid => isValid;
 

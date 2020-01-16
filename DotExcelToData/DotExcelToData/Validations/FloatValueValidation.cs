@@ -11,6 +11,21 @@ namespace Dot.Tools.ETD.Validations
         [EIField(EIFieldUsage.In, false)]
         public LineCell cell;
 
+
+
+        public void SetRule(string rule)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ValidationResultCode Verify(EIContext context)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        //--------------------------------
+
         private bool isValid = true;
         public bool IsValid => isValid;
 

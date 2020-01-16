@@ -17,32 +17,16 @@ namespace Dot.Tools.ETD.Validations
         {
         }
 
-        public ValidationResultMsg Verify(EIContext context)
+        ValidationResultCode IValidation.Verify(EIContext context)
         {
-            ValidationResultCode resultCode = ValidationResultCode.Success;
-            List<SystemObject> values = new List<SystemObject>();
-
-            EIUtil.Inject(context, this);
-
-            if (field == null || cell == null)
-            {
-                resultCode = ValidationResultCode.ArgIsNull;
-            }else
-            {
-
-            }
-
-            EIUtil.Extract(context, this);
-
-            return new ValidationResultMsg(resultCode, values.ToArray());
+            throw new System.NotImplementedException();
         }
 
 
 
 
 
-
-
+        //------------------
         public string ErrorMsg { get; set; }
 
         private bool isValid = true;

@@ -1,7 +1,23 @@
-﻿namespace Dot.Tools.ETD.Validations
+﻿using ExtractInject;
+
+namespace Dot.Tools.ETD.Validations
 {
     public class ErrorValidation : IValidation
     {
+
+        public void SetRule(string rule)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ValidationResultCode Verify(EIContext context)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        //--------------------------------
+
         public bool IsValid => false;
 
         public string ErrorMsg { get; set; }

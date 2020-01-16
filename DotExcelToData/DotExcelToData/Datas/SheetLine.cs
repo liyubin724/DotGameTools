@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace Dot.Tools.ETD.Datas
 {
@@ -28,5 +29,16 @@ namespace Dot.Tools.ETD.Datas
             return null;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<");
+            foreach(var cell in cells)
+            {
+                sb.Append(cell.ToString()+",");
+            }
+            sb.Append(">");
+            return sb.ToString();
+        }
     }
 }

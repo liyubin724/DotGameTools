@@ -77,5 +77,10 @@ namespace Dot.Tools.ETD.Fields
 
             return FieldPlatform.None;
         }
+
+        public override string ToString()
+        {
+            return $"<col = {col},name = {name},desc={desc},type={type},platform={platform},defaultValue={defaultValue},validationRule={validationRule}>";
+        }
     }
 }
