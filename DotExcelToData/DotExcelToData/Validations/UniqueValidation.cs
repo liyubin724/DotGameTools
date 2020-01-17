@@ -52,42 +52,5 @@ namespace Dot.Tools.ETD.Validations
             }
             return ValidationResultCode.Success;
         }
-
-
-        public ValidationResultCode Verify(out string msg)
-        {
-            msg = null;
-            if (field == null || cell == null || sheet == null)
-            {
-                msg = "UniqueValueValidation::Verify->Argument is null!";
-                return ValidationResultCode.ArgIsNull;
-            }
-
-            string content = field.GetContent(cell);
-            if(string.IsNullOrEmpty(content))
-            {
-                msg = "UniqueValueValidation::Verify->Content is null";
-                return ValidationResultCode.ContentIsNull;
-            }
-
-            //int index = sheet.Field.fields.IndexOf(field);
-
-            //foreach(var line in sheet.Line.lines)
-            //{
-            //    LineCell cc = line.cells[index];
-            //    if(cc.row == cell.row)
-            //    {
-            //        continue;
-            //    }
-            //    string c = field.GetContent(cc);
-            //    if(c == content)
-            //    {
-            //        msg = $"UniqueValueValidation::Verify->Content is Repeat.content = {content},Row={cell.row}--{cc.row},Col = {cell.col}";
-            //        return ValidationResultCode.ContentRepeatError;
-            //    }
-            //}
-
-            return ValidationResultCode.Success;
-        }
     }
 }
