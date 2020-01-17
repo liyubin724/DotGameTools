@@ -1,11 +1,10 @@
-﻿using Dot.Tools.ETD.Utils;
-using Dot.Tools.ETD.Validations;
+﻿using Dot.Tools.ETD.Fields;
 using ExtractInject;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Dot.Tools.ETD.Factorys
+namespace Dot.Tools.ETD.Validations
 {
     public class ValidationFactory
     {

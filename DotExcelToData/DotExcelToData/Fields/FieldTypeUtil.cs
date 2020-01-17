@@ -1,8 +1,7 @@
-﻿using Dot.Tools.ETD.Fields;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Dot.Tools.ETD.Utils
+namespace Dot.Tools.ETD.Fields
 {
     public static class FieldTypeUtil
     {

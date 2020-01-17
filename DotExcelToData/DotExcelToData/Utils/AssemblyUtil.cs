@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Dot.Tools.ETD.Utils
+namespace Dot.Tools.ETD.Fields
 {
     public static class AssemblyUtil
     {

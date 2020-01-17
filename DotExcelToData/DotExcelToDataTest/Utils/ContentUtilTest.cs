@@ -1,4 +1,4 @@
-﻿using Dot.Tools.ETD.Utils;
+﻿using Dot.Tools.ETD.Fields;
 using NUnit.Framework;
 
 namespace DotExcelToDataTest.Utils

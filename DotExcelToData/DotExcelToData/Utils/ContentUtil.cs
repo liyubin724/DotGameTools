@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Dot.Tools.ETD.Utils
+namespace Dot.Tools.ETD.Fields
 {
     public static class ContentUtil
     {
