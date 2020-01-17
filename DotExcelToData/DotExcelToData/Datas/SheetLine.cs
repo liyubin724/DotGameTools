@@ -22,7 +22,19 @@ namespace Dot.Tools.ETD.Datas
             cells.Add(cell);
         }
 
-        public LineCell GetCell(int index)
+        public LineCell GetCellByCol(int col)
+        {
+            foreach(var cell in cells)
+            {
+                if(cell.col == col)
+                {
+                    return cell;
+                }
+            }
+            return null;
+        }
+
+        public LineCell GetCellByIndex(int index)
         {
             if(index>=0&&index<cells.Count)
             {

@@ -30,7 +30,7 @@ namespace Dot.Tools.ETD.Validations
             string content = cell.GetContent(field);
             if (string.IsNullOrEmpty(content))
             {
-                logHandler.Log(LogType.Warning, LogConst.LOG_VALIDATION_NULL, cell.row, cell.col);
+                logHandler.Log(LogType.Error, LogConst.LOG_VALIDATION_NULL, cell.row, cell.col);
                 return ValidationResultCode.ContentIsNull;
             }
 

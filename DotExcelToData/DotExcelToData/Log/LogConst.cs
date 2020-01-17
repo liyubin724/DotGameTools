@@ -66,6 +66,11 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_VALIDATION_FORMAT_ERROR = -4106;
         public static readonly int LOG_VALIDATION_LEN_ERROR = -4107;
         public static readonly int LOG_VALIDATION_TYPE_FOR_RANGE_ERROR = -4108;
+        public static readonly int LOG_VALIDATION_RANGE_MIN_ERROR = -4109;
+        public static readonly int LOG_VALIDATION_RANGE_MAX_ERROR = -4110;
+        public static readonly int LOG_VALIDATION_RANGE_MAX_LESS_MIN_ERROR = -4111;
+        public static readonly int LOG_VALIDATION_CONTENT_REPEAT_ERROR = -4112;
+
 
 
         private static Dictionary<int, string> logFormatDic = new Dictionary<int, string>();
@@ -118,7 +123,11 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_VALIDATION_FORMAT_ERROR, "The format of the rule is error.col = {0},rule = {1}");
             logFormatDic.Add(LOG_VALIDATION_LEN_ERROR, "The lenght of the content is large then {0},row = {1},col = {2}.content = {3}");
             logFormatDic.Add(LOG_VALIDATION_TYPE_FOR_RANGE_ERROR, "The validation(Range) can only be used for number.row = {0},col = {1},type = {2}");
-            
+            logFormatDic.Add(LOG_VALIDATION_RANGE_MIN_ERROR, "The validation(Range) can't find the minValue.col = {0}");
+            logFormatDic.Add(LOG_VALIDATION_RANGE_MAX_ERROR, "The validation(Range) can't find the maxValue.col = {0}");
+            logFormatDic.Add(LOG_VALIDATION_RANGE_MAX_LESS_MIN_ERROR, "MaxValue is less then minValue.col = {0},min={1},max ={2}");
+            logFormatDic.Add(LOG_VALIDATION_CONTENT_REPEAT_ERROR, "Content is Repeat.curCell = {0},targetCell={1}");
+
         }
 
         public static string GetLogMsg(int logID,params object[] datas)
