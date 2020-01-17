@@ -5,7 +5,7 @@ using ExtractInject;
 
 namespace Dot.Tools.ETD.Validations
 {
-    public class NotNullValidation : IValidation
+    public class IntValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
         public AFieldData field;
@@ -30,8 +30,14 @@ namespace Dot.Tools.ETD.Validations
             string content = cell.GetContent(field);
             if (string.IsNullOrEmpty(content))
             {
-                logHandler.Log(LogType.Warning, LogConst.LOG_VALIDATION_NULL, cell.row, cell.col);
-                return ValidationResultCode.ContentIsNull;
+                logHandler.Log(LogType.Warning, LogConst.LOG_VALIDATION_SET_DEFAULT,"0", cell.row, cell.col);
+                content = cell.value = "0";
+            }
+
+            if (!int.TryParse(content, out int value))
+            {
+                logHandler.Log(LogType.Error, LogConst.LOG_VALIDATION_CONVERT_ERROR, "int",cell.ToString());
+                return ValidationResultCode.ParseContentFailed;
             }
 
             return ValidationResultCode.Success;

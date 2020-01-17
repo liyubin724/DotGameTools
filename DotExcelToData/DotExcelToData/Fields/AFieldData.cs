@@ -1,4 +1,5 @@
 ﻿using Dot.Tools.ETD.Factorys;
+using Dot.Tools.ETD.Log;
 using Dot.Tools.ETD.Utils;
 using Dot.Tools.ETD.Validations;
 using Dot.Tools.ETD.Verify;
@@ -22,8 +23,8 @@ namespace Dot.Tools.ETD.Fields
             col = c;
             name = n;
             desc = d;
-            type = t ==null ?"":t.ToLower();
-            platform = p==null?"cs":p.ToLower();
+            type = t ==null ?"":t.Trim().ToLower();
+            platform = p==null?"cs":p.Trim().ToLower();
             defaultValue = v;
             validationRule = r;
 
@@ -53,11 +54,40 @@ namespace Dot.Tools.ETD.Fields
 
         public bool Verify(IEIContext context)
         {
+            bool result = true;
+            LogHandler logHandler = context.GetObject<LogHandler>();
 
-            return VerifyField();
+            logHandler.Log(LogType.Verbose, LogConst.LOG_FIELD_VERIFY_START,ToString());
+
+            if (string.IsNullOrEmpty(name))
+            {
+                logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_NAME_NULL);
+                result = false;
+            }
+            if(Type == FieldType.None)
+            {
+                logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_TYPE_ERROR);
+                result = false;
+            }
+
+            if(Platform == FieldPlatform.None)
+            {
+                logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_PLATFORM_ERROR);
+                result = false;
+            }
+
+            bool innerResult = InnerVerify(context);
+            if(!innerResult)
+            {
+                result = false;
+            }
+
+            logHandler.Log(LogType.Verbose, LogConst.LOG_FIELD_VERIFY_END, result);
+
+            return result;
         }
 
-        protected virtual bool VerifyField()
+        protected virtual bool InnerVerify(IEIContext context)
         {
             return true;
         }

@@ -12,7 +12,7 @@ namespace Dot.Tools.ETD.Fields
 
         protected override void AddExtraValidation(List<IValidation> validationList)
         {
-            validationList.Add(new LongValueValidation());
+            validationList.Add(new LongValidation());
         }
 
         public override object GetValue(LineCell cell)

@@ -27,7 +27,7 @@ namespace Dot.Tools.ETD.Datas
 
         public override string ToString()
         {
-            return string.IsNullOrEmpty(value) ? "" : value;
+            return $"<row:{row},col:{col},value:{(string.IsNullOrEmpty(value) ? "" : value)}>";
         }
     }
 }

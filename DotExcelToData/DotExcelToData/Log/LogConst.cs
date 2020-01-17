@@ -25,21 +25,48 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_SHEET_ROW_LESS = -203;
         public static readonly int LOG_SHEET_COL_LESS = -204;
 
-        public static readonly int LOG_WORKBOOK_START = 100;
-        public static readonly int LOG_WORKBOOK_END = 101;
+        public static readonly int LOG_WORKBOOK_START = 1100;
+        public static readonly int LOG_WORKBOOK_END = 1101;
 
-        public static readonly int LOG_SHEET_START = 201;
-        public static readonly int LOG_SHEET_END = 202;
-        public static readonly int LOG_IGNORE_SHEET = 203;
-        public static readonly int LOG_SHEET_FIELD_START = 204;
-        public static readonly int LOG_SHEET_FIELD_END = 205;
-        public static readonly int LOG_SHEET_LINE_START = 206;
-        public static readonly int LOG_SHEET_LINE_END = 207;
-        public static readonly int LOG_SHEET_FIELD_IGNORE = 208;
-        public static readonly int LOG_SHEET_FIELD_CREATE = 209;
-        public static readonly int LOG_SHEET_FIELD_DETAIL = 210;
-        public static readonly int LOG_SHEET_LINE_CREATE = 211;
-        public static readonly int LOG_SHEET_LINE_DETAIL = 212;
+        public static readonly int LOG_SHEET_START = 2201;
+        public static readonly int LOG_SHEET_END = 2202;
+        public static readonly int LOG_IGNORE_SHEET = 2203;
+        public static readonly int LOG_SHEET_FIELD_START = 2204;
+        public static readonly int LOG_SHEET_FIELD_END = 2205;
+        public static readonly int LOG_SHEET_LINE_START = 2206;
+        public static readonly int LOG_SHEET_LINE_END = 2207;
+        public static readonly int LOG_SHEET_FIELD_IGNORE = 2208;
+        public static readonly int LOG_SHEET_FIELD_CREATE = 2209;
+        public static readonly int LOG_SHEET_FIELD_DETAIL = 2210;
+        public static readonly int LOG_SHEET_LINE_CREATE = 2211;
+        public static readonly int LOG_SHEET_LINE_DETAIL = 2212;
+
+        public static readonly int LOG_WORKBOOK_VERIFY_START = 3100;
+        public static readonly int LOG_WORKBOOK_VERIFY_END = 3101;
+
+        public static readonly int LOG_SHEET_VERIFY_START = 3201;
+        public static readonly int LOG_SHEET_VERIFY_END = 3202;
+
+        public static readonly int LOG_FIELD_VERIFY_START = 3301;
+        public static readonly int LOG_FIELD_VERIFY_END = 3302;
+        public static readonly int LOG_FIELD_VERIFY_NAME_NULL = -3303;
+        public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3304;
+        public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3305;
+
+        public static readonly int LOG_LINE_VERIFY_START = 3401;
+        public static readonly int LOG_LINE_VERIFY_END = 3402;
+        public static readonly int LOG_LINE_COUNT_NOT_EQUAL = -3303;
+
+        public static readonly int LOG_VALIDATION_SET_DEFAULT = 4101;
+        public static readonly int LOG_VALIDATION_CONVERT_ERROR = -4102;
+        public static readonly int LOG_VALIDATION_DIC_FORMAT_ERROR = -4103;
+        public static readonly int LOG_VALIDATION_DIC_KV_COUNT_ERROR = -4104;
+        public static readonly int LOG_VALIDATION_DIC_KEY_REPEAT_ERROR = -4104;
+        public static readonly int LOG_VALIDATION_NULL = -4105;
+        public static readonly int LOG_VALIDATION_FORMAT_ERROR = -4106;
+        public static readonly int LOG_VALIDATION_LEN_ERROR = -4107;
+        public static readonly int LOG_VALIDATION_TYPE_FOR_RANGE_ERROR = -4108;
+
 
         private static Dictionary<int, string> logFormatDic = new Dictionary<int, string>();
         static LogConst()
@@ -66,6 +93,32 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_SHEET_LINE_END, "End to read line from sheet");
             logFormatDic.Add(LOG_SHEET_LINE_CREATE, "Read the line from sheet as a content.row = {0}");
             logFormatDic.Add(LOG_SHEET_LINE_DETAIL, "The content of the line is {0}.");
+
+            logFormatDic.Add(LOG_WORKBOOK_VERIFY_START, "Start to verify workbook.path = {0}");
+            logFormatDic.Add(LOG_WORKBOOK_VERIFY_END, "Verify workbook finish.path = {0}, result = {1}.");
+
+            logFormatDic.Add(LOG_SHEET_VERIFY_START, "Start to verify Sheet.Name = {0}");
+            logFormatDic.Add(LOG_SHEET_VERIFY_END, "Verify sheet finish.Name = {0}, Result = {1}.");
+            logFormatDic.Add(LOG_FIELD_VERIFY_START, "Start to verify Field.Detail = {0}");
+            logFormatDic.Add(LOG_FIELD_VERIFY_END, "Verify Field finish. Result = {0}.");
+            logFormatDic.Add(LOG_FIELD_VERIFY_NAME_NULL, "The name of the field is null");
+            logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The type of the field is error.");
+            logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The platform of the field is error.");
+
+            logFormatDic.Add(LOG_LINE_VERIFY_START, "Start to verify line.Detail = {0}");
+            logFormatDic.Add(LOG_LINE_VERIFY_END, "Verify line finish. Result = {0}.");
+            logFormatDic.Add(LOG_LINE_COUNT_NOT_EQUAL, "The count of the cell in line is not equal to the count of the field");
+
+            logFormatDic.Add(LOG_VALIDATION_SET_DEFAULT, "The content of the cell is null,it will be set defalut({0}).row = {1},col={2}");
+            logFormatDic.Add(LOG_VALIDATION_CONVERT_ERROR, "The content of the cell can't convert to {0}. cell={1}");
+            logFormatDic.Add(LOG_VALIDATION_DIC_FORMAT_ERROR, "The format of the content should be start with {{ and end with }}. cell={0}");
+            logFormatDic.Add(LOG_VALIDATION_DIC_KV_COUNT_ERROR, "The content of the cell . cell={0}");
+            logFormatDic.Add(LOG_VALIDATION_DIC_KEY_REPEAT_ERROR, "The key of dic is repeat. cell={0}");
+            logFormatDic.Add(LOG_VALIDATION_NULL, "The content of the cell is null.row = {1},col={2}");
+            logFormatDic.Add(LOG_VALIDATION_FORMAT_ERROR, "The format of the rule is error.col = {0},rule = {1}");
+            logFormatDic.Add(LOG_VALIDATION_LEN_ERROR, "The lenght of the content is large then {0},row = {1},col = {2}.content = {3}");
+            logFormatDic.Add(LOG_VALIDATION_TYPE_FOR_RANGE_ERROR, "The validation(Range) can only be used for number.row = {0},col = {1},type = {2}");
+            
         }
 
         public static string GetLogMsg(int logID,params object[] datas)

@@ -1,31 +1,56 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
+using Dot.Tools.ETD.Log;
+using Dot.Tools.ETD.Utils;
 using ExtractInject;
 using System.Text.RegularExpressions;
 
 namespace Dot.Tools.ETD.Validations
 {
-    public class IntRangeValidation : IValidation
+    public class RangeValidation : IValidation
     {
-        private const string RANGE_REGEX = @"IntRange\{(?<min>[-]{0,1}[0-9]+),(?<max>[-]{0,1}[0-9]+)\}";
+        private const string RANGE_REGEX = @"Range\{(?<min>[-]{0,1}[0-9.]+),(?<max>[-]{0,1}[0-9.]+)\}";
 
         [EIField(EIFieldUsage.In, false)]
-        public AField field;
+        public AFieldData field;
         [EIField(EIFieldUsage.In, false)]
         public LineCell cell;
 
-        public int min;
-        public int max;
-
-
+        private string rule = string.Empty;
         public void SetRule(string rule)
         {
-            throw new System.NotImplementedException();
+            this.rule = rule;
         }
 
         public ValidationResultCode Verify(EIContext context)
         {
-            throw new System.NotImplementedException();
+            LogHandler logHandler = context.GetObject<LogHandler>();
+
+            if (FieldTypeUtil.IsNumberType(field.Type) ||
+                field.Type == FieldType.Array && FieldTypeUtil.IsNumberType(((ArrayFieldData)field).ValueType))
+            {
+                if (field == null || cell == null)
+                {
+                    logHandler.Log(LogType.Error, LogConst.LOG_ARG_IS_NULL);
+
+                    return ValidationResultCode.ArgIsNull;
+                }
+
+                string content = cell.GetContent(field);
+                if (string.IsNullOrEmpty(content))
+                {
+                    logHandler.Log(LogType.Warning, LogConst.LOG_VALIDATION_NULL, cell.row, cell.col);
+                    return ValidationResultCode.ContentIsNull;
+                }
+
+
+
+            }
+            else
+            {
+                logHandler.Log(LogType.Error, LogConst.LOG_VALIDATION_TYPE_FOR_RANGE_ERROR,cell.row,cell.col,field.Type);
+                return ValidationResultCode.NumberRangeError;
+            }
         }
 
 

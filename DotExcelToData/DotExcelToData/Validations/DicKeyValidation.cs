@@ -1,5 +1,6 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
+using Dot.Tools.ETD.Log;
 using Dot.Tools.ETD.Utils;
 using ExtractInject;
 using System.Collections.Generic;
@@ -9,75 +10,57 @@ namespace Dot.Tools.ETD.Validations
     public class DicKeyValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
-        public AField field;
+        public AFieldData field;
         [EIField(EIFieldUsage.In, false)]
         public LineCell cell;
 
         public void SetRule(string rule)
         {
-            throw new System.NotImplementedException();
         }
 
         public ValidationResultCode Verify(EIContext context)
         {
-            throw new System.NotImplementedException();
-        }
-
-
-        //--------------------------------
-        public string ErrorMsg { get; set; }
-
-        private bool isValid = true;
-        public bool IsValid =>isValid;
-
-        public void SetData(string rule)
-        {
-            if (field.Type != FieldType.Dic)
-            {
-                ErrorMsg = "FileType is not <FieldType.Int/FieldType.Ref>";
-                isValid = false;
-            }
-        }
-
-        public ValidationResultCode Verify(out string msg)
-        {
-            msg = null;
+            LogHandler logHandler = context.GetObject<LogHandler>();
 
             if (field == null || cell == null)
             {
-                msg = "DicKeyValidation::Verify->Argument is null!";
+                logHandler.Log(LogType.Error, LogConst.LOG_ARG_IS_NULL);
+
                 return ValidationResultCode.ArgIsNull;
             }
 
-            string content = field.GetContent(cell);
+            string content = cell.GetContent(field);
             if (string.IsNullOrEmpty(content))
             {
-                msg = $"DicKeyValidation::Verify->Cell Content is null. Row = {cell.row},Col = {cell.col}.";
-                return ValidationResultCode.ContentIsNull;
+                return ValidationResultCode.Success;
             }
 
             if(content[0]!='{' || content[content.Length-1]!='}')
             {
-                msg = $"DicKeyValidation::Verify->Cell Content should start with {{ and end with }} . Row = {cell.row},Col = {cell.col}.";
+                logHandler.Log(LogType.Error, LogConst.LOG_VALIDATION_DIC_FORMAT_ERROR,cell.ToString());
                 return ValidationResultCode.ContentDicFormatError;
             }
 
             string[] values = ContentUtil.SplitContent(content, new char[] { ',', ';' });
             if(values!=null && values.Length%2!=0)
             {
-                msg = $"DicKeyValidation::Verify->The length should be Divisible by 2 . Row = {cell.row},Col = {cell.col}.";
+                logHandler.Log(LogType.Error, LogConst.LOG_VALIDATION_DIC_KV_COUNT_ERROR, cell.ToString());
                 return ValidationResultCode.ContentDicKeyValueCountError;
             }
-            List<object> keys = new List<object>();
+
+            List<string> keys = new List<string>();
             for(int  i=0;i<values.Length;i+=2)
             {
-                var key = ContentUtil.GetValue(values[i], ((DicField)field).KeyFieldType);
-                if(keys.Contains(key))
+                if(keys.Contains(values[i]))
                 {
-                    msg = $"DicKeyValidation::Verify->Key repeat . Row = {cell.row},Col = {cell.col}.key ={key}";
+                    logHandler.Log(LogType.Error, LogConst.LOG_VALIDATION_DIC_KEY_REPEAT_ERROR, cell.ToString());
                     return ValidationResultCode.ContentDicKeyRepeatError;
+                }else
+                {
+                    keys.Add(values[i]);
                 }
             }
+
             return ValidationResultCode.Success;
         }
 

@@ -28,6 +28,16 @@ namespace Dot.Tools.ETD.Utils
             return null;
         }
 
+        public static bool IsNumberType(FieldType fieldType)
+        {
+            if(fieldType == FieldType.Int || fieldType == FieldType.Float || fieldType == FieldType.Long || fieldType == FieldType.Ref)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private static FieldType StrToFieldType(string typeStr)
         {
             if (string.IsNullOrEmpty(typeStr))

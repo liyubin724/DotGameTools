@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using SystemObject = System.Object;
-
-namespace Dot.Tools.ETD.Validations
+﻿namespace Dot.Tools.ETD.Validations
 {
     public enum ValidationResultCode
     {
         Success = 0,
-        Failed,
-        Pass,
+        Pass =1,
 
+        ValidationFormatError = -1,
         ArgIsNull = -2,
         ContentIsNull = -3,
         ParseContentFailed = -4,

@@ -1,11 +1,12 @@
-﻿using Dot.Tools.ETD.Verify;
+﻿using Dot.Tools.ETD.Log;
+using Dot.Tools.ETD.Verify;
 using ExtractInject;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Dot.Tools.ETD.Datas
 {
-    public class Workbook : IVerify
+    public class Workbook : IVerify,IEIContextObject
     {
         public string bookPath;
         private List<Sheet> sheets = new List<Sheet>();
@@ -53,7 +54,13 @@ namespace Dot.Tools.ETD.Datas
 
         public bool Verify(IEIContext context)
         {
+            LogHandler logHandler = context.GetObject<LogHandler>();
+
+            logHandler.Log(LogType.Info, LogConst.LOG_WORKBOOK_VERIFY_START, bookPath);
+
             bool result = true;
+
+            context.AddObject<Workbook>(this);
 
             foreach(var sheet in sheets)
             {
@@ -67,7 +74,9 @@ namespace Dot.Tools.ETD.Datas
 
                 context.DeleteObject<Sheet>();
             }
+            context.DeleteObject<Workbook>();
 
+            logHandler.Log(LogType.Info, LogConst.LOG_WORKBOOK_VERIFY_END, bookPath,result);
             return result;
         }
     }

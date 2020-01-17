@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Fields
 
         protected override void AddExtraValidation(List<IValidation> validations)
         {
-            validations.Add(new BoolValueValidation());
+            validations.Add(new BoolValidation());
         }
     }
 }

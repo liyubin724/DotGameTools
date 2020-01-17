@@ -13,7 +13,7 @@ namespace Dot.Tools.ETD.Datas
         public static string GetCellStringValue(ICell cell)
         {
             if (cell == null)
-                return string.Empty;
+                return null;
 
             CellType cType = cell.CellType;
             if (cType == CellType.String)
@@ -40,7 +40,7 @@ namespace Dot.Tools.ETD.Datas
                     return cell.StringCellValue;
                 }
             }
-            return string.Empty;
+            return null;
         }
     }
 }

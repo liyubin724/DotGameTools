@@ -13,7 +13,7 @@ namespace Dot.Tools.ETD.Factorys
 
         /// <summary>
         /// 
-        /// For Example:NotNull@IntRange{100,100}@Unique
+        /// For Example:NotNull@Range{100,100}@Unique
         /// </summary>
         /// <param name="multiRule"></param>
         /// <returns></returns>

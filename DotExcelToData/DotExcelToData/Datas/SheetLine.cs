@@ -14,6 +14,8 @@ namespace Dot.Tools.ETD.Datas
             row = r;
         }
 
+        public int CellCount { get => cells.Count; }
+
         public void AddCell(int c,string v)
         {
             LineCell cell = new LineCell(row, c, v);

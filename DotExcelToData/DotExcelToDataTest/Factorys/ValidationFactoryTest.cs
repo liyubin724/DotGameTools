@@ -18,7 +18,7 @@ namespace DotExcelToDataTest.Factorys
         {
             string validationStr = "IntValue";
             IValidation validation = ValidationFactory.GetValidation(validationStr);
-            Assert.AreEqual(typeof(IntValueValidation), validation.GetType(), $"ValidationFactoryTest::TestGetValidation->{validationStr}");
+            Assert.AreEqual(typeof(IntValidation), validation.GetType(), $"ValidationFactoryTest::TestGetValidation->{validationStr}");
 
             validationStr = "IntRange{10,100}";
             validation = ValidationFactory.GetValidation(validationStr);

@@ -4,33 +4,16 @@ namespace Dot.Tools.ETD.Validations
 {
     public class ErrorValidation : IValidation
     {
-
+        public string Rule { get => rule; }
+        private string rule = string.Empty;
         public void SetRule(string rule)
         {
-            throw new System.NotImplementedException();
+            this.rule = rule;
         }
 
         public ValidationResultCode Verify(EIContext context)
         {
             throw new System.NotImplementedException();
-        }
-
-
-        //--------------------------------
-
-        public bool IsValid => false;
-
-        public string ErrorMsg { get; set; }
-
-        public void SetData(string rule)
-        {
-            ErrorMsg = "The type of Validation is Error.rule = "+rule;
-        }
-
-        public ValidationResultCode Verify(out string msg)
-        {
-            msg = ErrorMsg;
-            return ValidationResultCode.Failed;
         }
     }
 }
