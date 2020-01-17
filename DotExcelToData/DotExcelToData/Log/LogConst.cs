@@ -10,7 +10,7 @@ namespace Dot.Tools.ETD.Log
         Error,
     }
 
-    public delegate void OnHandlerLog(LogType type, string msg);
+    public delegate void OnHandlerLog(LogType type,int logID, string msg);
 
     public static class LogConst
     {
@@ -52,29 +52,30 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_FIELD_VERIFY_NAME_NULL = -3303;
         public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3304;
         public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3305;
+        public static readonly int LOG_FIELD_VERIFY_VALIDATION_ERROR = -3306;
 
         public static readonly int LOG_LINE_VERIFY_START = 3401;
         public static readonly int LOG_LINE_VERIFY_END = 3402;
-        public static readonly int LOG_LINE_COUNT_NOT_EQUAL = -3303;
+        public static readonly int LOG_LINE_COUNT_NOT_EQUAL = -3403;
 
         public static readonly int LOG_VALIDATION_SET_DEFAULT = 4101;
         public static readonly int LOG_VALIDATION_CONVERT_ERROR = -4102;
         public static readonly int LOG_VALIDATION_DIC_FORMAT_ERROR = -4103;
         public static readonly int LOG_VALIDATION_DIC_KV_COUNT_ERROR = -4104;
-        public static readonly int LOG_VALIDATION_DIC_KEY_REPEAT_ERROR = -4104;
-        public static readonly int LOG_VALIDATION_NULL = -4105;
-        public static readonly int LOG_VALIDATION_FORMAT_ERROR = -4106;
-        public static readonly int LOG_VALIDATION_LEN_ERROR = -4107;
-        public static readonly int LOG_VALIDATION_TYPE_FOR_RANGE_ERROR = -4108;
+        public static readonly int LOG_VALIDATION_DIC_KEY_REPEAT_ERROR = -4105;
+        public static readonly int LOG_VALIDATION_NULL = -4106;
+        public static readonly int LOG_VALIDATION_FORMAT_ERROR = -4107;
+        public static readonly int LOG_VALIDATION_LEN_ERROR = -4108;
         public static readonly int LOG_VALIDATION_RANGE_MIN_ERROR = -4109;
         public static readonly int LOG_VALIDATION_RANGE_MAX_ERROR = -4110;
         public static readonly int LOG_VALIDATION_RANGE_MAX_LESS_MIN_ERROR = -4111;
         public static readonly int LOG_VALIDATION_CONTENT_REPEAT_ERROR = -4112;
+        public static readonly int LOG_VALIDATION_TYPE_FOR_RANGE_ERROR = -4113;
 
 
 
         private static Dictionary<int, string> logFormatDic = new Dictionary<int, string>();
-        static LogConst()
+        public static void InitMsg()
         {
             logFormatDic.Add(LOG_FILE_NOT_EXIST, "File is not found.path = {0}");
             logFormatDic.Add(LOG_FILE_NOT_EXCEL, "File is not a excel file.path = {0}");
@@ -108,9 +109,12 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_FIELD_VERIFY_END, "Verify Field finish. Result = {0}.");
             logFormatDic.Add(LOG_FIELD_VERIFY_NAME_NULL, "The name of the field is null");
             logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The type of the field is error.");
-            logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The platform of the field is error.");
+            logFormatDic.Add(LOG_FIELD_VERIFY_PLATFORM_ERROR, "The platform of the field is error.");
+            logFormatDic.Add(LOG_FIELD_VERIFY_VALIDATION_ERROR, "The validation of the field is error.rule = {0}");
 
-            logFormatDic.Add(LOG_LINE_VERIFY_START, "Start to verify line.Detail = {0}");
+            
+
+            logFormatDic.Add(LOG_LINE_VERIFY_START, "Start to verify line.row = {0}");
             logFormatDic.Add(LOG_LINE_VERIFY_END, "Verify line finish. Result = {0}.");
             logFormatDic.Add(LOG_LINE_COUNT_NOT_EQUAL, "The count of the cell in line is not equal to the count of the field");
 

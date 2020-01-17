@@ -1,6 +1,5 @@
 ﻿using Dot.Tools.ETD.Utils;
 using Dot.Tools.ETD.Validations;
-using System;
 using System.Collections.Generic;
 
 namespace Dot.Tools.ETD.Fields
@@ -16,7 +15,7 @@ namespace Dot.Tools.ETD.Fields
 
         protected override void AddExtraValidation(List<IValidation> validations)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Dot.Tools.ETD.Validations
         {
         }
 
-        ValidationResultCode IValidation.Verify(EIContext context)
+        ValidationResultCode IValidation.Verify(IEIContext context)
         {
             LogHandler logHandler = context.GetObject<LogHandler>();
 

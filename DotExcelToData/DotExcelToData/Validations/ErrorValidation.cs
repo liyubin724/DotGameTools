@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Validations
             this.rule = rule;
         }
 
-        public ValidationResultCode Verify(EIContext context)
+        public ValidationResultCode Verify(IEIContext context)
         {
             throw new System.NotImplementedException();
         }

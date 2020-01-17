@@ -51,9 +51,14 @@ namespace Dot.Tools.ETD
             return book;
         }
 
-        public void VerifyWorkbook(Workbook workbook)
+        public bool VerifyWorkbook(Workbook workbook)
         {
+            if(workbook!=null)
+            {
+                return workbook.Verify(context);
+            }
 
+            return false;
         }
 
         public void WriteWorkbook(Workbook workbook)

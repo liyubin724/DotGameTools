@@ -42,8 +42,6 @@ namespace Dot.Tools.ETD.Factorys
                 {
                     validation = new ErrorValidation();
                 }
-                EIUtil.Inject(context,validation);
-
                 validation.SetRule(rule);
                 validations.Add(validation);
             }

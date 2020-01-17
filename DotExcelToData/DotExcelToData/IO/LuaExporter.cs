@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Exporter
 {
     public static class LuaExporter
     {
-        private static void ExportLineToLua(StringBuilder luaSB, SheetLine line,List<AField> fields,int indent,FieldPlatform platform)
+        private static void ExportLineToLua(StringBuilder luaSB, SheetLine line,List<AFieldData> fields,int indent,FieldPlatform platform)
         {
             string indentStr = GetIndentStr(indent);
 

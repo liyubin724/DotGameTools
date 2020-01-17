@@ -25,13 +25,9 @@ namespace DotExcelToDataConsole
         [Option('o',"output",Required =false,HelpText ="output dir")]
         public string OutputDir { get; set; }
         
-        [Option("format",Required =false,HelpText ="Json or Lua")]
+        [Option("format",Required =false,HelpText ="Json, Lua,All")]
         public ETDFormat Format { get; set; }
 
-        [Option("verify",Required =false,HelpText ="Is it need verify")]
-        public bool IsVerify { get; set; }
-        [Option("optimize",Required =false,HelpText ="Optimize")]
-        public bool IsOptimize { get; set; }
         [Option("platform",Required =false,HelpText ="Platform(Server,Client,All)")]
         public FieldPlatform Platform { get; set; }
 
@@ -47,8 +43,6 @@ namespace DotExcelToDataConsole
             str.Append("\n");
             str.AppendLine($"Output = {OutputDir}");
             str.AppendLine($"Format = {Format}");
-            str.AppendLine($"IsVerify = {IsVerify}");
-            str.AppendLine($"IsOptimize = {IsOptimize}");
             str.AppendLine($"Platform = {Platform}");
             return str.ToString();
         }
@@ -61,22 +55,29 @@ namespace DotExcelToDataConsole
             Parser.Default.ParseArguments<ETDOption>(args).WithParsed(Run);
         }
 
-        static void Log(LogType logType,string message)
+        static void Log(LogType logType,int logID,string message)
         {
-            if(logType == LogType.Verbose)
+            string formatMess = $"[{logType,-7}]    [{logID,5}]    {message}";
+            Color messColor = Color.White;
+
+            if (logType == LogType.Verbose)
             {
-                Console.WriteLine(message, Color.GreenYellow);
+                messColor = Color.GreenYellow;
             }
             else if(logType == LogType.Info)
             {
-                Console.WriteLine(message, Color.White);
-            }else if(logType == LogType.Warning)
-            {
-                Console.WriteLine(message, Color.Yellow);
-            }else if(logType == LogType.Error)
-            {
-                Console.WriteLine(message, Color.Red);
+                messColor = Color.White;
             }
+            else if(logType == LogType.Warning)
+            {
+                messColor = Color.Yellow;
+            }
+            else if(logType == LogType.Error)
+            {
+                messColor = Color.Red;
+            }
+
+            Console.WriteLine(formatMess, messColor);
         }
 
         static void Run(ETDOption option)
@@ -93,41 +94,13 @@ namespace DotExcelToDataConsole
                 books.Add(book);
             }
 
-            if(option.IsVerify)
+            foreach (var book in books)
             {
-                foreach(var book in books)
-                {
-                    
-                }
+                proxy.VerifyWorkbook(book);
             }
 
             Console.ReadKey();
-            //if(verifyResult)
-            //{
-            //    foreach(var book in books)
-            //    {
-            //        Console.WriteLine($"----Begin export book({book.Name})");
-            //        foreach(var sheet in book.sheets)
-            //        {
-            //            Console.WriteLine($"--------Begin export Sheet({sheet.name})");
-            //            if(option.Format == ETDFormat.Json)
-            //            {
-            //                JsonExporter.Export(option.OutputDir, sheet, option.Platform);
-            //            }else
-            //            {
-            //                if(option.IsOptimize)
-            //                {
-            //                    LuaOptimizeExporter.Export(option.OutputDir, sheet, option.Platform);
-            //                }else
-            //                {
-            //                    LuaExporter.Export(option.OutputDir, sheet, option.Platform);
-            //                }
-            //            }
-            //            Console.WriteLine("--------Export sheet Success");
-            //        }
-            //        Console.WriteLine($"----End export book");
-            //    }
-            //}
+        
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Dot.Tools.ETD.Fields;
 using Dot.Tools.ETD.Log;
+using Dot.Tools.ETD.Validations;
 using Dot.Tools.ETD.Verify;
 using ExtractInject;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace Dot.Tools.ETD.Datas
 
             foreach(var line in lines)
             {
-                logHandler.Log(LogType.Info, LogConst.LOG_LINE_VERIFY_START,line.ToString());
+                logHandler.Log(LogType.Info, LogConst.LOG_LINE_VERIFY_START,line.row);
 
                 bool lineResult = true;
 
@@ -50,9 +51,31 @@ namespace Dot.Tools.ETD.Datas
                     lineResult = false;
                 }else
                 {
-                    foreach(var field in fields)
+                    for(int i = 0;i<fields.Count;++i)
                     {
+                        AFieldData field = fields[i];
+                        LineCell cell = line.GetCellByIndex(i);
 
+                        context.AddObject<AFieldData>(field);
+                        context.AddObject<LineCell>(cell);
+
+                        IValidation[] validations = field.GetValidations();
+                        foreach(var v in validations)
+                        {
+                            if(v.GetType() != typeof(ErrorValidation))
+                            {
+                                EIUtil.Inject(context, v);
+
+                                ValidationResultCode resultCode = v.Verify(context);
+                                if(resultCode!= ValidationResultCode.Success)
+                                {
+                                    lineResult = false;
+                                }
+                            }
+                        }
+
+                        context.DeleteObject<AFieldData>();
+                        context.DeleteObject<LineCell>();
                     }
                 }
                 logHandler.Log(LogType.Info, LogConst.LOG_LINE_VERIFY_END, lineResult);

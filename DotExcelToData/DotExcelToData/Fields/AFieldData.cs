@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Dot.Tools.ETD.Fields
 {
-    public abstract class AFieldData : IVerify
+    public abstract class AFieldData : IVerify,IEIContextObject
     {
         public int col;
         public string name;
@@ -76,10 +76,13 @@ namespace Dot.Tools.ETD.Fields
                 result = false;
             }
 
-            bool innerResult = InnerVerify(context);
-            if(!innerResult)
+            foreach(var v in GetValidations())
             {
-                result = false;
+                if(v.GetType() == typeof(ErrorValidation))
+                {
+                    logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_VALIDATION_ERROR,((ErrorValidation)v).Rule);
+                    result = false;
+                }
             }
 
             logHandler.Log(LogType.Verbose, LogConst.LOG_FIELD_VERIFY_END, result);

@@ -8,7 +8,7 @@ namespace Dot.Tools.ETD.Validations
 {
     public class MaxLenValidation: IValidation
     {
-        private const string MAX_LEN_REGEX = @"StringMaxLen{(?<len>[0-9]+)}";
+        private const string MAX_LEN_REGEX = @"MaxLen{(?<len>[0-9]+)}";
 
         [EIField(EIFieldUsage.In, false)]
         public AFieldData field;
@@ -21,7 +21,7 @@ namespace Dot.Tools.ETD.Validations
             this.rule = rule;
         }
 
-        public ValidationResultCode Verify(EIContext context)
+        public ValidationResultCode Verify(IEIContext context)
         {
             LogHandler logHandler = context.GetObject<LogHandler>();
 

@@ -8,12 +8,13 @@ namespace Dot.Tools.ETD.Log
 
         public LogHandler(OnHandlerLog callback)
         {
+            LogConst.InitMsg();
             logCallback = callback;
         }
 
         public void Log(LogType type, int logID, params object[] datas)
         {
-            logCallback?.Invoke(type, LogConst.GetLogMsg(logID, datas));
+            logCallback?.Invoke(type, logID,LogConst.GetLogMsg(logID, datas));
         }
     }
 }
