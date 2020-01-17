@@ -8,6 +8,8 @@ namespace Dot.Tools.ETD.Log
         Info,
         Warning,
         Error,
+
+        Block,
     }
 
     public delegate void OnHandlerLog(LogType type,int logID, string msg);
