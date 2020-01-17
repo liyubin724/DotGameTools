@@ -61,6 +61,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +73,9 @@
     <Compile Include="Datas\LineCell.cs" />
     <Compile Include="Datas\SheetLine.cs" />
     <Compile Include="ETDProxy.cs" />
+    <Compile Include="IO\JsonWriter.cs" />
+    <Compile Include="IO\LuaWriter.cs" />
+    <Compile Include="IO\OptimizeLuaWriter.cs" />
     <Compile Include="IO\WorkbookReader.cs" />
     <Compile Include="Log\LogConst.cs" />
     <Compile Include="Log\LogHandler.cs" />

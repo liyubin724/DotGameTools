@@ -2,6 +2,7 @@
 using Dot.Tools.ETD;
 using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
+using Dot.Tools.ETD.IO;
 using Dot.Tools.ETD.Log;
 using System.Collections.Generic;
 using System.Drawing;
@@ -129,9 +130,18 @@ namespace DotExcelToDataConsole
 
             foreach (var book in books)
             {
-                proxy.VerifyWorkbook(book);
+                if(proxy.VerifyWorkbook(book))
+                {
+                    for(int i =0;i<book.SheetCount;++i)
+                    {
+                        if (option.Format == ETDFormat.ALL || option.Format == ETDFormat.Json)
+                        {
+                            JsonWriter writer = new JsonWriter(book.GetSheetByIndex(i));
+                            writer.WriteTo("D:/",option.Platform);
+                        }
+                    }
+                }
             }
-
 
             if(writer!=null)
             {
