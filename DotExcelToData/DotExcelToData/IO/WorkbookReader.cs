@@ -17,8 +17,8 @@ namespace Dot.Tools.ETD.IO
 {
     internal class WorkbookReader
     {
-        private static EIContext context = null;
-        internal static void InitReader(EIContext context)
+        private static IEIContext context = null;
+        internal static void InitReader(IEIContext context)
         {
             WorkbookReader.context = context;
         }

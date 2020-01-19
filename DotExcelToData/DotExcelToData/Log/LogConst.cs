@@ -23,6 +23,7 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_ARG_IS_NULL = -3;
 
         public static readonly int LOG_WORKBOOK_EMPTY = -100;
+        public static readonly int LOG_WORKBOOK_VERIFY_FAILED = -101;
 
         public static readonly int LOG_SHEET_NAME_NULL = -201;
         public static readonly int LOG_SHEET_NAME_NOT_MATCH = -202;
@@ -88,7 +89,10 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_FILE_NOT_EXIST, "File is not found.path = {0}");
             logFormatDic.Add(LOG_FILE_NOT_EXCEL, "File is not a excel file.path = {0}");
             logFormatDic.Add(LOG_ARG_IS_NULL, "The argument is null.");
+
             logFormatDic.Add(LOG_WORKBOOK_EMPTY, "Workbook is empty. path = {0}");
+            logFormatDic.Add(LOG_WORKBOOK_VERIFY_FAILED, "Verify failed");
+            
             logFormatDic.Add(LOG_SHEET_NAME_NULL, "The name of sheet is null.it will be ignored. index = {0}");
             logFormatDic.Add(LOG_SHEET_NAME_NOT_MATCH, "The sheet which named ({0}) will be ingored,because of the name should be like '{1}'");
             logFormatDic.Add(LOG_SHEET_ROW_LESS, "The count of the row({0}) is less then min value({1}).");

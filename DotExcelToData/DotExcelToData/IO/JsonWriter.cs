@@ -9,81 +9,146 @@ namespace Dot.Tools.ETD.IO
 {
     public class JsonWriter
     {
-        private static readonly string JSON_EXTERSION = ".json";
 
-        private Sheet sheet = null;
 
-        public JsonWriter(Sheet sheet)
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public static void WriteTo(Workbook book,string outputDir,ETDWriterTarget target)
         {
-            this.sheet = sheet;
-        }
-
-        private StreamWriter writer = null;
-        private int indent = 0;
-        public void WriteTo(string outputDir,FieldPlatform platform)
-        {
-            if (sheet == null)
+            if(book == null)
             {
                 return;
             }
-            string filePath = $"{outputDir}/{sheet.name}{JSON_EXTERSION}";
-            writer = new StreamWriter(filePath, false, Encoding.UTF8);
-
-            writer.WriteLine("{");
-
-            List<AFieldData> fields = new List<AFieldData>();
-            for(int i = 0;i<sheet.FieldCount;++i)
+            FieldPlatform platform = FieldPlatform.None;
+            if(target == ETDWriterTarget.Client)
             {
-                AFieldData field = sheet.GetFieldByIndex(i);
-                if (field.Platform == FieldPlatform.All || field.Platform == platform)
-                {
-                    fields.Add(field);
-                }
+                platform = FieldPlatform.Client;
+            }else if(target == ETDWriterTarget.Server)
+            {
+                platform = FieldPlatform.Server;
             }
 
-            for (int i =0;i<sheet.LineCount;++i)
+            string configDir = $"{outputDir}/{book.Name}";
+            if (Directory.Exists(configDir))
             {
-                SheetLine line = sheet.GetLineByIndex(i);
-                string idContent = sheet.GetLineIDByIndex(i);
+                Directory.Delete(configDir, true);
+            }
+            Directory.CreateDirectory(configDir);
 
-                ++indent;
+            for (int i = 0; i < book.SheetCount; ++i)
+            {
+                Sheet sheet = book.GetSheetByIndex(i);
+
+                string filePath = $"{configDir}/{sheet.name}{IOConst.JSON_EXTERSION}";
+                using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
                 {
-                    writer.WriteLine($"{GetIndent()}\"{idContent}\":{{");
+                    writer.WriteLine("{");
 
-                    for (int j = 0; j < fields.Count; ++j)
+                    int indent = 0;
+
+                    List<AFieldData> fields = new List<AFieldData>();
+                    for (int f = 0; f < sheet.FieldCount; ++f)
                     {
-                        AFieldData field = fields[j];
-
-                        LineCell cell = line.GetCellByCol(field.col);
-                        WriteCell(field, cell);
-                        if (j == fields.Count - 1)
+                        AFieldData field = sheet.GetFieldByIndex(f);
+                        if (field.Platform == FieldPlatform.All || field.Platform == platform)
                         {
-                            writer.WriteLine();
-                        }
-                        else
-                        {
-                            writer.WriteLine(",");
+                            fields.Add(field);
                         }
                     }
 
-                    writer.Write($"{GetIndent()}}}");
-                    if (i == sheet.LineCount - 1)
+                    for (int m = 0; m < sheet.LineCount; ++m)
                     {
-                        writer.WriteLine();
+                        SheetLine line = sheet.GetLineByIndex(m);
+                        string idContent = sheet.GetLineIDByIndex(m);
+
+                        ++indent;
+                        {
+                            writer.WriteLine($"{GetIndent()}\"{idContent}\":{{");
+
+                            for (int j = 0; j < fields.Count; ++j)
+                            {
+                                AFieldData field = fields[j];
+
+                                LineCell cell = line.GetCellByCol(field.col);
+                                WriteCell(field, cell);
+                                if (j == fields.Count - 1)
+                                {
+                                    writer.WriteLine();
+                                }
+                                else
+                                {
+                                    writer.WriteLine(",");
+                                }
+                            }
+
+                            writer.Write($"{GetIndent()}}}");
+                            if (m == sheet.LineCount - 1)
+                            {
+                                writer.WriteLine();
+                            }
+                            else
+                            {
+                                writer.WriteLine(",");
+                            }
+                        }
+                        --indent;
                     }
-                    else
-                    {
-                        writer.WriteLine(",");
-                    }
+
+                    writer.WriteLine("}");
+
+                    writer.Flush();
+                    writer.Close();
                 }
-                --indent;
+
+            }
+        }
+
+        private void WriteSheet(string filePath,Sheet sheet)
+        {
+
+        }
+
+
+
+        private Workbook workbook = null;
+
+        public JsonWriter(Workbook book)
+        {
+            workbook = book;
+        }
+
+        public void WriteTo(string outputDir,ETDWriterTarget target)
+        {
+            if(workbook == null)
+            {
+                return;
             }
 
-            writer.WriteLine("}");
+            string configDir = $"{outputDir}/{Path.GetFileNameWithoutExtension(workbook.bookPath)}";
+            if(Directory.Exists(configDir))
+            {
+                Directory.Delete(configDir, true);
+            }
+            Directory.CreateDirectory(configDir);
 
-            writer.Flush();
-            writer.Close();
-            writer = null;
+            for(int i =0;i<workbook.SheetCount;++i)
+            {
+                Sheet sheet = workbook.GetSheetByIndex(i);
+
+                string filePath = $"{configDir}/{sheet.name}{IOConst.JSON_EXTERSION}";
+                
+            }
         }
 
         private void WriteCell(AFieldData field,LineCell cell)

@@ -1,23 +1,13 @@
 ﻿using CommandLine;
 using Dot.Tools.ETD;
-using Dot.Tools.ETD.Datas;
-using Dot.Tools.ETD.Fields;
 using Dot.Tools.ETD.IO;
 using Dot.Tools.ETD.Log;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using Console = Colorful.Console;
 
 namespace DotExcelToDataConsole
 {
-    public enum ETDFormat
-    {
-        ALL,
-        Json,
-        Lua,
-    }
-
     public class ETDOption
     {
         [Option('i',"input",Required =true,HelpText ="Input dir which contains mulitable excel files(.xlsx|.xls)")]
@@ -27,10 +17,13 @@ namespace DotExcelToDataConsole
         public string OutputDir { get; set; }
         
         [Option('f',"format",Required =true,HelpText ="Export Format(Json, Lua,All)")]
-        public ETDFormat Format { get; set; }
+        public ETDWriterFormat Format { get; set; }
 
-        [Option('p',"platform",Required =true,HelpText ="Platform(Server,Client,All)")]
-        public FieldPlatform Platform { get; set; }
+        [Option('p',"target",Required =true,HelpText ="Target(Server,Client,All)")]
+        public ETDWriterTarget Target { get; set; }
+
+        [Option("optimize",Required =false,HelpText ="Is Need Optimize")]
+        public bool IsOptimize { get; set; } = false;
 
         [Option("log-level", Required = false, HelpText = "Log Level(Verbose,Info,Warning,Error)")]
         public LogType LogLevel { get; set; } = LogType.Info;
@@ -107,45 +100,12 @@ namespace DotExcelToDataConsole
                 writer.AutoFlush = true;
             }
 
-            List<Workbook> books = new List<Workbook>();
-            ETDProxy proxy = new ETDProxy(OnLogReceived);
+            if (Directory.Exists(option.InputDir))
+            {
+                ETDProxy proxy = new ETDProxy(OnLogReceived);
+                proxy.ReadWorkbookForDir(option.InputDir);
 
-            if (!Directory.Exists(option.InputDir))
-            {
-                return;
-            }
-
-            List<string> fileList = new List<string>();
-            string[] files = Directory.GetFiles(option.InputDir, "*.xls", SearchOption.AllDirectories);
-            if (files != null && files.Length > 0)
-            {
-                fileList.AddRange(files);
-            }
-            files = Directory.GetFiles(option.InputDir, "*.xlsx", SearchOption.AllDirectories);
-            if (files != null && files.Length > 0)
-            {
-                fileList.AddRange(files);
-            }
-
-            foreach (var file in fileList)
-            {
-                Workbook book = proxy.ReadWorkbookFromExcel(file);
-                books.Add(book);
-            }
-
-            foreach (var book in books)
-            {
-                if(proxy.VerifyWorkbook(book))
-                {
-                    for(int i =0;i<book.SheetCount;++i)
-                    {
-                        if (option.Format == ETDFormat.ALL || option.Format == ETDFormat.Json)
-                        {
-                            JsonWriter writer = new JsonWriter(book.GetSheetByIndex(i));
-                            writer.WriteTo("D:/",option.Platform);
-                        }
-                    }
-                }
+                proxy.WriteWorkbook(option.OutputDir, option.Format, option.Target, option.IsOptimize, true);
             }
 
             if(writer!=null)
