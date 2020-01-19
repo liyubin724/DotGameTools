@@ -15,5 +15,7 @@
         ContentDicFormatError = -8,
         ContentDicKeyValueCountError = -9,
         ContentDicKeyRepeatError = -10,
+        TextNotFoundError = -11,
+        TextIDNotFoundError = -12,
     }
 }

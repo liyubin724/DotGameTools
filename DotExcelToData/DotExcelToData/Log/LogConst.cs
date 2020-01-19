@@ -79,6 +79,8 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_VALIDATION_RANGE_MAX_LESS_MIN_ERROR = -4111;
         public static readonly int LOG_VALIDATION_CONTENT_REPEAT_ERROR = -4112;
         public static readonly int LOG_VALIDATION_TYPE_FOR_RANGE_ERROR = -4113;
+        public static readonly int LOG_VALIDATION_TEXT_NOT_FOUND_ERROR = -4114;
+        public static readonly int LOG_VALIDATION_TEXT_ID_NOT_FOUND_ERROR = -4115;
 
 
 
@@ -147,7 +149,8 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_VALIDATION_RANGE_MAX_ERROR, "The validation(Range) can't find the maxValue.col = {0}");
             logFormatDic.Add(LOG_VALIDATION_RANGE_MAX_LESS_MIN_ERROR, "MaxValue is less then minValue.col = {0},min={1},max ={2}");
             logFormatDic.Add(LOG_VALIDATION_CONTENT_REPEAT_ERROR, "Content is Repeat.curCell = {0},targetCell={1}");
-
+            logFormatDic.Add(LOG_VALIDATION_TEXT_NOT_FOUND_ERROR, "The sheet which named 'Text' not found.");
+            logFormatDic.Add(LOG_VALIDATION_TEXT_ID_NOT_FOUND_ERROR, "The ID is not found in 'Text'.ID = {0}");
         }
 
         public static string GetLogMsg(int logID,params object[] datas)

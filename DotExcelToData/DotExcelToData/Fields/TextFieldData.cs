@@ -12,6 +12,7 @@ namespace Dot.Tools.ETD.Fields
         protected override void AddExtraValidation(List<IValidation> validations)
         {
             validations.Add(new IntValidation());
+            validations.Add(new TextValidation());
         }
     }
 }
