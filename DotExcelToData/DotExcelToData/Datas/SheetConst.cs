@@ -7,6 +7,7 @@ namespace Dot.Tools.ETD.Datas
         public static int MIN_ROW_COUNT = 6;
         public static int MIN_COLUMN_COUNT = 2;
         public static string SHEET_NAME_REGEX = @"^[A-Z]\w{3,10}";
+        public static string FIELD_NAME_REGEX = @"^[A-Za-z]{2,15}$";
         public static string ID_FIELD_NAME = "ID";
         public static string TEXT_BOOK_NAME = "Text";
         public static string ROW_START_FLAG = "start";

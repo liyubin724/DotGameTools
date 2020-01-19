@@ -57,10 +57,11 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_FIELD_VERIFY_START = 3301;
         public static readonly int LOG_FIELD_VERIFY_END = 3302;
         public static readonly int LOG_FIELD_VERIFY_NAME_NULL = -3303;
-        public static readonly int LOG_FIELD_VERIFY_NAME_REPEAT = -3304;
-        public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3305;
-        public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3306;
-        public static readonly int LOG_FIELD_VERIFY_VALIDATION_ERROR = -3307;
+        public static readonly int LOG_FIELD_VERIFY_NAME_FORMAT = -3304;
+        public static readonly int LOG_FIELD_VERIFY_NAME_REPEAT = -3305;
+        public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3306;
+        public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3307;
+        public static readonly int LOG_FIELD_VERIFY_VALIDATION_ERROR = -3308;
 
         public static readonly int LOG_LINE_VERIFY_START = 3401;
         public static readonly int LOG_LINE_VERIFY_END = 3402;
@@ -125,6 +126,7 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_FIELD_VERIFY_START, "Start to verify Field.Detail = {0}");
             logFormatDic.Add(LOG_FIELD_VERIFY_END, "Verify Field finish. Result = {0}.");
             logFormatDic.Add(LOG_FIELD_VERIFY_NAME_NULL, "The name of the field is null");
+            logFormatDic.Add(LOG_FIELD_VERIFY_NAME_FORMAT, "The name of the field is error.name={0},regex={1}");
             logFormatDic.Add(LOG_FIELD_VERIFY_NAME_REPEAT, "The name of the field is repeated.name={0}");
             logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The type of the field is error.");
             logFormatDic.Add(LOG_FIELD_VERIFY_PLATFORM_ERROR, "The platform of the field is error.");

@@ -4,6 +4,7 @@ using Dot.Tools.ETD.Validations;
 using Dot.Tools.ETD.Verify;
 using ExtractInject;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Dot.Tools.ETD.Fields
 {
@@ -72,6 +73,13 @@ namespace Dot.Tools.ETD.Fields
                 logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_NAME_NULL);
                 result = false;
             }
+
+            if(!Regex.IsMatch(name,SheetConst.FIELD_NAME_REGEX))
+            {
+                logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_NAME_FORMAT, name, SheetConst.FIELD_NAME_REGEX);
+                result = false;
+            }
+
             if(Type == FieldType.None)
             {
                 logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_TYPE_ERROR);
