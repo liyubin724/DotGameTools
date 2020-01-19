@@ -38,6 +38,8 @@ namespace Dot.Tools.ETD.Fields
         [FieldRealyType(typeof(string))]
         String,
         [FieldRealyType(typeof(string))]
+        Stringt,
+        [FieldRealyType(typeof(string))]
         Res,
         [FieldRealyType(typeof(string))]
         Lua,
