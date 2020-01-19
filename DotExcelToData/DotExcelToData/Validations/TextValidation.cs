@@ -45,7 +45,7 @@ namespace Dot.Tools.ETD.Validations
                 return ValidationResultCode.TextNotFoundError;
             }
 
-            for(int i =0;i<sheet.LineCount,++i)
+            for(int i =0;i<sheet.LineCount; ++i)
             {
                 string id = sheet.GetLineIDByIndex(i);
                 if(id == content)

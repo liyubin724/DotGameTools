@@ -72,15 +72,19 @@
   <ItemGroup>
     <Compile Include="Datas\LineCell.cs" />
     <Compile Include="Datas\SheetLine.cs" />
+    <Compile Include="Datas\WorkbookAssembly.cs" />
     <Compile Include="ETDProxy.cs" />
     <Compile Include="Fields\IDFieldData.cs" />
+    <Compile Include="Fields\TextFieldData.cs" />
+    <Compile Include="IO\IOConst.cs" />
     <Compile Include="IO\JsonWriter.cs" />
     <Compile Include="IO\LuaWriter.cs" />
     <Compile Include="IO\OptimizeLuaWriter.cs" />
     <Compile Include="IO\WorkbookReader.cs" />
     <Compile Include="Log\LogConst.cs" />
     <Compile Include="Log\LogHandler.cs" />
-    <Compile Include="Validations\ValidationResultMsg.cs" />
+    <Compile Include="Validations\TextValidation.cs" />
+    <Compile Include="Validations\ValidationResultCode.cs" />
     <Compile Include="Verify\IVerify.cs" />
     <Compile Include="Datas\SheetConst.cs" />
     <Compile Include="Datas\Sheet.cs" />
@@ -97,7 +101,6 @@
     <Compile Include="Fields\ResFieldData.cs" />
     <Compile Include="Fields\StringFieldData.cs" />
     <Compile Include="Fields\StringtFieldData.cs" />
-    <Compile Include="IO\JsonExporter.cs" />
     <Compile Include="IO\LuaExporter.cs" />
     <Compile Include="IO\LuaOptimizeExporter.cs" />
     <Compile Include="Fields\FieldPlatform.cs" />

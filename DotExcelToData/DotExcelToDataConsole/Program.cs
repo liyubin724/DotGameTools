@@ -36,7 +36,12 @@ namespace DotExcelToDataConsole
     {
         static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<ETDOption>(args).WithParsed(Run);
+            var result = Parser.Default.ParseArguments<ETDOption>(args).WithParsed(Run);
+            if(result.Tag == ParserResultType.NotParsed)
+            {
+                Console.WriteLine("The paramters in option is error");
+                Console.ReadKey();
+            }
         }
 
         static void Run(ETDOption option)
@@ -114,6 +119,8 @@ namespace DotExcelToDataConsole
                 writer.Close();
                 writer = null;
             }
+
+            Console.ReadKey();
         }
     }
 }

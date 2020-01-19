@@ -76,7 +76,7 @@ namespace Dot.Tools.ETD.Datas
                                 {
                                     EIUtil.Inject(context, v);
 
-                                    ValidationResultCode resultCode = v.Verify(context);
+                                    ValidationResultCode resultCode = v.Verify();
                                     if (resultCode != ValidationResultCode.Success)
                                     {
                                         lineResult = false;

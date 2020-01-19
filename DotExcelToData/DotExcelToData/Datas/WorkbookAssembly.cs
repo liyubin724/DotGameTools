@@ -126,8 +126,7 @@ namespace Dot.Tools.ETD.Datas
         {
             if (format == ETDWriterFormat.ALL || format == ETDWriterFormat.Json)
             {
-                JsonWriter writer = new JsonWriter(book);
-                writer.WriteTo(outputDir, target);
+                JsonWriter.WriteBook(book, outputDir, target);
             }
             else if (format == ETDWriterFormat.ALL || format == ETDWriterFormat.Lua)
             {
