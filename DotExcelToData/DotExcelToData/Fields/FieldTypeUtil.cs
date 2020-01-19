@@ -17,6 +17,16 @@ namespace Dot.Tools.ETD.Fields
             return false;
         }
 
+        public static bool IsStringType(FieldType fieldType)
+        {
+            FieldRealyType realyTypeAttr = typeof(FieldType).GetField(fieldType.ToString()).GetCustomAttribute<FieldRealyType>();
+            if (realyTypeAttr != null && realyTypeAttr.RealyType == typeof(string))
+            {
+                return true;
+            }
+            return false;
+        }
+
         private static FieldType StrToFieldType(string typeStr)
         {
             if (string.IsNullOrEmpty(typeStr))

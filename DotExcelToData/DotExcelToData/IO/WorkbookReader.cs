@@ -172,10 +172,10 @@ namespace Dot.Tools.ETD.IO
                 if (values.Count == SheetConst.MIN_ROW_COUNT)
                 {
                     object[] datas = new object[values.Count + 1];
-                    datas[0] = firstCol + i;
+                    datas[0] = i;
                     Array.Copy(values.ToArray(), 0, datas, 1, values.Count);
 
-                    Log(LogType.Info, LogConst.LOG_SHEET_FIELD_CREATE, (firstCol + i));
+                    Log(LogType.Info, LogConst.LOG_SHEET_FIELD_CREATE, i);
 
                     AFieldData field = (AFieldData)getFieldMI.Invoke(null, datas);
                     sheetData.AddField(field);

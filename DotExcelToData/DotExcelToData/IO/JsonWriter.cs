@@ -1,9 +1,9 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Web;
 
 namespace Dot.Tools.ETD.IO
 {
@@ -22,7 +22,7 @@ namespace Dot.Tools.ETD.IO
         private int indent = 0;
         public void WriteTo(string outputDir,FieldPlatform platform)
         {
-            if(sheet==null)
+            if (sheet == null)
             {
                 return;
             }
@@ -31,30 +31,32 @@ namespace Dot.Tools.ETD.IO
 
             writer.WriteLine("{");
 
-            for(int i =0;i<sheet.LineCount;++i)
+            List<AFieldData> fields = new List<AFieldData>();
+            for(int i = 0;i<sheet.FieldCount;++i)
+            {
+                AFieldData field = sheet.GetFieldByIndex(i);
+                if (field.Platform == FieldPlatform.All || field.Platform == platform)
+                {
+                    fields.Add(field);
+                }
+            }
+
+            for (int i =0;i<sheet.LineCount;++i)
             {
                 SheetLine line = sheet.GetLineByIndex(i);
+                string idContent = sheet.GetLineIDByIndex(i);
 
-                AFieldData idField = sheet.GetFieldByIndex(0);
-                LineCell idCell = line.GetCellByIndex(0);
                 ++indent;
                 {
-                    writer.WriteLine($"{GetIndent()}\"{idCell.GetContent(idField)}\":{{");
+                    writer.WriteLine($"{GetIndent()}\"{idContent}\":{{");
 
-                    for (int j = 0; j < sheet.FieldCount; ++j)
+                    for (int j = 0; j < fields.Count; ++j)
                     {
-                        AFieldData field = sheet.GetFieldByIndex(j);
+                        AFieldData field = fields[j];
 
-                        if(field.Platform != FieldPlatform.All && field.Platform == platform)
-                        {
-                            continue;
-                        }
-
-                        LineCell cell = line.GetCellByIndex(j);
-
+                        LineCell cell = line.GetCellByCol(field.col);
                         WriteCell(field, cell);
-
-                        if (j == sheet.FieldCount - 1)
+                        if (j == fields.Count - 1)
                         {
                             writer.WriteLine();
                         }
@@ -112,18 +114,13 @@ namespace Dot.Tools.ETD.IO
                 {
                     writer.Write($"{GetIndent()}{value.ToLower()}");
                 }
-                else if (fieldType == FieldType.Int || fieldType == FieldType.Float
-                   || fieldType == FieldType.Long || fieldType == FieldType.Ref)
+                else if (FieldTypeUtil.IsNumberType(fieldType))
                 {
                     writer.Write($"{GetIndent()}{value}");
                 }
-                else if (fieldType == FieldType.String || fieldType == FieldType.Res)
+                else if (FieldTypeUtil.IsStringType(fieldType))
                 {
                     writer.Write($"{GetIndent()}\"{value}\"");
-                }
-                else if (fieldType == FieldType.Stringt || fieldType == FieldType.Lua)
-                {
-                    writer.Write($"{GetIndent()}\"{HttpUtility.UrlEncode(value, Encoding.UTF8)}\"");
                 }
             }
             --indent;
@@ -136,16 +133,12 @@ namespace Dot.Tools.ETD.IO
                 if(fieldType == FieldType.Bool)
                 {
                     writer.Write($"{GetIndent()}\"{key}\":{value.ToLower()}");
-                }else if(fieldType == FieldType.Int || fieldType == FieldType.Float 
-                    || fieldType == FieldType.Long || fieldType == FieldType.Ref)
+                }else if(FieldTypeUtil.IsNumberType(fieldType))
                 {
                     writer.Write($"{GetIndent()}\"{key}\":{value}");
-                }else if(fieldType == FieldType.String || fieldType == FieldType.Res)
+                }else if (FieldTypeUtil.IsStringType(fieldType))
                 {
                     writer.Write($"{GetIndent()}\"{key}\":\"{value}\"");
-                }else if(fieldType == FieldType.Stringt || fieldType == FieldType.Lua)
-                {
-                    writer.Write($"{GetIndent()}\"{key}\":\"{HttpUtility.UrlEncode(value,Encoding.UTF8)}\"");
                 }
             }
             --indent;

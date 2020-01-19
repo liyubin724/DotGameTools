@@ -154,5 +154,25 @@ namespace Dot.Tools.ETD.Datas
             }
             return null;
         }
+
+        public string GetLineIDByIndex(int index)
+        {
+            SheetLine line = GetLineByIndex(index);
+            if(line!=null)
+            {
+                return line.GetCellByIndex(0).GetContent(fields[0]);
+            }
+            return null;
+        }
+
+        public string GetLineIDByRow(int row)
+        {
+            SheetLine line = GetLineByRow(row);
+            if (line != null)
+            {
+                return line.GetCellByIndex(0).GetContent(fields[0]);
+            }
+            return null;
+        }
     }
 }
