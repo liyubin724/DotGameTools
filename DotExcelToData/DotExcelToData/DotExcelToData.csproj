@@ -101,8 +101,6 @@
     <Compile Include="Fields\ResFieldData.cs" />
     <Compile Include="Fields\StringFieldData.cs" />
     <Compile Include="Fields\StringtFieldData.cs" />
-    <Compile Include="IO\LuaExporter.cs" />
-    <Compile Include="IO\LuaOptimizeExporter.cs" />
     <Compile Include="Fields\FieldPlatform.cs" />
     <Compile Include="Fields\FieldType.cs" />
     <Compile Include="Fields\FieldFactory.cs" />

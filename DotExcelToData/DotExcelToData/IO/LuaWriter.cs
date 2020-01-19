@@ -17,18 +17,16 @@ namespace Dot.Tools.ETD.IO
             }
             FieldPlatform platform = GetPlatform(target);
 
-            string configDir = $"{outputDir}/{book.Name}";
-            if (Directory.Exists(configDir))
+            if (!Directory.Exists(outputDir))
             {
-                Directory.Delete(configDir, true);
+                Directory.CreateDirectory(outputDir);
             }
-            Directory.CreateDirectory(configDir);
 
             for (int i = 0; i < book.SheetCount; ++i)
             {
                 Sheet sheet = book.GetSheetByIndex(i);
 
-                string filePath = $"{configDir}/{sheet.name}{IOConst.LUA_EXTERSION}";
+                string filePath = $"{outputDir}/{book.Name}_{sheet.name}{IOConst.LUA_EXTERSION}";
                 WriteSheet(sheet, filePath, platform);
             }
         }
@@ -37,7 +35,9 @@ namespace Dot.Tools.ETD.IO
         {
             using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
-                writer.WriteLine($"local {sheet.name} = {{");
+                string dataName = Path.GetFileNameWithoutExtension(filePath);
+
+                writer.WriteLine($"local {dataName} = {{");
 
                 int indent = 0;
 
@@ -76,7 +76,7 @@ namespace Dot.Tools.ETD.IO
                 }
 
                 writer.WriteLine("}");
-                writer.WriteLine($"return {sheet.name}");
+                writer.WriteLine($"return {dataName}");
 
                 writer.Flush();
                 writer.Close();

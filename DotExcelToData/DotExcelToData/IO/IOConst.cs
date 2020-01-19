@@ -17,7 +17,7 @@
     {
         public static readonly string JSON_EXTERSION = ".json";
         public static readonly string JSON_DIR_NAME = "json";
-        public static readonly string LUA_EXTERSION = ".txt";
+        public static readonly string LUA_EXTERSION = ".lua";
         public static readonly string LUA_DIR_NAME = "lua";
     }
 }
