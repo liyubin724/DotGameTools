@@ -1,39 +1,19 @@
 ﻿using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Dot.Tools.ETD.Fields
 {
     public static class FieldTypeUtil
     {
-        public static Type GetType(FieldType fieldType)
-        {
-            switch(fieldType)
-            {
-                case FieldType.Int:
-                case FieldType.Ref:
-                    return typeof(int);
-                case FieldType.Long:
-                    return typeof(long);
-                case FieldType.Float:
-                    return typeof(float);
-                case FieldType.String:
-                case FieldType.Stringt:
-                case FieldType.Res:
-                case FieldType.Lua:
-                    return typeof(string);
-                case FieldType.Bool:
-                    return typeof(bool);
-            }
-            return null;
-        }
-
         public static bool IsNumberType(FieldType fieldType)
         {
-            if(fieldType == FieldType.Int || fieldType == FieldType.Float || fieldType == FieldType.Long || fieldType == FieldType.Ref)
+            FieldRealyType realyTypeAttr = typeof(FieldType).GetField(fieldType.ToString()).GetCustomAttribute<FieldRealyType>();
+            if(realyTypeAttr!=null && realyTypeAttr.RealyType.IsValueType && 
+                realyTypeAttr.RealyType.IsPrimitive && realyTypeAttr.RealyType != typeof(bool))
             {
                 return true;
             }
-
             return false;
         }
 

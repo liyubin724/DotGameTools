@@ -73,6 +73,7 @@
     <Compile Include="Datas\LineCell.cs" />
     <Compile Include="Datas\SheetLine.cs" />
     <Compile Include="ETDProxy.cs" />
+    <Compile Include="Fields\IDFieldData.cs" />
     <Compile Include="IO\JsonWriter.cs" />
     <Compile Include="IO\LuaWriter.cs" />
     <Compile Include="IO\OptimizeLuaWriter.cs" />

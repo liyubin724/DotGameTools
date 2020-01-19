@@ -1,6 +1,4 @@
-﻿using Dot.Tools.ETD.Validations;
-using Dot.Tools.ETD.Log;
-using Dot.Tools.ETD.Fields;
+﻿using Dot.Tools.ETD.Log;
 using Dot.Tools.ETD.Validations;
 using Dot.Tools.ETD.Verify;
 using ExtractInject;
@@ -18,7 +16,16 @@ namespace Dot.Tools.ETD.Fields
         public string defaultValue;
         public string validationRule;
 
-        protected AFieldData(int c,string n,string d,string t,string p,string v,string r)
+        protected AFieldData()
+        {
+        }
+
+        protected AFieldData(int c, string n, string d, string t, string p, string v, string r)
+        {
+            InitData(c, n, d, t, p, v, r);
+        }
+
+        protected void InitData(int c, string n, string d, string t, string p, string v, string r)
         {
             col = c;
             name = n;
