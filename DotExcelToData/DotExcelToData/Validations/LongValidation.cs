@@ -8,6 +8,8 @@ namespace Dot.Tools.ETD.Validations
     public class LongValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
+        private LogHandler logHandler;
+        [EIField(EIFieldUsage.In, false)]
         public AFieldData field;
         [EIField(EIFieldUsage.In, false)]
         public LineCell cell;
@@ -16,10 +18,8 @@ namespace Dot.Tools.ETD.Validations
         {
         }
 
-        public ValidationResultCode Verify(IEIContext context)
+        public ValidationResultCode Verify()
         {
-            LogHandler logHandler = context.GetObject<LogHandler>();
-
             if (field == null || cell == null)
             {
                 logHandler.Log(LogType.Error, LogConst.LOG_ARG_IS_NULL);

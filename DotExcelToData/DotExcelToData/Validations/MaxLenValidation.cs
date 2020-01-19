@@ -11,6 +11,9 @@ namespace Dot.Tools.ETD.Validations
         private const string MAX_LEN_REGEX = @"MaxLen{(?<len>[0-9]+)}";
 
         [EIField(EIFieldUsage.In, false)]
+        private LogHandler logHandler;
+
+        [EIField(EIFieldUsage.In, false)]
         public AFieldData field;
         [EIField(EIFieldUsage.In, false)]
         public LineCell cell;
@@ -21,10 +24,8 @@ namespace Dot.Tools.ETD.Validations
             this.rule = rule;
         }
 
-        public ValidationResultCode Verify(IEIContext context)
+        public ValidationResultCode Verify()
         {
-            LogHandler logHandler = context.GetObject<LogHandler>();
-
             int maxLen = 0;
             Match match = new Regex(MAX_LEN_REGEX).Match(rule);
             Group group = match.Groups["len"];

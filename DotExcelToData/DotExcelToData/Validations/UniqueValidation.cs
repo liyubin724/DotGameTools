@@ -8,7 +8,11 @@ namespace Dot.Tools.ETD.Validations
     public class UniqueValidation : IValidation
     {
         [EIField(EIFieldUsage.In, false)]
+        private LogHandler logHandler;
+
+        [EIField(EIFieldUsage.In, false)]
         public Sheet sheet;
+
         [EIField(EIFieldUsage.In, false)]
         public AFieldData field;
         [EIField(EIFieldUsage.In, false)]
@@ -18,10 +22,8 @@ namespace Dot.Tools.ETD.Validations
         {
         }
 
-        public ValidationResultCode Verify(IEIContext context)
+        public ValidationResultCode Verify()
         {
-            LogHandler logHandler = context.GetObject<LogHandler>();
-
             if (field == null || cell == null)
             {
                 logHandler.Log(LogType.Error, LogConst.LOG_ARG_IS_NULL);

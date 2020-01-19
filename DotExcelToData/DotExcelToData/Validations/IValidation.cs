@@ -1,10 +1,8 @@
-﻿using ExtractInject;
-
-namespace Dot.Tools.ETD.Validations
+﻿namespace Dot.Tools.ETD.Validations
 {
     public interface IValidation
     {
         void SetRule(string rule);
-        ValidationResultCode Verify(IEIContext context);
+        ValidationResultCode Verify();
     }
 }

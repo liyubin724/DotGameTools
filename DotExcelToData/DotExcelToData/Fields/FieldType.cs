@@ -23,11 +23,15 @@ namespace Dot.Tools.ETD.Fields
         Int,
         [FieldRealyType(typeof(int))]
         Ref,
+        [FieldRealyType(typeof(int))]
+        Text,
 
         [FieldRealyType(typeof(long))]
         Long,
+
         [FieldRealyType(typeof(float))]
         Float,
+
         [FieldRealyType(typeof(bool))]
         Bool,
 
@@ -35,8 +39,6 @@ namespace Dot.Tools.ETD.Fields
         String,
         [FieldRealyType(typeof(string))]
         Stringt,
-        [FieldRealyType(typeof(string))]
-        Text,
         [FieldRealyType(typeof(string))]
         Res,
         [FieldRealyType(typeof(string))]

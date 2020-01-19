@@ -1,7 +1,6 @@
 ﻿using Dot.Tools.ETD.Datas;
 using Dot.Tools.ETD.Fields;
 using Dot.Tools.ETD.Log;
-using Dot.Tools.ETD.Fields;
 using ExtractInject;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,9 @@ namespace Dot.Tools.ETD.Validations
     public class RangeValidation : IValidation
     {
         private const string RANGE_REGEX = @"Range\{(?<min>[-]{0,1}[0-9.]+),(?<max>[-]{0,1}[0-9.]+)\}";
+        
+        [EIField(EIFieldUsage.In, false)]
+        private LogHandler logHandler;
 
         [EIField(EIFieldUsage.In, false)]
         public AFieldData field;
@@ -24,10 +26,8 @@ namespace Dot.Tools.ETD.Validations
             this.rule = rule;
         }
 
-        public ValidationResultCode Verify(IEIContext context)
+        public ValidationResultCode Verify()
         {
-            LogHandler logHandler = context.GetObject<LogHandler>();
-
             float min = 0.0f;
             float max = 0.0f;
             Match match = new Regex(RANGE_REGEX).Match(rule);

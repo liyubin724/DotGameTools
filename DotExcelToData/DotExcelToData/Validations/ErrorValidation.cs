@@ -1,6 +1,4 @@
-﻿using ExtractInject;
-
-namespace Dot.Tools.ETD.Validations
+﻿namespace Dot.Tools.ETD.Validations
 {
     public class ErrorValidation : IValidation
     {
@@ -11,7 +9,7 @@ namespace Dot.Tools.ETD.Validations
             this.rule = rule;
         }
 
-        public ValidationResultCode Verify(IEIContext context)
+        public ValidationResultCode Verify()
         {
             throw new System.NotImplementedException();
         }
