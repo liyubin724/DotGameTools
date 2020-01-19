@@ -124,13 +124,14 @@ namespace Dot.Tools.ETD.Datas
 
         private void WriteBook(Workbook book,string outputDir,ETDWriterFormat format,ETDWriterTarget target, bool isOptimize)
         {
-            if (format == ETDWriterFormat.ALL || format == ETDWriterFormat.Json)
+            if (format == ETDWriterFormat.All || format == ETDWriterFormat.Json)
             {
-                JsonWriter.WriteBook(book, outputDir, target);
+                JsonWriter.WriteBook(book, Path.Combine(outputDir,IOConst.JSON_DIR_NAME), target);
             }
-            else if (format == ETDWriterFormat.ALL || format == ETDWriterFormat.Lua)
-            {
 
+            if (format == ETDWriterFormat.All || format == ETDWriterFormat.Lua)
+            {
+                LuaWriter.WriteBook(book, Path.Combine(outputDir, IOConst.LUA_DIR_NAME), target);
             }
         }
     }

@@ -10,7 +10,7 @@ namespace Dot.Tools.ETD.Fields
         {
             FieldRealyType realyTypeAttr = typeof(FieldType).GetField(fieldType.ToString()).GetCustomAttribute<FieldRealyType>();
             if(realyTypeAttr!=null && realyTypeAttr.RealyType.IsValueType && 
-                realyTypeAttr.RealyType.IsPrimitive && realyTypeAttr.RealyType != typeof(bool))
+                realyTypeAttr.RealyType.IsPrimitive)
             {
                 return true;
             }
