@@ -16,6 +16,8 @@ namespace Dot.Tools.ETD.Log
 
     public static class LogConst
     {
+        public static readonly int LOG_WARP_LINE = 0;
+
         public static readonly int LOG_FILE_NOT_EXIST = -1;
         public static readonly int LOG_FILE_NOT_EXCEL = -2;
         public static readonly int LOG_ARG_IS_NULL = -3;
@@ -79,6 +81,7 @@ namespace Dot.Tools.ETD.Log
         private static Dictionary<int, string> logFormatDic = new Dictionary<int, string>();
         public static void InitMsg()
         {
+            logFormatDic.Add(LOG_WARP_LINE, "\r\n");
             logFormatDic.Add(LOG_FILE_NOT_EXIST, "File is not found.path = {0}");
             logFormatDic.Add(LOG_FILE_NOT_EXCEL, "File is not a excel file.path = {0}");
             logFormatDic.Add(LOG_ARG_IS_NULL, "The argument is null.");

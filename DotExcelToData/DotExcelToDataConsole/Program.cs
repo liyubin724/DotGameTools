@@ -63,6 +63,14 @@ namespace DotExcelToDataConsole
 
         private void OnLogReceived(LogType logType, int logID, string message)
         {
+            if(logID == 0)
+            {
+                Console.WriteLine();
+
+                writer?.WriteLine();
+                return;
+            }
+
             string formatMess = $"[{logType,-7}]    [{logID,5}]    {message}";
 
             if (logType>=option.LogLevel)
@@ -88,10 +96,7 @@ namespace DotExcelToDataConsole
                 Console.WriteLine(formatMess, messColor);
             }
 
-            if(writer!=null)
-            {
-                writer.WriteLine(formatMess);
-            }
+            writer?.WriteLine(formatMess);
         }
 
         public void Start(ETDOption option)

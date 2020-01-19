@@ -59,6 +59,8 @@ namespace Dot.Tools.ETD.IO
                 ETDWorkbook bookData = new ETDWorkbook(excelPath);
                 for (int i = 0; i < workbook.NumberOfSheets; i++)
                 {
+                    Log(LogType.Info, LogConst.LOG_WARP_LINE);
+
                     ISheet sheet = workbook.GetSheetAt(i);
                     string sheetName = sheet.SheetName;
                     if (string.IsNullOrEmpty(sheetName))
@@ -83,6 +85,8 @@ namespace Dot.Tools.ETD.IO
                     {
                         bookData.AddSheet(dataSheet);
                     }
+
+                    Log(LogType.Info, LogConst.LOG_WARP_LINE);
                 }
 
                 Log(LogType.Info, LogConst.LOG_WORKBOOK_END, excelPath);
