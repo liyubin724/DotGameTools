@@ -44,19 +44,22 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_SHEET_FIELD_DETAIL = 2210;
         public static readonly int LOG_SHEET_LINE_CREATE = 2211;
         public static readonly int LOG_SHEET_LINE_DETAIL = 2212;
+        public static readonly int LOG_SHEET_FIELD_NAME_NULL = -2213;
 
         public static readonly int LOG_WORKBOOK_VERIFY_START = 3100;
         public static readonly int LOG_WORKBOOK_VERIFY_END = 3101;
 
         public static readonly int LOG_SHEET_VERIFY_START = 3201;
         public static readonly int LOG_SHEET_VERIFY_END = 3202;
+        public static readonly int LOG_SHEET_FIELD_EMPTY = -3203;
 
         public static readonly int LOG_FIELD_VERIFY_START = 3301;
         public static readonly int LOG_FIELD_VERIFY_END = 3302;
         public static readonly int LOG_FIELD_VERIFY_NAME_NULL = -3303;
-        public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3304;
-        public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3305;
-        public static readonly int LOG_FIELD_VERIFY_VALIDATION_ERROR = -3306;
+        public static readonly int LOG_FIELD_VERIFY_NAME_REPEAT = -3304;
+        public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3305;
+        public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3306;
+        public static readonly int LOG_FIELD_VERIFY_VALIDATION_ERROR = -3307;
 
         public static readonly int LOG_LINE_VERIFY_START = 3401;
         public static readonly int LOG_LINE_VERIFY_END = 3402;
@@ -96,7 +99,8 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_SHEET_START, "Start to convert the sheet({0})");
             logFormatDic.Add(LOG_SHEET_END, "End to convert the sheet({0}).");
             logFormatDic.Add(LOG_SHEET_FIELD_START, "Start to read field from sheet");
-            logFormatDic.Add(LOG_SHEET_FIELD_IGNORE, "The field which named({0}) will be ignored,because of the name is start with '#'.");
+            logFormatDic.Add(LOG_SHEET_FIELD_IGNORE, "The field which named({0}) will be ignored,because of the name is start with '#' or '_'.");
+            logFormatDic.Add(LOG_SHEET_FIELD_NAME_NULL, "The field will be ignored,because of the name is null.");
             logFormatDic.Add(LOG_SHEET_FIELD_CREATE, "The col of the sheet({0}) will be created as a field");
             logFormatDic.Add(LOG_SHEET_FIELD_DETAIL, "The detail content of the field is {0}");
             logFormatDic.Add(LOG_SHEET_FIELD_END, "End to read field from sheet");
@@ -110,9 +114,12 @@ namespace Dot.Tools.ETD.Log
 
             logFormatDic.Add(LOG_SHEET_VERIFY_START, "Start to verify Sheet.Name = {0}");
             logFormatDic.Add(LOG_SHEET_VERIFY_END, "Verify sheet finish.Name = {0}, Result = {1}.");
+            logFormatDic.Add(LOG_SHEET_FIELD_EMPTY, "The count of the field is 0.");
+
             logFormatDic.Add(LOG_FIELD_VERIFY_START, "Start to verify Field.Detail = {0}");
             logFormatDic.Add(LOG_FIELD_VERIFY_END, "Verify Field finish. Result = {0}.");
             logFormatDic.Add(LOG_FIELD_VERIFY_NAME_NULL, "The name of the field is null");
+            logFormatDic.Add(LOG_FIELD_VERIFY_NAME_REPEAT, "The name of the field is repeated.name={0}");
             logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The type of the field is error.");
             logFormatDic.Add(LOG_FIELD_VERIFY_PLATFORM_ERROR, "The platform of the field is error.");
             logFormatDic.Add(LOG_FIELD_VERIFY_VALIDATION_ERROR, "The validation of the field is error.rule = {0}");

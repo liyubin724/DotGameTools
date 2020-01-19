@@ -1,4 +1,5 @@
-﻿using Dot.Tools.ETD.Log;
+﻿using Dot.Tools.ETD.Datas;
+using Dot.Tools.ETD.Log;
 using Dot.Tools.ETD.Validations;
 using Dot.Tools.ETD.Verify;
 using ExtractInject;
@@ -89,6 +90,20 @@ namespace Dot.Tools.ETD.Fields
                 {
                     logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_VALIDATION_ERROR,((ErrorValidation)v).Rule);
                     result = false;
+                }
+            }
+
+            Sheet sheet = context.GetObject<Sheet>();
+            for(int i =0;i<sheet.FieldCount;++i)
+            {
+                AFieldData tField = sheet.GetFieldByIndex(i);
+                if(tField!=this)
+                {
+                    if(tField.name == name)
+                    {
+                        logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_NAME_REPEAT, name);
+                        result = false;
+                    }
                 }
             }
 

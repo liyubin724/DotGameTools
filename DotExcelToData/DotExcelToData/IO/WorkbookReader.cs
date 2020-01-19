@@ -137,31 +137,37 @@ namespace Dot.Tools.ETD.IO
             int firstCol = sheet.GetRow(firstRow).FirstCellNum;
             int lastCol = sheet.GetRow(firstRow).LastCellNum;
 
-            int colCount = lastCol - firstCol + 1;
-            for (int i = 1; i < colCount; i++)
+            bool isFoundIDCol = false;
+            for(int i = firstCol; i<=lastCol;++i)
             {
+                IRow nameRow = sheet.GetRow(firstRow);
+                string nameContent = SheetConst.GetCellStringValue(nameRow.GetCell(i));
+                if(string.IsNullOrEmpty(nameContent))
+                {
+                    Log(LogType.Warning, LogConst.LOG_SHEET_FIELD_NAME_NULL);
+                    continue;
+                }
+                if(nameContent.StartsWith("#") || nameContent.StartsWith("_"))
+                {
+                    Log(LogType.Info, LogConst.LOG_SHEET_FIELD_IGNORE, nameContent);
+                    continue;
+                }
+                if(!isFoundIDCol)
+                {
+                    if(nameContent == SheetConst.ID_FIELD_NAME)
+                    {
+                        isFoundIDCol = true;
+                    }else
+                    {
+                        continue;
+                    }
+                }
+
                 List<string> values = new List<string>();
                 for (int j = 0; j < SheetConst.MIN_ROW_COUNT; j++)
                 {
                     IRow row = sheet.GetRow(firstRow + j);
-                    ICell cell = row.GetCell(i);
-                    if (j == 0)
-                    {
-                        if (cell == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            string content = SheetConst.GetCellStringValue(cell);
-                            if (string.IsNullOrEmpty(content) || content.StartsWith("#"))
-                            {
-                                Log(LogType.Info, LogConst.LOG_SHEET_FIELD_IGNORE, content);
-                                break;
-                            }
-                        }
-                    }
-                    values.Add(SheetConst.GetCellStringValue(cell));
+                    values.Add(SheetConst.GetCellStringValue(row.GetCell(i)));
                 }
                 if (values.Count == SheetConst.MIN_ROW_COUNT)
                 {
@@ -177,7 +183,6 @@ namespace Dot.Tools.ETD.IO
                     Log(LogType.Verbose, LogConst.LOG_SHEET_FIELD_DETAIL, field.ToString());
                 }
             }
-
             Log(LogType.Info, LogConst.LOG_SHEET_FIELD_END);
         }
 

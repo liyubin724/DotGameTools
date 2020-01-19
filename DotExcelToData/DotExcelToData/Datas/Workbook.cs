@@ -64,15 +64,11 @@ namespace Dot.Tools.ETD.Datas
 
             foreach(var sheet in sheets)
             {
-                context.AddObject<Sheet>(sheet);
-
                 bool isValid = sheet.Verify(context);
                 if(result && !isValid)
                 {
                     result = false;
                 }
-
-                context.DeleteObject<Sheet>();
             }
             context.DeleteObject<Workbook>();
 

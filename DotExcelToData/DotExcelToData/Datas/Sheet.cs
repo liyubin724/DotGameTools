@@ -29,61 +29,74 @@ namespace Dot.Tools.ETD.Datas
             logHandler.Log(LogType.Info, LogConst.LOG_SHEET_VERIFY_START, name);
 
             bool result = true;
-
-            foreach(var field in fields)
+            if(FieldCount == 0)
             {
-                bool isValid = field.Verify(context);
-                if(!isValid)
-                {
-                    result = false;
-                }
+                logHandler.Log(LogType.Error, LogConst.LOG_SHEET_FIELD_EMPTY);
+                result = false;
             }
 
-            foreach(var line in lines)
+            if(result)
             {
-                logHandler.Log(LogType.Info, LogConst.LOG_LINE_VERIFY_START,line.row);
+                context.AddObject<Sheet>(this);
 
-                bool lineResult = true;
-
-                if (line.CellCount != fields.Count)
+                foreach (var field in fields)
                 {
-                    logHandler.Log(LogType.Error, LogConst.LOG_LINE_COUNT_NOT_EQUAL);
-                    lineResult = false;
-                }else
-                {
-                    for(int i = 0;i<fields.Count;++i)
+                    bool isValid = field.Verify(context);
+                    if (!isValid)
                     {
-                        AFieldData field = fields[i];
-                        LineCell cell = line.GetCellByIndex(i);
-
-                        context.AddObject<AFieldData>(field);
-                        context.AddObject<LineCell>(cell);
-
-                        IValidation[] validations = field.GetValidations();
-                        foreach(var v in validations)
-                        {
-                            if(v.GetType() != typeof(ErrorValidation))
-                            {
-                                EIUtil.Inject(context, v);
-
-                                ValidationResultCode resultCode = v.Verify(context);
-                                if(resultCode!= ValidationResultCode.Success)
-                                {
-                                    lineResult = false;
-                                }
-                            }
-                        }
-
-                        context.DeleteObject<AFieldData>();
-                        context.DeleteObject<LineCell>();
+                        result = false;
                     }
                 }
-                logHandler.Log(LogType.Info, LogConst.LOG_LINE_VERIFY_END, lineResult);
 
-                if(!lineResult)
+                foreach (var line in lines)
                 {
-                    result = false;
+                    logHandler.Log(LogType.Info, LogConst.LOG_LINE_VERIFY_START, line.row);
+
+                    bool lineResult = true;
+
+                    if (line.CellCount != fields.Count)
+                    {
+                        logHandler.Log(LogType.Error, LogConst.LOG_LINE_COUNT_NOT_EQUAL);
+                        lineResult = false;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < fields.Count; ++i)
+                        {
+                            AFieldData field = fields[i];
+                            LineCell cell = line.GetCellByIndex(i);
+
+                            context.AddObject<AFieldData>(field);
+                            context.AddObject<LineCell>(cell);
+
+                            IValidation[] validations = field.GetValidations();
+                            foreach (var v in validations)
+                            {
+                                if (v.GetType() != typeof(ErrorValidation))
+                                {
+                                    EIUtil.Inject(context, v);
+
+                                    ValidationResultCode resultCode = v.Verify(context);
+                                    if (resultCode != ValidationResultCode.Success)
+                                    {
+                                        lineResult = false;
+                                    }
+                                }
+                            }
+
+                            context.DeleteObject<AFieldData>();
+                            context.DeleteObject<LineCell>();
+                        }
+                    }
+                    logHandler.Log(LogType.Info, LogConst.LOG_LINE_VERIFY_END, lineResult);
+
+                    if (!lineResult)
+                    {
+                        result = false;
+                    }
                 }
+
+                context.DeleteObject<Sheet>();
             }
 
             logHandler.Log(LogType.Info, LogConst.LOG_SHEET_VERIFY_END, name,result);
