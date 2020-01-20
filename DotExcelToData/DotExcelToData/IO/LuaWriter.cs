@@ -27,20 +27,14 @@ namespace Dot.Tools.ETD.IO
                 Sheet sheet = book.GetSheetByIndex(i);
 
                 string filePath = $"{outputDir}/{book.Name}_{sheet.name}{IOConst.LUA_EXTERSION}";
-                WriteSheet(sheet, filePath, platform);
+                WriteSheet(book.Name,sheet, filePath, platform);
             }
         }
 
-        private static void WriteSheet(Sheet sheet, string filePath, FieldPlatform platform)
+        private static void WriteSheet(string bookName,Sheet sheet, string filePath, FieldPlatform platform)
         {
             using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
-                string dataName = Path.GetFileNameWithoutExtension(filePath);
-
-                writer.WriteLine($"local {dataName} = {{");
-
-                int indent = 0;
-
                 List<AFieldData> fields = new List<AFieldData>();
                 for (int f = 0; f < sheet.FieldCount; ++f)
                 {
@@ -50,6 +44,9 @@ namespace Dot.Tools.ETD.IO
                         fields.Add(field);
                     }
                 }
+
+                writer.WriteLine($"local {bookName}_{sheet.name} = {{");
+                int indent = 0;
 
                 for (int m = 0; m < sheet.LineCount; ++m)
                 {
@@ -76,7 +73,7 @@ namespace Dot.Tools.ETD.IO
                 }
 
                 writer.WriteLine("}");
-                writer.WriteLine($"return {dataName}");
+                writer.WriteLine($"return {bookName}_{sheet.name}");
 
                 writer.Flush();
                 writer.Close();

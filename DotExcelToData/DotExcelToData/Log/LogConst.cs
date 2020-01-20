@@ -62,6 +62,9 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_FIELD_VERIFY_TYPE_ERROR = -3306;
         public static readonly int LOG_FIELD_VERIFY_PLATFORM_ERROR = -3307;
         public static readonly int LOG_FIELD_VERIFY_VALIDATION_ERROR = -3308;
+        public static readonly int LOG_FIELD_VERIFY_DIC_KEY_ERROR = -3309;
+        public static readonly int LOG_FIELD_VERIFY_DIC_VALUE_ERROR = -3310;
+        public static readonly int LOG_FIELD_VERIFY_ARRAY_VALUE_ERROR = -3311;
 
         public static readonly int LOG_LINE_VERIFY_START = 3401;
         public static readonly int LOG_LINE_VERIFY_END = 3402;
@@ -131,8 +134,11 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_FIELD_VERIFY_TYPE_ERROR, "The type of the field is error.");
             logFormatDic.Add(LOG_FIELD_VERIFY_PLATFORM_ERROR, "The platform of the field is error.");
             logFormatDic.Add(LOG_FIELD_VERIFY_VALIDATION_ERROR, "The validation of the field is error.rule = {0}");
+            logFormatDic.Add(LOG_FIELD_VERIFY_DIC_KEY_ERROR, "The type of key in dic is not correct.type = {0}");
+            logFormatDic.Add(LOG_FIELD_VERIFY_DIC_VALUE_ERROR, "The type of value in dic is not correct.type = {0}");
+            logFormatDic.Add(LOG_FIELD_VERIFY_ARRAY_VALUE_ERROR, "The type of value in array is not correct.type = {0}");
 
-            
+
 
             logFormatDic.Add(LOG_LINE_VERIFY_START, "Start to verify line.row = {0}");
             logFormatDic.Add(LOG_LINE_VERIFY_END, "Verify line finish. Result = {0}.");

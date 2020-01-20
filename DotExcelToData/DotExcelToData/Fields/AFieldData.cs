@@ -115,6 +115,11 @@ namespace Dot.Tools.ETD.Fields
                 }
             }
 
+            if(!InnerVerify(context))
+            {
+                result = false;
+            }
+
             logHandler.Log(LogType.Verbose, LogConst.LOG_FIELD_VERIFY_END, result);
 
             return result;

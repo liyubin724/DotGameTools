@@ -1,5 +1,6 @@
-﻿using Dot.Tools.ETD.Fields;
+﻿using Dot.Tools.ETD.Log;
 using Dot.Tools.ETD.Validations;
+using ExtractInject;
 using System.Collections.Generic;
 
 namespace Dot.Tools.ETD.Fields
@@ -19,6 +20,20 @@ namespace Dot.Tools.ETD.Fields
         protected override void AddExtraValidation(List<IValidation> validations)
         {
             
+        }
+
+        protected override bool InnerVerify(IEIContext context)
+        {
+            LogHandler logHandler = context.GetObject<LogHandler>();
+
+            bool result = true;
+            if (ValueType == FieldType.Array || ValueType == FieldType.Dic || ValueType == FieldType.None)
+            {
+                logHandler.Log(LogType.Error, LogConst.LOG_FIELD_VERIFY_ARRAY_VALUE_ERROR, ValueType);
+                result = false;
+            }
+
+            return result;
         }
     }
 }
