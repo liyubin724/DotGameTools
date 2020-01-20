@@ -22,6 +22,19 @@ namespace Dot.Tools.ETD.Datas
         public int LineCount { get => lines.Count; }
         public int FieldCount { get => fields.Count; }
 
+        public void SortLineByID()
+        {
+            lines.Sort((line1, line2) =>
+            {
+                string idStr1 = line1.GetCellByIndex(0).GetContent(fields[0]);
+                string idStr2 = line2.GetCellByIndex(0).GetContent(fields[0]);
+
+                int id1 = int.Parse(idStr1);
+                int id2 = int.Parse(idStr2);
+                return id1.CompareTo(id2);
+            });
+        }
+
         public bool Verify(IEIContext context)
         {
             LogHandler logHandler = context.GetObject<LogHandler>();

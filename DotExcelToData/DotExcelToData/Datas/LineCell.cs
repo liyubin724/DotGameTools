@@ -18,11 +18,16 @@ namespace Dot.Tools.ETD.Datas
 
         public string GetContent(AFieldData field)
         {
-            if(string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(field.defaultValue))
+            string content = value;
+            if(string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(field.defaultValue))
             {
-                return field.defaultValue;
+                content = field.defaultValue;
             }
-            return value;
+            if(string.IsNullOrEmpty(content))
+            {
+                content = field.GetOriginalDefault();
+            }
+            return content;
         }
 
         public override string ToString()

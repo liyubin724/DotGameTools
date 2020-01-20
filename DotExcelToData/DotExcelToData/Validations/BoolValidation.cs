@@ -10,9 +10,9 @@ namespace Dot.Tools.ETD.Validations
         [EIField(EIFieldUsage.In, false)]
         private LogHandler logHandler;
         [EIField(EIFieldUsage.In, false)]
-        public AFieldData field;
+        private AFieldData field;
         [EIField(EIFieldUsage.In, false)]
-        public LineCell cell;
+        private LineCell cell;
 
         public void SetRule(string rule)
         {
@@ -28,12 +28,6 @@ namespace Dot.Tools.ETD.Validations
             }
 
             string content = cell.GetContent(field);
-            if(string.IsNullOrEmpty(content))
-            {
-                logHandler.Log(LogType.Warning, LogConst.LOG_VALIDATION_SET_DEFAULT,"false", cell.row, cell.col);
-                content = cell.value = "false";
-            }
-
             if (!bool.TryParse(content, out bool value))
             {
                 logHandler.Log(LogType.Error, LogConst.LOG_VALIDATION_CONVERT_ERROR,"bool", cell.ToString());

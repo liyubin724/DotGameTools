@@ -52,5 +52,10 @@ namespace Dot.Tools.ETD.Fields
 
             return result;
         }
+
+        public override string GetOriginalDefault()
+        {
+            return "nil";
+        }
     }
 }

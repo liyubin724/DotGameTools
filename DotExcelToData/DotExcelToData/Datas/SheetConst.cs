@@ -12,6 +12,7 @@ namespace Dot.Tools.ETD.Datas
         public static string TEXT_BOOK_NAME = "Text";
         public static string ROW_START_FLAG = "start";
         public static string ROW_END_FLAG = "end";
+        public static string CELL_NULL_FLAG = "nil";
 
         public static string GetCellStringValue(ICell cell)
         {

@@ -13,9 +13,15 @@ namespace Dot.Tools.ETD.Fields
             RefName = FieldTypeUtil.GetRefName(t);
         }
 
+
         protected override void AddExtraValidation(List<IValidation> validations)
         {
             
+        }
+
+        public override string GetOriginalDefault()
+        {
+            return "nil";
         }
     }
 }

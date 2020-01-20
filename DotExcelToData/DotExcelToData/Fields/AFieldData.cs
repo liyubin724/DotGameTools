@@ -60,6 +60,7 @@ namespace Dot.Tools.ETD.Fields
         }
 
         protected abstract void AddExtraValidation(List<IValidation> validations);
+        public abstract string GetOriginalDefault();
 
         public bool Verify(IEIContext context)
         {

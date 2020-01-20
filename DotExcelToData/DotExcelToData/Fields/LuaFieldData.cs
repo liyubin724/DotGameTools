@@ -9,6 +9,11 @@ namespace Dot.Tools.ETD.Fields
         {
         }
 
+        public override string GetOriginalDefault()
+        {
+            return "";
+        }
+
         protected override void AddExtraValidation(List<IValidation> validations)
         {
             

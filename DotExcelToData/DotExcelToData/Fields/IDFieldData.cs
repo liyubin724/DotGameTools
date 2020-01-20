@@ -16,6 +16,11 @@ namespace Dot.Tools.ETD.Fields
             InitData(c, n, d, t, p, v, r);
         }
 
+        public override string GetOriginalDefault()
+        {
+            throw new System.NotImplementedException();
+        }
+
         protected override void AddExtraValidation(List<IValidation> validations)
         {
             validations.Add(new IntValidation());

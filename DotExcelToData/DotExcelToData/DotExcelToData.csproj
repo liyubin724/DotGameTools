@@ -79,6 +79,7 @@
     <Compile Include="IO\IOConst.cs" />
     <Compile Include="IO\JsonWriter.cs" />
     <Compile Include="IO\LuaWriter.cs" />
+    <Compile Include="IO\Lua\OptimizeLuaAnalyzer.cs" />
     <Compile Include="IO\OptimizeLuaWriter.cs" />
     <Compile Include="IO\WorkbookReader.cs" />
     <Compile Include="Log\LogConst.cs" />
