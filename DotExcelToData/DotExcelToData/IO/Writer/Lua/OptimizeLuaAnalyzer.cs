@@ -8,67 +8,165 @@ namespace Dot.Tools.ETD.IO
 {
     public class SubSheetData
     {
-        public string name;
         public int startID;
         public int endID;
 
         public Dictionary<AFieldData, List<string>> complexContentDic = new Dictionary<AFieldData, List<string>>();
         public List<SheetLine> lines = new List<SheetLine>();
-    }
 
-    public class SummarySheetData
-    {
-        public string bookName;
-        public string sheetName;
-
-        public bool isNeedText = false;
-        public Dictionary<AFieldData, string> defalutDic = new Dictionary<AFieldData, string>();
-        public List<string> strList = new List<string>();
-        public List<SubSheetData> subSheets = new List<SubSheetData>();
-    }
-
-    public class OptimizeLuaAnalyzer
-    {
-        private static List<SubSheetData> SubSheet(Sheet sheet,int countInSub)
+        public int index;
+        public SummarySheetData summarySheet;
+        public SubSheetData(int index, SummarySheetData summarySheet)
         {
-            sheet.SortLineByID();
-
-            List<SubSheetData> subSheets = new List<SubSheetData>();
-            int curIndex = 0;
-            SubSheetData subSheet = null;
-            while(curIndex<sheet.LineCount)
-            {
-                SheetLine line = sheet.GetLineByIndex(curIndex);
-                string idStr = sheet.GetLineIDByIndex(curIndex);
-                int id = int.Parse(idStr);
-                if(curIndex%countInSub ==0)
-                {
-                    subSheet = new SubSheetData();
-                    subSheets.Add(subSheet);
-
-                    subSheet.startID = id;
-                }
-                
-                subSheet.endID = id;
-
-                subSheet.lines.Add(line);
-
-                curIndex++;
-            }
-            return subSheets;
+            this.index = index;
+            this.summarySheet = summarySheet;
         }
 
-        private static Dictionary<AFieldData,string> FindSheetDefault(Sheet sheet,FieldPlatform platform)
-        {
-            Dictionary<AFieldData, string> defaultValueDic = new Dictionary<AFieldData, string>();
+        public string OutputName { get => $"{summarySheet.bookName}_{summarySheet.sheet.name}_{index+1}"; }
+        public string OutputFilePath { get => $"{summarySheet.outputDir}/{summarySheet.OutputName}/{OutputName}{IOConst.LUA_EXTERSION}"; }
 
+        internal void FindSubSheetComplexContent()
+        {
+            Sheet sheet = summarySheet.sheet;
+            FieldPlatform platform = summarySheet.platform;
             List<AFieldData> fields = new List<AFieldData>();
             for (int f = 0; f < sheet.FieldCount; ++f)
             {
                 AFieldData field = sheet.GetFieldByIndex(f);
                 if (field.Platform == FieldPlatform.All || field.Platform == platform)
                 {
-                    if(field.Type == FieldType.Array || field.Type == FieldType.Dic)
+                    if (field.Type == FieldType.Array || field.Type == FieldType.Dic || field.Type == FieldType.Lua)
+                    {
+                        fields.Add(field);
+                    }
+                }
+            }
+            foreach (var field in fields)
+            {
+                List<string> contents = new List<string>();
+                foreach (var line in lines)
+                {
+                    var content = line.GetCellByCol(field.col).GetContent(field);
+                    if (content != null)
+                    {
+                        contents.Add(content);
+                    }
+                }
+
+                contents = contents.Distinct().ToList();
+                complexContentDic.Add(field, contents);
+            }
+        }
+    }
+
+    public class SummarySheetData
+    {
+        public string bookName;
+        public string outputDir;
+        public Sheet sheet;
+        public FieldPlatform platform;
+
+        public Dictionary<AFieldData, string> defalutDic = new Dictionary<AFieldData, string>();
+        public List<string> strList = new List<string>();
+
+        public List<string> luaFieldNames = new List<string>();
+        public List<string> strFieldNames = new List<string>();
+        public List<string> textFieldNames = new List<string>();
+             
+        public List<SubSheetData> subSheets = new List<SubSheetData>();
+
+        public SummarySheetData(string bookName,string outputDir,Sheet sheet,FieldPlatform platform)
+        {
+            this.bookName = bookName;
+            this.outputDir = outputDir;
+            this.sheet = sheet;
+            this.platform = platform;
+        }
+
+        public string OutputName { get => $"{bookName}_{sheet.name}"; }
+        public string OutputFilePath { get => $"{outputDir}/{OutputName}{IOConst.LUA_EXTERSION}"; }
+
+        public bool IsNeedText
+        {
+            get
+            {
+                for (int f = 0; f < sheet.FieldCount; ++f)
+                {
+                    AFieldData field = sheet.GetFieldByIndex(f);
+                    if (field.Platform == FieldPlatform.All || field.Platform == platform)
+                    {
+                        if (field.Type == FieldType.Text)
+                        {
+                            return true;
+                        }
+                        if (field.Type == FieldType.Array && ((ArrayFieldData)field).ValueType == FieldType.Text)
+                        {
+                            return true;
+                        }
+                        if (field.Type == FieldType.Dic && ((DicFieldData)field).ValueType == FieldType.Text)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        private void FilterNames()
+        {
+            for (int f = 0; f < sheet.FieldCount; ++f)
+            {
+                AFieldData field = sheet.GetFieldByIndex(f);
+                if (field.Platform == FieldPlatform.All || field.Platform == platform)
+                {
+                    if(field.Type == FieldType.Lua)
+                    {
+                        luaFieldNames.Add(field.name);
+                    }else if(SheetConst.IsContainStringField(field))
+                    {
+                        strFieldNames.Add(field.name);
+                    }
+                }
+            }
+        }
+
+        private void SubSheet(int countForSub)
+        {
+            sheet.SortLineByID();
+
+            int curIndex = 0;
+            SubSheetData subSheet = null;
+            while (curIndex < sheet.LineCount)
+            {
+                SheetLine line = sheet.GetLineByIndex(curIndex);
+                string idStr = sheet.GetLineIDByIndex(curIndex);
+                int id = int.Parse(idStr);
+                if (curIndex % countForSub == 0)
+                {
+                    subSheet = new SubSheetData(subSheets.Count, this);
+                    subSheets.Add(subSheet);
+
+                    subSheet.startID = id;
+                }
+
+                subSheet.endID = id;
+
+                subSheet.lines.Add(line);
+
+                curIndex++;
+            }
+        }
+
+        private void FindSheetDefault()
+        {
+            List<AFieldData> fields = new List<AFieldData>();
+            for (int f = 0; f < sheet.FieldCount; ++f)
+            {
+                AFieldData field = sheet.GetFieldByIndex(f);
+                if (field.Platform == FieldPlatform.All || field.Platform == platform)
+                {
+                    if (field.Type == FieldType.Array || field.Type == FieldType.Dic || field.Type == FieldType.Lua)
                     {
                         continue;
                     }
@@ -108,15 +206,13 @@ namespace Dot.Tools.ETD.IO
 
                 if (maxCount > 1)
                 {
-                    defaultValueDic.Add(field, rContent);
+                    defalutDic.Add(field, rContent);
                 }
             }
-            return defaultValueDic;
         }
 
-        private static List<string> FindSheetString(Sheet sheet, FieldPlatform platform)
+        private void FindSheetString()
         {
-            List<string> result = new List<string>();
             List<AFieldData> fields = new List<AFieldData>();
             for (int f = 0; f < sheet.FieldCount; ++f)
             {
@@ -129,7 +225,7 @@ namespace Dot.Tools.ETD.IO
             for (int i = 0; i < fields.Count; ++i)
             {
                 AFieldData field = fields[i];
-                if (IsStringField(field))
+                if (SheetConst.IsContainStringField(field))
                 {
                     for (int j = 0; j < sheet.LineCount; ++j)
                     {
@@ -139,55 +235,27 @@ namespace Dot.Tools.ETD.IO
                         string[] values = GetStringCellContent(field, cell);
                         if (values != null && values.Length > 0)
                         {
-                            result.AddRange(values);
+                            strList.AddRange(values);
                         }
                     }
                 }
             }
-            result = result.Distinct().ToList();
-            return result;
+            strList = strList.Distinct().ToList();
         }
 
-        private static bool IsStringField(AFieldData field)
-        {
-            if (field.Type == FieldType.String || field.Type == FieldType.Res || field.Type == FieldType.Stringt)
-            {
-                return true;
-            }
-            if (field.Type == FieldType.Array)
-            {
-                ArrayFieldData arrayField = (ArrayFieldData)field;
-
-                if (arrayField.Type == FieldType.String || arrayField.Type == FieldType.Res || arrayField.Type == FieldType.Stringt)
-                {
-                    return true;
-                }
-            }
-            if (field.Type == FieldType.Dic)
-            {
-                DicFieldData dicField = (DicFieldData)field;
-
-                if (dicField.ValueType == FieldType.String || dicField.ValueType == FieldType.Res || dicField.ValueType == FieldType.Stringt)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private static string[] GetStringCellContent(AFieldData field, LineCell cell)
+        private string[] GetStringCellContent(AFieldData field, LineCell cell)
         {
             List<string> contents = new List<string>();
             string content = cell.GetContent(field);
 
-            if (field.Type == FieldType.String || field.Type == FieldType.Res || field.Type == FieldType.Stringt)
+            if (FieldTypeUtil.IsStringType(field.Type))
             {
                 contents.Add(content);
             }
             else if (field.Type == FieldType.Array)
             {
                 ArrayFieldData arrayField = (ArrayFieldData)field;
-                if (arrayField.Type == FieldType.String || arrayField.Type == FieldType.Res || arrayField.Type == FieldType.Stringt)
+                if (FieldTypeUtil.IsStringType(arrayField.ValueType))
                 {
                     string[] splitStr = content.Split(new char[] { '[', ',', ']' }, StringSplitOptions.RemoveEmptyEntries);
                     contents.AddRange(splitStr);
@@ -196,7 +264,7 @@ namespace Dot.Tools.ETD.IO
             if (field.Type == FieldType.Dic)
             {
                 DicFieldData dicField = (DicFieldData)field;
-                if (dicField.ValueType == FieldType.String || dicField.ValueType == FieldType.Res || dicField.ValueType == FieldType.Stringt)
+                if (FieldTypeUtil.IsStringType(dicField.ValueType))
                 {
                     string[] splitStr = content.Split(new char[] { '[', ';', ']' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var str in splitStr)
@@ -212,75 +280,26 @@ namespace Dot.Tools.ETD.IO
             return contents.ToArray();
         }
 
-        private static void FindSubSheetComplexContent(Sheet sheet, SubSheetData subSheet,FieldPlatform platform)
+        internal void Analyzer(int countForSub)
         {
-            List<AFieldData> fields = new List<AFieldData>();
-            for (int f = 0; f < sheet.FieldCount; ++f)
-            {
-                AFieldData field = sheet.GetFieldByIndex(f);
-                if (field.Platform == FieldPlatform.All || field.Platform == platform)
-                {
-                    if(field.Type == FieldType.Array || field.Type == FieldType.Dic || field.Type == FieldType.Lua)
-                    {
-                        fields.Add(field);
-                    }
-                }
-            }
-            foreach(var field in fields)
-            {
-                List<string> contents = new List<string>();
-                foreach(var line in subSheet.lines)
-                {
-                    var content = line.GetCellByCol(field.col).GetContent(field);
-                    if(content!=null)
-                    {
-                        contents.Add(content);
-                    }
-                }
+            FilterNames();
+            SubSheet(countForSub);
+            FindSheetDefault();
+            FindSheetString();
 
-                contents = contents.Distinct().ToList();
-                subSheet.complexContentDic.Add(field, contents);
+            foreach(var subSheet in subSheets)
+            {
+                subSheet.FindSubSheetComplexContent();
             }
         }
+    }
 
-        private static bool IsNeedText(Sheet sheet,FieldPlatform platform)
+    public class OptimizeLuaAnalyzer
+    {
+        public static SummarySheetData OptimizeSheet(string bookName,string outputDir,Sheet sheet,int countInSub,FieldPlatform platform)
         {
-            for (int f = 0; f < sheet.FieldCount; ++f)
-            {
-                AFieldData field = sheet.GetFieldByIndex(f);
-                if (field.Platform == FieldPlatform.All || field.Platform == platform)
-                {
-                    if (field.Type == FieldType.Text)
-                    {
-                        return true;
-                    }
-                    if(field.Type == FieldType.Array && ((ArrayFieldData)field).ValueType == FieldType.Text)
-                    {
-                        return true;
-                    }
-                    if(field.Type == FieldType.Dic && ((DicFieldData)field).ValueType == FieldType.Text)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public static SummarySheetData OptimizeSheet(Sheet sheet,int countInSub,FieldPlatform platform)
-        {
-            SummarySheetData summarySheet = new SummarySheetData();
-            summarySheet.isNeedText = IsNeedText(sheet, platform);
-            summarySheet.sheetName = sheet.name;
-            summarySheet.subSheets = SubSheet(sheet, countInSub);
-            summarySheet.defalutDic = FindSheetDefault(sheet, platform);
-            summarySheet.strList = FindSheetString(sheet, platform);
-
-            foreach(var subSheet in summarySheet.subSheets)
-            {
-                FindSubSheetComplexContent(sheet, subSheet, platform);
-            }
-
+            SummarySheetData summarySheet = new SummarySheetData(bookName,outputDir,sheet,platform);
+            summarySheet.Analyzer(countInSub);
             return summarySheet;
         }
     }

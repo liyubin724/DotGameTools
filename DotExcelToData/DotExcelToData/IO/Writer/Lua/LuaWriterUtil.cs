@@ -48,7 +48,7 @@ namespace Dot.Tools.ETD.IO
                 }
                 else if (FieldTypeUtil.IsStringType(fieldType))
                 {
-                    writer.Write($"{WriterUtil.GetIndent(indent)}[[{value}]]");
+                    writer.Write($"{WriterUtil.GetIndent(indent)}{string.Format(IOConst.LUA_STRING_FORMAT,value)}");
                 }
             }
             --indent;
@@ -76,7 +76,7 @@ namespace Dot.Tools.ETD.IO
                 }
                 else if (FieldTypeUtil.IsStringType(valueType))
                 {
-                    writer.Write($"[[{value}]]");
+                    writer.Write($"{string.Format(IOConst.LUA_STRING_FORMAT, value)}");
                 }
             }
             --indent;

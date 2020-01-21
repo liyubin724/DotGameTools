@@ -3,9 +3,7 @@ using Dot.Tools.ETD.Fields;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Dot.Tools.ETD.IO
 {
@@ -17,7 +15,7 @@ namespace Dot.Tools.ETD.IO
             {
                 return;
             }
-            FieldPlatform platform = GetPlatform(target);
+            FieldPlatform platform = WriterUtil.GetPlatform(target);
 
             if (!Directory.Exists(outputDir))
             {
@@ -32,49 +30,76 @@ namespace Dot.Tools.ETD.IO
                     LuaWriter.WriteSheet(book.Name, sheet, outputDir,platform);
                 }else
                 {
-                    SummarySheetData summarySheet = OptimizeLuaAnalyzer.OptimizeSheet(sheet, 3, platform);
-                    summarySheet.bookName = book.Name;
-                    WriteSummarySheet(sheet,summarySheet, outputDir,platform);
+                    SummarySheetData summarySheet = OptimizeLuaAnalyzer.OptimizeSheet(book.Name, outputDir,sheet, 3, platform);
+                    WriteSummarySheet(summarySheet);
                 }
             }
         }
 
-        private static void WriteSummarySheet(Sheet sheet,SummarySheetData summarySheet,string outputDir,FieldPlatform platform)
+        private static void WriteSummarySheet(SummarySheetData summarySheet)
         {
-            string name = $"{summarySheet.bookName}_{summarySheet.sheetName}";
-
-            string filePath = $"{outputDir}/{name}{IOConst.LUA_EXTERSION}";
-            using(StreamWriter writer = new StreamWriter(filePath,false,Encoding.UTF8))
+            using(StreamWriter writer = new StreamWriter(summarySheet.OutputFilePath, false,Encoding.UTF8))
             {
+                string name = summarySheet.OutputName;
                 writer.WriteLine($"require(\"{IOConst.LUA_SUMMARY_SHEET_META}\")");
                 writer.WriteLine($"local {name} = {{}}");
                 writer.WriteLine(string.Format(IOConst.LUA_SET_INDEX_FORMART, name, name));
                 writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, name, IOConst.LUA_SUMMARY_SHEET_META_NAME));
 
-                if(summarySheet.isNeedText)
+                if(summarySheet.IsNeedText)
                 {
-                    writer.WriteLine($"{name}.Text = require (\"{string.Format(IOConst.LUA_PATH_FORMAT,summarySheet.bookName)}\")");
+                    writer.WriteLine($"{name}.{IOConst.LUA_SUMMARY_TEXT_NAME} = require (\"{string.Format(IOConst.LUA_PATH_FORMAT,summarySheet.bookName)}\")");
                 }
-
-                WriteSummaryDefault(summarySheet, writer);
+                WriteSummaryNames(summarySheet, writer);
                 WriteSummaryString(summarySheet, writer);
+                WriteSummaryDefault(summarySheet, writer);
                 WriteSummarySubSheet(summarySheet, writer);
-
-                for(int i = 0;i<summarySheet.subSheets.Count;++i)
-                {
-                    WriteSubSheet(sheet,summarySheet, i, outputDir, platform);
-                }
 
                 writer.WriteLine($"return {name}");
                 writer.Flush();
                 writer.Close();
             }
+
+            for (int i = 0; i < summarySheet.subSheets.Count; ++i)
+            {
+                WriteSubSheet(summarySheet, i);
+            }
+        }
+
+        private static void WriteSummaryNames(SummarySheetData summarySheet,StreamWriter writer)
+        {
+            if(summarySheet.luaFieldNames.Count>0)
+            {
+                writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
+                foreach(var name in summarySheet.luaFieldNames)
+                {
+                    writer.WriteLine($"{WriterUtil.GetIndent(1)}\"{name}\",");
+                }
+                writer.WriteLine("}");
+            }
+            if(summarySheet.strFieldNames.Count>0)
+            {
+                writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
+                foreach (var name in summarySheet.strFieldNames)
+                {
+                    writer.WriteLine($"{WriterUtil.GetIndent(1)}\"{name}\",");
+                }
+                writer.WriteLine("}");
+            }
+            if (summarySheet.textFieldNames.Count > 0)
+            {
+                writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
+                foreach (var name in summarySheet.textFieldNames)
+                {
+                    writer.WriteLine($"{WriterUtil.GetIndent(1)}\"{name}\",");
+                }
+                writer.WriteLine("}");
+            }
         }
 
         private static void WriteSummaryDefault(SummarySheetData summarySheet,StreamWriter writer)
         {
-            string name = $"{summarySheet.bookName}_{summarySheet.sheetName}";
-            writer.WriteLine($"{name}.{IOConst.LUA_SUMMARY_DEFAULT_NAME} = {{");
+            writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_DEFAULT_NAME} = {{");
 
             int indent = 0;
             foreach(var kvp in summarySheet.defalutDic)
@@ -88,8 +113,7 @@ namespace Dot.Tools.ETD.IO
 
         private static void WriteSummaryString(SummarySheetData summarySheet,StreamWriter writer)
         {
-            string name = $"{summarySheet.bookName}_{summarySheet.sheetName}";
-            writer.WriteLine($"{name}.{IOConst.LUA_SUMMARY_STRING_NAME} = {{");
+            writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_STRING_NAME} = {{");
 
             int indent = 0;
             foreach (var str in summarySheet.strList)
@@ -103,7 +127,7 @@ namespace Dot.Tools.ETD.IO
 
         private static void WriteSummarySubSheet(SummarySheetData summarySheet, StreamWriter writer)
         {
-            string name = $"{summarySheet.bookName}_{summarySheet.sheetName}";
+            string name = summarySheet.OutputName;
             writer.WriteLine($"{name}.{IOConst.LUA_SUMMARY_SUB_NAME} = {{");
 
             int indent = 0;
@@ -116,9 +140,10 @@ namespace Dot.Tools.ETD.IO
 
                     ++indent;
                     {
+                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_DATA_NAME} = {IOConst.LUA_NULL},");
                         writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUBMARY_SUBSHEET_STARTID} = {subSheet.startID},");
                         writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUBMARY_SUBSHEET_ENDID} = {subSheet.endID},");
-                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUBMARY_SUBSHEET_PATH} = \"{string.Format(IOConst.LUA_SUBMARY_SUBSHEET_PATH_FORMAT,name,i+1)}\",");
+                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUBMARY_SUBSHEET_PATH} = \"{string.Format(IOConst.LUA_SUBMARY_SUBSHEET_PATH_FORMAT, summarySheet.OutputName, subSheet.OutputName)}\",");
                     }
                     --indent;
 
@@ -130,14 +155,21 @@ namespace Dot.Tools.ETD.IO
             writer.WriteLine("}");
         }
 
-        private static void WriteSubSheet(Sheet sheet,SummarySheetData summarySheet,int index,string outputDir, FieldPlatform platform)
+        private static void WriteSubSheet(SummarySheetData summarySheet,int index)
         {
-            string name = $"{summarySheet.bookName}_{summarySheet.sheetName}_{index}";
-            string filePath = $"{outputDir}/{name}{IOConst.LUA_EXTERSION}";
-            using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
-            {
-                SubSheetData subSheet = summarySheet.subSheets[index];
+            SubSheetData subSheet = summarySheet.subSheets[index];
+            string name = subSheet.OutputName;
+            Sheet sheet = summarySheet.sheet;
+            FieldPlatform platform = summarySheet.platform;
 
+            string dirPath = Path.GetDirectoryName(subSheet.OutputFilePath);
+            if(!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+
+            using (StreamWriter writer = new StreamWriter(subSheet.OutputFilePath, false, Encoding.UTF8))
+            {
                 WriteSubSheetComplexContent(subSheet, writer);
 
                 writer.WriteLine($"local {name} = {{}}");
@@ -159,7 +191,7 @@ namespace Dot.Tools.ETD.IO
                     SheetLine line = sheet.GetLineByIndex(m);
                     string idContent = sheet.GetLineIDByIndex(m);
 
-                    writer.WriteLine($"{GetIndent(indent)}{name}[{idContent}] = {{");
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{name}[{idContent}] = {{");
                     for (int j = 0; j < fields.Count; ++j)
                     {
                         AFieldData field = fields[j];
@@ -169,7 +201,7 @@ namespace Dot.Tools.ETD.IO
                         writer.WriteLine(",");
                     }
 
-                    writer.Write($"{GetIndent(indent)}}}");
+                    writer.Write($"{WriterUtil.GetIndent(indent)}}}");
                     writer.WriteLine();
                 }
 
@@ -178,11 +210,6 @@ namespace Dot.Tools.ETD.IO
                 writer.Flush();
                 writer.Close();
             }
-        }
-
-        private static void WriteCell(AFieldData field,string content,StreamWriter writer,ref int indent)
-        {
-
         }
 
         private static void WriteSubSheetComplexContent(SubSheetData subSheet,StreamWriter writer)
@@ -253,30 +280,6 @@ namespace Dot.Tools.ETD.IO
                     }
                 }
             }
-        }
-
-        private static FieldPlatform GetPlatform(ETDWriterTarget target)
-        {
-            FieldPlatform platform = FieldPlatform.None;
-            if (target == ETDWriterTarget.Client)
-            {
-                platform = FieldPlatform.Client;
-            }
-            else if (target == ETDWriterTarget.Server)
-            {
-                platform = FieldPlatform.Server;
-            }
-            return platform;
-        }
-
-        private static string GetIndent(int indent)
-        {
-            string indentStr = "";
-            for (int i = 0; i < indent; ++i)
-            {
-                indentStr += "    ";
-            }
-            return indentStr;
         }
     }
 }

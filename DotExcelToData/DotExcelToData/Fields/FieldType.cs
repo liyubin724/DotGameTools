@@ -13,6 +13,9 @@ namespace Dot.Tools.ETD.Fields
         }
     }
 
+    public class LuaType
+    { }
+
     public enum FieldType
     {
         None = 0,
@@ -41,8 +44,11 @@ namespace Dot.Tools.ETD.Fields
         Stringt,
         [FieldRealyType(typeof(string))]
         Res,
-        [FieldRealyType(typeof(string))]
+
+        [FieldRealyType(typeof(LuaType))]
         Lua,
+        [FieldRealyType(typeof(LuaType))]
+        LuaFun,
 
         [FieldRealyType(typeof(IList))]
         Array,
