@@ -17,5 +17,6 @@
         ContentDicKeyRepeatError = -10,
         TextNotFoundError = -11,
         TextIDNotFoundError = -12,
+        LuaFunctionError = -13,
     }
 }

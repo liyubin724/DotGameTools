@@ -229,10 +229,10 @@ namespace Dot.Tools.ETD.IO
 
                 int indent = 0;
 
-                for (int m = 0; m < sheet.LineCount; ++m)
+                for (int m = 0; m < subSheet.lines.Count; ++m)
                 {
-                    SheetLine line = sheet.GetLineByIndex(m);
-                    string idContent = sheet.GetLineIDByIndex(m);
+                    SheetLine line = subSheet.lines[m];
+                    string idContent = sheet.GetLineIDByRow(line.row);
 
                     writer.WriteLine($"{WriterUtil.GetIndent(indent)}{name}[{idContent}] = {{");
                     for (int j = 0; j < fields.Count; ++j)
@@ -240,7 +240,8 @@ namespace Dot.Tools.ETD.IO
                         AFieldData field = fields[j];
 
                         LineCell cell = line.GetCellByCol(field.col);
-                        LuaWriterUtil.WriteCell(field, cell, writer, ref indent);
+                        string content = cell.GetContent(field);
+                        WriteCell(summarySheet, subSheet, field, content, writer, ref indent);
                         writer.WriteLine(",");
                     }
 
@@ -310,19 +311,32 @@ namespace Dot.Tools.ETD.IO
                     }
                     else if(field.Type == FieldType.Lua)
                     {
-                        writer.WriteLine($"local {tName} = function()");
+                        writer.Write($"local {tName} =");
                         string[] splitStr = content.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                         if(splitStr!=null && splitStr.Length>0)
                         {
-                            foreach(var str in splitStr)
+                            for(int m = 0;m<splitStr.Length;++m)
                             {
-                                writer.WriteLine($"{WriterUtil.GetIndent(1)}{str}");
+                                writer.WriteLine(splitStr[m]);
                             }
                         }
-                        writer.WriteLine("end");
                     }
                 }
             }
+        }
+
+        private static void WriteCell(SummarySheetData summarySheet,SubSheetData subSheet,AFieldData field,string content,StreamWriter writer,ref int indent)
+        {
+            if(summarySheet.defalutDic.TryGetValue(field,out string dContent))
+            {
+                if(dContent == content)
+                {
+                    return;
+                }
+            }
+
+
+
         }
     }
 }

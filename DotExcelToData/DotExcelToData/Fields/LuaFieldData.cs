@@ -11,12 +11,12 @@ namespace Dot.Tools.ETD.Fields
 
         public override string GetOriginalDefault()
         {
-            return string.Empty;
+            return null;
         }
 
         protected override void AddExtraValidation(List<IValidation> validations)
         {
-            
+            validations.Add(new LuaValidation());
         }
     }
 }

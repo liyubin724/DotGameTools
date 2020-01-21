@@ -85,6 +85,7 @@ namespace Dot.Tools.ETD.Log
         public static readonly int LOG_VALIDATION_TYPE_FOR_RANGE_ERROR = -4113;
         public static readonly int LOG_VALIDATION_TEXT_NOT_FOUND_ERROR = -4114;
         public static readonly int LOG_VALIDATION_TEXT_ID_NOT_FOUND_ERROR = -4115;
+        public static readonly int LOG_VALIDATION_LUA_FORMAT_ERROR = -4116;
 
 
 
@@ -159,6 +160,8 @@ namespace Dot.Tools.ETD.Log
             logFormatDic.Add(LOG_VALIDATION_CONTENT_REPEAT_ERROR, "Content is Repeat.curCell = {0},targetCell={1}");
             logFormatDic.Add(LOG_VALIDATION_TEXT_NOT_FOUND_ERROR, "The sheet which named 'Text' not found.");
             logFormatDic.Add(LOG_VALIDATION_TEXT_ID_NOT_FOUND_ERROR, "The ID is not found in 'Text'.ID = {0}");
+            logFormatDic.Add(LOG_VALIDATION_LUA_FORMAT_ERROR, "The content is not a function of lua.cell = {0}");
+
         }
 
         public static string GetLogMsg(int logID,params object[] datas)

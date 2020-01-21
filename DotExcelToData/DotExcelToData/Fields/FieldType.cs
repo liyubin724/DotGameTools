@@ -47,8 +47,6 @@ namespace Dot.Tools.ETD.Fields
 
         [FieldRealyType(typeof(LuaType))]
         Lua,
-        [FieldRealyType(typeof(LuaType))]
-        LuaFun,
 
         [FieldRealyType(typeof(IList))]
         Array,

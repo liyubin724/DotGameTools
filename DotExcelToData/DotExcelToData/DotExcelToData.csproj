@@ -86,6 +86,7 @@
     <Compile Include="IO\Writer\WriterUtil.cs" />
     <Compile Include="Log\LogConst.cs" />
     <Compile Include="Log\LogHandler.cs" />
+    <Compile Include="Validations\LuaValidation.cs" />
     <Compile Include="Validations\TextValidation.cs" />
     <Compile Include="Validations\ValidationResultCode.cs" />
     <Compile Include="Verify\IVerify.cs" />
