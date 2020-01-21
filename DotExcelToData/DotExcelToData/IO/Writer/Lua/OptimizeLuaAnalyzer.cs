@@ -8,13 +8,20 @@ namespace Dot.Tools.ETD.IO
 {
     public class SubSheetData
     {
+        public string name;
         public int startID;
         public int endID;
+
+        public Dictionary<AFieldData, List<string>> complexContentDic = new Dictionary<AFieldData, List<string>>();
         public List<SheetLine> lines = new List<SheetLine>();
     }
 
     public class SummarySheetData
     {
+        public string bookName;
+        public string sheetName;
+
+        public bool isNeedText = false;
         public Dictionary<AFieldData, string> defalutDic = new Dictionary<AFieldData, string>();
         public List<string> strList = new List<string>();
         public List<SubSheetData> subSheets = new List<SubSheetData>();
@@ -205,12 +212,74 @@ namespace Dot.Tools.ETD.IO
             return contents.ToArray();
         }
 
+        private static void FindSubSheetComplexContent(Sheet sheet, SubSheetData subSheet,FieldPlatform platform)
+        {
+            List<AFieldData> fields = new List<AFieldData>();
+            for (int f = 0; f < sheet.FieldCount; ++f)
+            {
+                AFieldData field = sheet.GetFieldByIndex(f);
+                if (field.Platform == FieldPlatform.All || field.Platform == platform)
+                {
+                    if(field.Type == FieldType.Array || field.Type == FieldType.Dic || field.Type == FieldType.Lua)
+                    {
+                        fields.Add(field);
+                    }
+                }
+            }
+            foreach(var field in fields)
+            {
+                List<string> contents = new List<string>();
+                foreach(var line in subSheet.lines)
+                {
+                    var content = line.GetCellByCol(field.col).GetContent(field);
+                    if(content!=null)
+                    {
+                        contents.Add(content);
+                    }
+                }
+
+                contents = contents.Distinct().ToList();
+                subSheet.complexContentDic.Add(field, contents);
+            }
+        }
+
+        private static bool IsNeedText(Sheet sheet,FieldPlatform platform)
+        {
+            for (int f = 0; f < sheet.FieldCount; ++f)
+            {
+                AFieldData field = sheet.GetFieldByIndex(f);
+                if (field.Platform == FieldPlatform.All || field.Platform == platform)
+                {
+                    if (field.Type == FieldType.Text)
+                    {
+                        return true;
+                    }
+                    if(field.Type == FieldType.Array && ((ArrayFieldData)field).ValueType == FieldType.Text)
+                    {
+                        return true;
+                    }
+                    if(field.Type == FieldType.Dic && ((DicFieldData)field).ValueType == FieldType.Text)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public static SummarySheetData OptimizeSheet(Sheet sheet,int countInSub,FieldPlatform platform)
         {
             SummarySheetData summarySheet = new SummarySheetData();
+            summarySheet.isNeedText = IsNeedText(sheet, platform);
+            summarySheet.sheetName = sheet.name;
             summarySheet.subSheets = SubSheet(sheet, countInSub);
             summarySheet.defalutDic = FindSheetDefault(sheet, platform);
             summarySheet.strList = FindSheetString(sheet, platform);
+
+            foreach(var subSheet in summarySheet.subSheets)
+            {
+                FindSubSheetComplexContent(sheet, subSheet, platform);
+            }
 
             return summarySheet;
         }

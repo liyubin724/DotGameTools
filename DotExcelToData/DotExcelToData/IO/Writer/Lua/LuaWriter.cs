@@ -26,13 +26,13 @@ namespace Dot.Tools.ETD.IO
             {
                 Sheet sheet = book.GetSheetByIndex(i);
 
-                string filePath = $"{outputDir}/{book.Name}_{sheet.name}{IOConst.LUA_EXTERSION}";
-                WriteSheet(book.Name,sheet, filePath, platform);
+                WriteSheet(book.Name,sheet, outputDir, platform);
             }
         }
 
-        private static void WriteSheet(string bookName,Sheet sheet, string filePath, FieldPlatform platform)
+        internal static void WriteSheet(string bookName,Sheet sheet, string outputDir, FieldPlatform platform)
         {
+            string filePath = $"{outputDir}/{bookName}_{sheet.name}{IOConst.LUA_EXTERSION}";
             using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 List<AFieldData> fields = new List<AFieldData>();

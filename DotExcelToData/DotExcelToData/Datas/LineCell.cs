@@ -1,5 +1,7 @@
 ﻿using Dot.Tools.ETD.Fields;
 using ExtractInject;
+using System;
+using System.Collections.Generic;
 
 namespace Dot.Tools.ETD.Datas
 {
@@ -26,6 +28,16 @@ namespace Dot.Tools.ETD.Datas
             if(string.IsNullOrEmpty(content))
             {
                 content = field.GetOriginalDefault();
+            }
+            if(!string.IsNullOrEmpty(content) && field.Type == FieldType.Dic)
+            {
+                string[] splitStr = content.Split(new char[] { '{', '}', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                if(splitStr!=null && splitStr.Length>0)
+                {
+                    List<string> result = new List<string>(splitStr);
+                    result.Sort();
+                    content = $"{{{string.Join(";", result.ToArray())}}}";
+                }
             }
             return content;
         }
