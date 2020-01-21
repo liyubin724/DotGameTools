@@ -1,5 +1,4 @@
-﻿using Dot.Tools.ETD.Fields;
-using Dot.Tools.ETD.Validations;
+﻿using Dot.Tools.ETD.Validations;
 using System.Collections.Generic;
 
 namespace Dot.Tools.ETD.Fields

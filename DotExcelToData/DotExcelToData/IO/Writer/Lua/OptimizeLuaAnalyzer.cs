@@ -61,6 +61,10 @@ namespace Dot.Tools.ETD.IO
                 AFieldData field = sheet.GetFieldByIndex(f);
                 if (field.Platform == FieldPlatform.All || field.Platform == platform)
                 {
+                    if(field.Type == FieldType.Array || field.Type == FieldType.Dic)
+                    {
+                        continue;
+                    }
                     fields.Add(field);
                 }
             }

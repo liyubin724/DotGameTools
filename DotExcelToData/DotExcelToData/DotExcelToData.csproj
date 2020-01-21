@@ -77,11 +77,11 @@
     <Compile Include="Fields\IDFieldData.cs" />
     <Compile Include="Fields\TextFieldData.cs" />
     <Compile Include="IO\IOConst.cs" />
-    <Compile Include="IO\JsonWriter.cs" />
-    <Compile Include="IO\LuaWriter.cs" />
-    <Compile Include="IO\Lua\OptimizeLuaAnalyzer.cs" />
-    <Compile Include="IO\OptimizeLuaWriter.cs" />
-    <Compile Include="IO\WorkbookReader.cs" />
+    <Compile Include="IO\Writer\Json\JsonWriter.cs" />
+    <Compile Include="IO\Writer\Lua\LuaWriter.cs" />
+    <Compile Include="IO\Writer\Lua\OptimizeLuaAnalyzer.cs" />
+    <Compile Include="IO\Writer\Lua\OptimizeLuaWriter.cs" />
+    <Compile Include="IO\Reader\WorkbookReader.cs" />
     <Compile Include="Log\LogConst.cs" />
     <Compile Include="Log\LogHandler.cs" />
     <Compile Include="Validations\TextValidation.cs" />
