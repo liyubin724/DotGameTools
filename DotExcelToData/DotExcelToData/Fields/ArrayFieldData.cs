@@ -38,7 +38,7 @@ namespace Dot.Tools.ETD.Fields
 
         public override string GetOriginalDefault()
         {
-            return "nil";
+            return null;
         }
     }
 }

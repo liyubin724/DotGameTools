@@ -11,7 +11,7 @@ namespace Dot.Tools.ETD.Fields
 
         public override string GetOriginalDefault()
         {
-            return "nil";
+            return "0";
         }
 
         protected override void AddExtraValidation(List<IValidation> validations)
