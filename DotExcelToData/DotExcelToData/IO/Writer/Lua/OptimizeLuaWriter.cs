@@ -41,18 +41,29 @@ namespace Dot.Tools.ETD.IO
             using(StreamWriter writer = new StreamWriter(summarySheet.OutputFilePath, false,Encoding.UTF8))
             {
                 string name = summarySheet.OutputName;
-                writer.WriteLine($"require(\"{IOConst.LUA_SUMMARY_SHEET_META}\")");
-                writer.WriteLine($"local {name} = {{}}");
+                writer.WriteLine($"{string.Format(IOConst.LUA_REQUIRE_FORMAT, IOConst.LUA_SUMMARY_SHEET_META)}");
+                writer.WriteLine($"{string.Format(IOConst.LUA_LOCAL_DEFINE_FORMAT,name)}");
                 writer.WriteLine(string.Format(IOConst.LUA_SET_INDEX_FORMART, name, name));
                 writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, name, IOConst.LUA_SUMMARY_SHEET_META_NAME));
 
                 if(summarySheet.IsNeedText)
                 {
-                    writer.WriteLine($"{name}.{IOConst.LUA_SUMMARY_TEXT_NAME} = require (\"{string.Format(IOConst.LUA_PATH_FORMAT,summarySheet.bookName)}\")");
+                    string textName = string.Format(IOConst.LUA_PATH_FORMAT, summarySheet.bookName);
+                    writer.WriteLine($"{name}.{IOConst.LUA_SUMMARY_TEXT_NAME} = {string.Format(IOConst.LUA_REQUIRE_FORMAT,textName)}");
                 }
-                WriteSummaryNames(summarySheet, writer);
-                WriteSummaryString(summarySheet, writer);
-                WriteSummaryDefault(summarySheet, writer);
+
+                writer.WriteLine($"{summarySheet.OutputName}." +
+                    $"{IOConst.LUA_SUMMARY_DEPEND_NAME}={{");
+
+                int indent = 0;
+                WriteSummaryNames(summarySheet, writer,ref indent);
+                WriteSummaryString(summarySheet, writer,ref indent);
+
+                WriteSummaryDefault(summarySheet, writer,ref indent);
+
+                writer.WriteLine(IOConst.LUA_LOCAL_DEFINE_END);
+
+                
                 WriteSummarySubSheet(summarySheet, writer);
 
                 writer.WriteLine($"return {name}");
@@ -66,63 +77,95 @@ namespace Dot.Tools.ETD.IO
             }
         }
 
-        private static void WriteSummaryNames(SummarySheetData summarySheet,StreamWriter writer)
+        private static void WriteSummaryNames(SummarySheetData summarySheet,StreamWriter writer,ref int indent)
         {
-            if(summarySheet.luaFieldNames.Count>0)
+            ++indent;
             {
-                writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
-                foreach(var name in summarySheet.luaFieldNames)
+                if (summarySheet.luaFieldNames.Count > 0)
                 {
-                    writer.WriteLine($"{WriterUtil.GetIndent(1)}\"{name}\",");
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
+                    foreach (var name in summarySheet.luaFieldNames)
+                    {
+                        ++indent;
+                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}\"{name}\",");
+                        --indent;
+                    }
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}}},"); 
                 }
-                writer.WriteLine("}");
-            }
-            if(summarySheet.strFieldNames.Count>0)
-            {
-                writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
-                foreach (var name in summarySheet.strFieldNames)
+
+                if (summarySheet.strFieldNames.Count > 0)
                 {
-                    writer.WriteLine($"{WriterUtil.GetIndent(1)}\"{name}\",");
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_STR_FIELD_NAME} = {{");
+                    foreach (var name in summarySheet.strFieldNames)
+                    {
+                        ++indent;
+                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}\"{name}\",");
+                        --indent;
+                    }
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}}},");
                 }
-                writer.WriteLine("}");
-            }
-            if (summarySheet.textFieldNames.Count > 0)
-            {
-                writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
-                foreach (var name in summarySheet.textFieldNames)
+
+                if (summarySheet.textFieldNames.Count > 0)
                 {
-                    writer.WriteLine($"{WriterUtil.GetIndent(1)}\"{name}\",");
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_TEXT_FIELD_NAME} = {{");
+                    foreach (var name in summarySheet.textFieldNames)
+                    {
+                        ++indent;
+                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}\"{name}\",");
+                        --indent;
+                    }
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}}},");
                 }
-                writer.WriteLine("}");
             }
+            --indent;
+            
+            
         }
 
-        private static void WriteSummaryDefault(SummarySheetData summarySheet,StreamWriter writer)
+        private static void WriteSummaryDefault(SummarySheetData summarySheet,StreamWriter writer,ref int indent)
         {
-            writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_DEFAULT_NAME} = {{");
-
-            int indent = 0;
-            foreach(var kvp in summarySheet.defalutDic)
+            ++indent;
             {
-                LuaWriterUtil.WriteContent(FieldType.String,kvp.Key.name, kvp.Key.Type, kvp.Value, writer, ref indent);
-                writer.WriteLine(",");
-            }
+                writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_DEFAULT_NAME} = {{");
 
-            writer.WriteLine("}");
+                foreach (var kvp in summarySheet.defalutDic)
+                {
+                    string keyName = kvp.Key.name;
+                    FieldType fType = kvp.Key.Type;
+                    string value = kvp.Value;
+
+                    if (FieldTypeUtil.IsStringType(fType) || fType == FieldType.Text)
+                    {
+                        keyName = string.Format(IOConst.LUA_FIELD_INDEX_FORMAT, keyName);
+                        fType = FieldType.Int;
+                        value = "" + (summarySheet.strList.IndexOf(value) + 1);
+                    }
+
+                    LuaWriterUtil.WriteContent(FieldType.String, keyName, fType, value, writer, ref indent);
+                    writer.WriteLine(",");
+                }
+
+                writer.WriteLine($"{WriterUtil.GetIndent(indent)}}},");
+            }
+            --indent;
         }
 
-        private static void WriteSummaryString(SummarySheetData summarySheet,StreamWriter writer)
+        private static void WriteSummaryString(SummarySheetData summarySheet,StreamWriter writer,ref int indent)
         {
-            writer.WriteLine($"{summarySheet.OutputName}.{IOConst.LUA_SUMMARY_STRING_NAME} = {{");
-
-            int indent = 0;
-            foreach (var str in summarySheet.strList)
+            ++indent;
             {
-                LuaWriterUtil.WriteContent(FieldType.String, str, writer, ref indent);
-                writer.WriteLine(",");
-            }
+                writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_STRING_NAME} = {{");
 
-            writer.WriteLine("}");
+                foreach (var str in summarySheet.strList)
+                {
+                    LuaWriterUtil.WriteContent(FieldType.String, str, writer, ref indent);
+                    writer.WriteLine(",");
+                }
+
+                writer.WriteLine($"{WriterUtil.GetIndent(indent)}}},");
+            }
+            --indent;
+            
         }
 
         private static void WriteSummarySubSheet(SummarySheetData summarySheet, StreamWriter writer)
