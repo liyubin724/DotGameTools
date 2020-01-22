@@ -33,7 +33,7 @@ namespace Dot.Tools.ETD.IO
         internal static void WriteSheet(string bookName,Sheet sheet, string outputDir, FieldPlatform platform)
         {
             string filePath = $"{outputDir}/{bookName}_{sheet.name}{IOConst.LUA_EXTERSION}";
-            using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+            using (StreamWriter writer = new StreamWriter(filePath, false, new UTF8Encoding(false)))
             {
                 List<AFieldData> fields = new List<AFieldData>();
                 for (int f = 0; f < sheet.FieldCount; ++f)

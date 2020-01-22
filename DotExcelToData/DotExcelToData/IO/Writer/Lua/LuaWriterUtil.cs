@@ -7,14 +7,8 @@ namespace Dot.Tools.ETD.IO
 {
     public static class LuaWriterUtil
     {
-        public static void WriteBook(Workbook book, string outputDir, ETDWriterTarget target,bool isOptimize)
+        internal static void WriteContent(AFieldData field, string content, StreamWriter writer, ref int indent)
         {
-
-        }
-
-        internal static void WriteCell(AFieldData field, LineCell cell, StreamWriter writer, ref int indent)
-        {
-            string content = cell.GetContent(field);
             if (string.IsNullOrEmpty(content))
             {
                 return;
@@ -22,11 +16,11 @@ namespace Dot.Tools.ETD.IO
 
             if (field.Type == FieldType.Array)
             {
-                WriteArrayContent(field.name, field, content, writer, ref indent);
+                WriteArrayContent(field, content, writer, ref indent);
             }
             else if (field.Type == FieldType.Dic)
             {
-                WriteDicContent(field.name, field, content, writer, ref indent);
+                WriteDicContent(field, content, writer, ref indent);
             }
             else
             {
@@ -82,7 +76,7 @@ namespace Dot.Tools.ETD.IO
             --indent;
         }
 
-        internal static void WriteArrayContent(string key, AFieldData field, string value, StreamWriter writer, ref int indent)
+        internal static void WriteArrayContent(AFieldData field, string content, StreamWriter writer, ref int indent)
         {
             ArrayFieldData arrayFieldData = (ArrayFieldData)field;
 
@@ -90,7 +84,7 @@ namespace Dot.Tools.ETD.IO
             {
                 writer.WriteLine($"{WriterUtil.GetIndent(indent)}{field.name} = {{");
 
-                string[] values = value.Split(new char[] { '[', ']', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] values = content.Split(new char[] { '[', ']', ',' }, StringSplitOptions.RemoveEmptyEntries);
                 if (values != null && values.Length > 0)
                 {
                     for (int i = 0; i < values.Length; ++i)
@@ -105,7 +99,7 @@ namespace Dot.Tools.ETD.IO
             --indent;
         }
 
-        internal static void WriteDicContent(string key, AFieldData field, string value, StreamWriter writer, ref int indent)
+        internal static void WriteDicContent(AFieldData field, string content, StreamWriter writer, ref int indent)
         {
             DicFieldData dicFieldData = (DicFieldData)field;
 
@@ -113,15 +107,18 @@ namespace Dot.Tools.ETD.IO
             {
                 writer.WriteLine($"{WriterUtil.GetIndent(indent)}{field.name} = {{");
 
-                string[] values = value.Split(new char[] { '{', '}', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] values = content.Split(new char[] { '{', '}', ';' }, StringSplitOptions.RemoveEmptyEntries);
                 if (values != null && values.Length > 0)
                 {
                     for (int i = 0; i < values.Length; ++i)
                     {
                         string kvValue = values[i];
                         string[] tempArr = kvValue.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        WriteContent(dicFieldData.KeyType, tempArr[0], dicFieldData.ValueType, tempArr[1], writer, ref indent);
-                        writer.WriteLine(",");
+                        if(tempArr.Length == 2)
+                        {
+                            WriteContent(dicFieldData.KeyType, tempArr[0], dicFieldData.ValueType, tempArr[1], writer, ref indent);
+                            writer.WriteLine(",");
+                        }
                     }
                 }
 

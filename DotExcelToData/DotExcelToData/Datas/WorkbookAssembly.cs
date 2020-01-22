@@ -131,13 +131,15 @@ namespace Dot.Tools.ETD.Datas
 
             if (format == ETDWriterFormat.All || format == ETDWriterFormat.Lua)
             {
+                string targetDir = outputDir;//Path.Combine(outputDir, IOConst.LUA_DIR_NAME);
                 if (isOptimize)
                 {
-                    OptimizeLuaWriter.WriteBook(book, Path.Combine(outputDir, IOConst.LUA_DIR_NAME), target);
+
+                    OptimizeLuaWriter.WriteBook(book, targetDir, target);
                 }
                 else
                 {
-                    LuaWriter.WriteBook(book, Path.Combine(outputDir, IOConst.LUA_DIR_NAME), target);
+                    LuaWriter.WriteBook(book, targetDir, target);
                 }
             }
         }

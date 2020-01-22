@@ -20,7 +20,7 @@ namespace Dot.Tools.ETD.IO
         public static readonly string JSON_EXTERSION = ".json";
         public static readonly string JSON_DIR_NAME = "json";
 
-        public static readonly string LUA_EXTERSION = ".txt";
+        public static readonly string LUA_EXTERSION = ".lua";
         public static readonly string LUA_DIR_NAME = "lua";
         public static readonly string LUA_PATH_FORMAT = "Game/Config/{0}_"+SheetConst.TEXT_BOOK_NAME;
 
@@ -37,8 +37,10 @@ namespace Dot.Tools.ETD.IO
        
         public static readonly string LUA_SUMMARY_SHEET_META_NAME = "ConfigSummarySheet";
         public static readonly string LUA_SUMMARY_SHEET_META = "Dot/Config/"+ LUA_SUMMARY_SHEET_META_NAME;
-        public static readonly string LUA_SHEET_LINE_META = "Dot/Config/ConfigSheetLine";
-        public static readonly string LUA_SUB_SHEET_META = "Dot/Config/ConfigSubSheet";
+        public static readonly string LUA_SUB_SHEET_META_NAME = "ConfigSubSheet";
+        public static readonly string LUA_SUB_SHEET_META = "Dot/Config/"+LUA_SUB_SHEET_META_NAME;
+        public static readonly string LUA_SHEET_LINE_META_NAME = "ConfigSheetLine";
+        public static readonly string LUA_SHEET_LINE_META = "Dot/Config/"+LUA_SHEET_LINE_META_NAME;
 
         public static readonly string LUA_SUMMARY_DEPEND_NAME = "depends";
         public static readonly string LUA_SUMMARY_TEXT_NAME = "text";

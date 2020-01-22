@@ -1,5 +1,4 @@
-﻿using Dot.Tools.ETD.Fields;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 
 namespace Dot.Tools.ETD.Datas
 {
@@ -48,21 +47,5 @@ namespace Dot.Tools.ETD.Datas
             return null;
         }
 
-        public static bool IsContainStringField(AFieldData field)
-        {
-            if(FieldTypeUtil.IsStringType(field.Type))
-            {
-                return true;
-            }
-            if(field.Type == FieldType.Array)
-            {
-                return FieldTypeUtil.IsStringType(((ArrayFieldData)field).ValueType);
-            }
-            if(field.Type == FieldType.Dic)
-            {
-                return FieldTypeUtil.IsStringType(((DicFieldData)field).ValueType);
-            }
-            return false;
-        }
     }
 }

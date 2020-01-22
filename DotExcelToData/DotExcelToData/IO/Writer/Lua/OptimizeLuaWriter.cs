@@ -38,22 +38,20 @@ namespace Dot.Tools.ETD.IO
 
         private static void WriteSummarySheet(SummarySheetData summarySheet)
         {
-            using(StreamWriter writer = new StreamWriter(summarySheet.OutputFilePath, false,Encoding.UTF8))
+            using(StreamWriter writer = new StreamWriter(summarySheet.OutputFilePath, false, new UTF8Encoding(false)))
             {
                 string name = summarySheet.OutputName;
                 writer.WriteLine($"{string.Format(IOConst.LUA_REQUIRE_FORMAT, IOConst.LUA_SUMMARY_SHEET_META)}");
                 writer.WriteLine($"{string.Format(IOConst.LUA_LOCAL_DEFINE_FORMAT,name)}");
                 writer.WriteLine(string.Format(IOConst.LUA_SET_INDEX_FORMART, name, name));
-                writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, name, IOConst.LUA_SUMMARY_SHEET_META_NAME));
-
-                if(summarySheet.IsNeedText)
-                {
-                    string textName = string.Format(IOConst.LUA_PATH_FORMAT, summarySheet.bookName);
-                    writer.WriteLine($"{name}.{IOConst.LUA_SUMMARY_TEXT_NAME} = {string.Format(IOConst.LUA_REQUIRE_FORMAT,textName)}");
-                }
-
+                
                 writer.WriteLine($"{summarySheet.OutputName}." +
                     $"{IOConst.LUA_SUMMARY_DEPEND_NAME}={{");
+                if (summarySheet.IsNeedText)
+                {
+                    string textName = string.Format(IOConst.LUA_PATH_FORMAT, summarySheet.bookName);
+                    writer.WriteLine($"{WriterUtil.GetIndent(1)}{IOConst.LUA_SUMMARY_TEXT_NAME} = {string.Format(IOConst.LUA_REQUIRE_FORMAT, textName)},");
+                }
 
                 int indent = 0;
                 WriteSummaryNames(summarySheet, writer,ref indent);
@@ -65,6 +63,8 @@ namespace Dot.Tools.ETD.IO
 
                 
                 WriteSummarySubSheet(summarySheet, writer);
+
+                writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, name, IOConst.LUA_SUMMARY_SHEET_META_NAME));
 
                 writer.WriteLine($"return {name}");
                 writer.Flush();
@@ -81,34 +81,10 @@ namespace Dot.Tools.ETD.IO
         {
             ++indent;
             {
-                if (summarySheet.luaFieldNames.Count > 0)
-                {
-                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_LUA_FIELD_NAME} = {{");
-                    foreach (var name in summarySheet.luaFieldNames)
-                    {
-                        ++indent;
-                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}\"{name}\",");
-                        --indent;
-                    }
-                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}}},"); 
-                }
-
                 if (summarySheet.strFieldNames.Count > 0)
                 {
                     writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_STR_FIELD_NAME} = {{");
                     foreach (var name in summarySheet.strFieldNames)
-                    {
-                        ++indent;
-                        writer.WriteLine($"{WriterUtil.GetIndent(indent)}\"{name}\",");
-                        --indent;
-                    }
-                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}}},");
-                }
-
-                if (summarySheet.textFieldNames.Count > 0)
-                {
-                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{IOConst.LUA_SUMMARY_TEXT_FIELD_NAME} = {{");
-                    foreach (var name in summarySheet.textFieldNames)
                     {
                         ++indent;
                         writer.WriteLine($"{WriterUtil.GetIndent(indent)}\"{name}\",");
@@ -134,7 +110,7 @@ namespace Dot.Tools.ETD.IO
                     FieldType fType = kvp.Key.Type;
                     string value = kvp.Value;
 
-                    if (FieldTypeUtil.IsStringType(fType) || fType == FieldType.Text)
+                    if (FieldTypeUtil.IsStringType(fType))
                     {
                         keyName = string.Format(IOConst.LUA_FIELD_INDEX_FORMAT, keyName);
                         fType = FieldType.Int;
@@ -211,11 +187,23 @@ namespace Dot.Tools.ETD.IO
                 Directory.CreateDirectory(dirPath);
             }
 
-            using (StreamWriter writer = new StreamWriter(subSheet.OutputFilePath, false, Encoding.UTF8))
+            using (StreamWriter writer = new StreamWriter(subSheet.OutputFilePath, false,  new UTF8Encoding(false)))
             {
-                WriteSubSheetComplexContent(subSheet, writer);
+                writer.WriteLine($"{string.Format(IOConst.LUA_REQUIRE_FORMAT, IOConst.LUA_SUB_SHEET_META)}");
+                writer.WriteLine($"{string.Format(IOConst.LUA_REQUIRE_FORMAT, IOConst.LUA_SHEET_LINE_META)}");
 
-                writer.WriteLine($"local {name} = {{}}");
+                Dictionary<string,string> tableNameDic = WriteSubSheetComplexContent(subSheet, writer);
+
+                writer.WriteLine($"{string.Format(IOConst.LUA_LOCAL_DEFINE_FORMAT, name)}");
+                writer.WriteLine(string.Format(IOConst.LUA_SET_INDEX_FORMART, name, name));
+                writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, name, IOConst.LUA_SUB_SHEET_META_NAME));
+
+                writer.Write($"{name}.ids = {{");
+                foreach (var id in subSheet.GetLineIDs())
+                {
+                    writer.Write($"{id},");
+                }
+                writer.WriteLine("}");
 
                 List<AFieldData> fields = new List<AFieldData>();
                 for (int f = 0; f < sheet.FieldCount; ++f)
@@ -228,24 +216,31 @@ namespace Dot.Tools.ETD.IO
                 }
 
                 int indent = 0;
-
                 for (int m = 0; m < subSheet.lines.Count; ++m)
                 {
                     SheetLine line = subSheet.lines[m];
                     string idContent = sheet.GetLineIDByRow(line.row);
 
-                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{name}[{idContent}] = {{");
+                    string lineName = $"{name}[{idContent}]";
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{lineName} = {{");
                     for (int j = 0; j < fields.Count; ++j)
                     {
                         AFieldData field = fields[j];
-
                         LineCell cell = line.GetCellByCol(field.col);
                         string content = cell.GetContent(field);
-                        WriteCell(summarySheet, subSheet, field, content, writer, ref indent);
-                        writer.WriteLine(",");
+                        if(string.IsNullOrEmpty(content))
+                        {
+                            continue;
+                        }
+
+                        WriteCell(summarySheet, subSheet,tableNameDic, field, content, writer, ref indent);
                     }
 
-                    writer.Write($"{WriterUtil.GetIndent(indent)}}}");
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}}}");
+
+                    writer.WriteLine(string.Format(IOConst.LUA_SET_INDEX_FORMART, lineName, lineName));
+                    writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, lineName, IOConst.LUA_SHEET_LINE_META_NAME));
+
                     writer.WriteLine();
                 }
 
@@ -256,20 +251,21 @@ namespace Dot.Tools.ETD.IO
             }
         }
 
-        private static void WriteSubSheetComplexContent(SubSheetData subSheet,StreamWriter writer)
+        private static Dictionary<string, string> WriteSubSheetComplexContent(SubSheetData subSheet,StreamWriter writer)
         {
             int index = 1;
-            Dictionary<string, string> contentToTableNameDic = new Dictionary<string, string>();
+            Dictionary<string, string> tableNameDic = new Dictionary<string, string>();
             foreach(var kvp in subSheet.complexContentDic)
             {
                 AFieldData field = kvp.Key;
                 List<string> contents = kvp.Value;
                 for(int i =0;i<contents.Count;++i)
                 {
-                    string tName = string.Format(IOConst.LUA_TEMP_TABLE_NAME_FORMAT, index);
                     string content = contents[i];
-                    contentToTableNameDic.Add(contents[i], tName);
+                    string tName = string.Format(IOConst.LUA_TEMP_TABLE_NAME_FORMAT, index);
+                    tableNameDic.Add(content, tName);
                     index++;
+
                     if(field.Type == FieldType.Array)
                     {
                         ArrayFieldData arrayField = (ArrayFieldData)field;
@@ -323,9 +319,16 @@ namespace Dot.Tools.ETD.IO
                     }
                 }
             }
+            return tableNameDic;
         }
 
-        private static void WriteCell(SummarySheetData summarySheet,SubSheetData subSheet,AFieldData field,string content,StreamWriter writer,ref int indent)
+        private static void WriteCell(SummarySheetData summarySheet,
+            SubSheetData subSheet,
+            Dictionary<string, string> tableNameDic, 
+            AFieldData field,
+            string content,
+            StreamWriter writer,
+            ref int indent)
         {
             if(summarySheet.defalutDic.TryGetValue(field,out string dContent))
             {
@@ -334,9 +337,28 @@ namespace Dot.Tools.ETD.IO
                     return;
                 }
             }
+            if(tableNameDic.TryGetValue(content,out string tableName))
+            {
+                ++indent;
+                {
+                    writer.WriteLine($"{WriterUtil.GetIndent(indent)}{field.name} = {tableName},");
+                }
+                --indent;
+                return;
+            }
 
+            string keyName = field.name;
+            FieldType fType = field.Type;
 
+            if (FieldTypeUtil.IsStringType(fType))
+            {
+                keyName = string.Format(IOConst.LUA_FIELD_INDEX_FORMAT, keyName);
+                fType = FieldType.Int;
+                content = "" + (summarySheet.strList.IndexOf(content) + 1);
+            }
 
+            LuaWriterUtil.WriteContent(FieldType.String, keyName, fType, content, writer, ref indent);
+            writer.WriteLine(",");
         }
     }
 }

@@ -25,6 +25,17 @@ namespace Dot.Tools.ETD.IO
         public string OutputName { get => $"{summarySheet.bookName}_{summarySheet.sheet.name}_{index+1}"; }
         public string OutputFilePath { get => $"{summarySheet.outputDir}/{summarySheet.OutputName}/{OutputName}{IOConst.LUA_EXTERSION}"; }
 
+        public int[] GetLineIDs()
+        {
+            List<int> ids = new List<int>();
+            foreach(var line in lines)
+            {
+                string strID = summarySheet.sheet.GetLineIDByRow(line.row);
+                ids.Add(int.Parse(strID));
+            }
+            return ids.ToArray();
+        }
+
         internal void FindSubSheetComplexContent()
         {
             Sheet sheet = summarySheet.sheet;
@@ -69,9 +80,7 @@ namespace Dot.Tools.ETD.IO
         public Dictionary<AFieldData, string> defalutDic = new Dictionary<AFieldData, string>();
         public List<string> strList = new List<string>();
 
-        public List<string> luaFieldNames = new List<string>();
         public List<string> strFieldNames = new List<string>();
-        public List<string> textFieldNames = new List<string>();
              
         public List<SubSheetData> subSheets = new List<SubSheetData>();
 
@@ -110,24 +119,6 @@ namespace Dot.Tools.ETD.IO
                     }
                 }
                 return false;
-            }
-        }
-
-        private void FilterNames()
-        {
-            for (int f = 0; f < sheet.FieldCount; ++f)
-            {
-                AFieldData field = sheet.GetFieldByIndex(f);
-                if (field.Platform == FieldPlatform.All || field.Platform == platform)
-                {
-                    if(field.Type == FieldType.Lua)
-                    {
-                        luaFieldNames.Add(field.name);
-                    }else if(SheetConst.IsContainStringField(field))
-                    {
-                        strFieldNames.Add(field.name);
-                    }
-                }
             }
         }
 
@@ -225,17 +216,18 @@ namespace Dot.Tools.ETD.IO
             for (int i = 0; i < fields.Count; ++i)
             {
                 AFieldData field = fields[i];
-                if (SheetConst.IsContainStringField(field))
+                if (FieldTypeUtil.IsStringType(field.Type))
                 {
+                    strFieldNames.Add(field.name);
+
                     for (int j = 0; j < sheet.LineCount; ++j)
                     {
                         SheetLine line = sheet.GetLineByIndex(j);
                         LineCell cell = line.GetCellByCol(field.col);
-
-                        string[] values = GetStringCellContent(field, cell);
-                        if (values != null && values.Length > 0)
+                        string content = cell.GetContent(field);
+                        if (!string.IsNullOrEmpty(content))
                         {
-                            strList.AddRange(values);
+                            strList.Add(content);
                         }
                     }
                 }
@@ -243,46 +235,8 @@ namespace Dot.Tools.ETD.IO
             strList = strList.Distinct().ToList();
         }
 
-        private string[] GetStringCellContent(AFieldData field, LineCell cell)
-        {
-            List<string> contents = new List<string>();
-            string content = cell.GetContent(field);
-
-            if (FieldTypeUtil.IsStringType(field.Type))
-            {
-                contents.Add(content);
-            }
-            else if (field.Type == FieldType.Array)
-            {
-                ArrayFieldData arrayField = (ArrayFieldData)field;
-                if (FieldTypeUtil.IsStringType(arrayField.ValueType))
-                {
-                    string[] splitStr = content.Split(new char[] { '[', ',', ']' }, StringSplitOptions.RemoveEmptyEntries);
-                    contents.AddRange(splitStr);
-                }
-            }
-            if (field.Type == FieldType.Dic)
-            {
-                DicFieldData dicField = (DicFieldData)field;
-                if (FieldTypeUtil.IsStringType(dicField.ValueType))
-                {
-                    string[] splitStr = content.Split(new char[] { '[', ';', ']' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var str in splitStr)
-                    {
-                        string[] splitValue = str.Split(new char[] { '{', ',', '}' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (splitValue.Length == 2)
-                        {
-                            contents.Add(splitValue[1]);
-                        }
-                    }
-                }
-            }
-            return contents.ToArray();
-        }
-
         internal void Analyzer(int countForSub)
         {
-            FilterNames();
             SubSheet(countForSub);
             FindSheetDefault();
             FindSheetString();
