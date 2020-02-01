@@ -30,7 +30,7 @@ namespace Dot.Tools.ETD.IO
                     LuaWriter.WriteSheet(book.Name, sheet, outputDir,platform);
                 }else
                 {
-                    SummarySheetData summarySheet = OptimizeLuaAnalyzer.OptimizeSheet(book.Name, outputDir,sheet, 3, platform);
+                    SummarySheetData summarySheet = OptimizeLuaAnalyzer.OptimizeSheet(book.Name, outputDir,sheet, 300, platform);
                     WriteSummarySheet(summarySheet);
                 }
             }
@@ -196,7 +196,7 @@ namespace Dot.Tools.ETD.IO
 
                 writer.WriteLine($"{string.Format(IOConst.LUA_LOCAL_DEFINE_FORMAT, name)}");
                 writer.WriteLine(string.Format(IOConst.LUA_SET_INDEX_FORMART, name, name));
-                writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, name, IOConst.LUA_SUB_SHEET_META_NAME));
+                //writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, name, IOConst.LUA_SUB_SHEET_META_NAME));
 
                 writer.Write($"{name}.ids = {{");
                 foreach (var id in subSheet.GetLineIDs())
@@ -239,7 +239,7 @@ namespace Dot.Tools.ETD.IO
                     writer.WriteLine($"{WriterUtil.GetIndent(indent)}}}");
 
                     writer.WriteLine(string.Format(IOConst.LUA_SET_INDEX_FORMART, lineName, lineName));
-                    writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, lineName, IOConst.LUA_SHEET_LINE_META_NAME));
+                    //writer.WriteLine(string.Format(IOConst.LUA_SET_METATABLE_FORMAT, lineName, IOConst.LUA_SHEET_LINE_META_NAME));
 
                     writer.WriteLine();
                 }

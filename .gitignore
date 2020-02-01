@@ -4,6 +4,7 @@
 bin/
 obj/
 temp/
+LuaProj/.metadata/
 
 # Office »º´æÎÄ¼þ
 ~'$'*.docx

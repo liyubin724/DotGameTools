@@ -1,107 +1,105 @@
-local getData = function(t,dataId)
-  if not t or type(t) ~= "table" or not dataId or type(dataId) ~= "number" then
+require ("Dot/Config/ConfigConst")
+require("Dot/Config/ConfigSubSheet")
+
+local rawget = rawget
+local rawset = rawset
+local setmetatable = setmetatable
+
+ConfigSummarySheet = {}
+
+----private----
+--
+--@param subSheet
+--@return 
+function ConfigSummarySheet:GetOrLoadSubSheet(subSheet)
+  if not self or type(self) ~= "table" or not subSheet or type(subSheet) ~= "table" then
+    return nil
+  end
+  
+  local subSheetData = subSheet[ConfigConst.SUBSHEET_DATA_NAME]
+  if not subSheetData then 
+    subSheetData = require(subSheet[ConfigConst.SUBSHEET_PATH_NAME])
+    rawset(subSheet,ConfigConst.SUBSHEET_DATA_NAME,subSheetData)
+    
+    setmetatable(subSheetData,ConfigSubSheet)
+    
+    local depends = rawget(self,ConfigConst.DEPENDS_NAME)
+    subSheetData:SetDepend(depends)
+    
+  end
+  
+  return subSheetData
+end
+
+
+----public----
+--
+--@param dataId
+--@return t
+function ConfigSummarySheet:GetData(dataId)
+  if not self or type(self) ~= "table" or not dataId or type(dataId) ~= "number" then
     return nil
   end
 
-  local subSheets = t.subSheets
-  if not subSheets then
+  local subSheets = rawget(self,ConfigConst.SUBSHEET_NAME)
+  if not subSheets or #(subSheets) == 0 then
     return nil
   end
 
   for index = 1, #subSheets do
     local subSheet = subSheets[index]
-    local startId = subSheet.startID
-    local endId = subSheet.endID
+    local startId = subSheet[ConfigConst.SUBSHEET_STARTID_NAME]
+    local endId = subSheet[ConfigConst.SUBSHEET_ENDID_NAME]
 
-    if dataId>=startId and dataId<=endId then
-      local data = subSheet.data
-      if not data then
-        data = require(subSheet.path)
-        subSheet.data = data
-      end
-
+    if dataId >= startId and dataId <= endId then
+      local data = self:GetOrLoadSubSheet(subSheet)
       if not data then
         return nil
       end
 
-      return data[dataId]
+      return data:GetDataById(dataId)
     end
   end
 
   return nil
 end
 
-local getText = function(t,textId)
-  if not t or type(t) ~= "table" or not textId or type(textId) ~= "number" then
+function ConfigSummarySheet:GetAllId()
+  if not self or type(self) ~= "table" then
+    return nil
+  end
+  
+  local allId = rawget(self,ConfigConst.ALL_ID_NAME)
+  if allId then
+    return allId
+  end
+
+  local subSheets = rawget(self,ConfigConst.SUBSHEET_NAME)
+  if not subSheets or #(subSheets) == 0 then
     return nil
   end
 
-  local depends = t.depends
-  if not depends then
-    return nil
-  end
-
-  local text = depends.text
-  if not text then
-    return nil
-  end
-
-  return text[textId].zh
-end
-
-local getIds = function(t)
-  if not t or type(t) ~= "table" then
-    return nil
-  end
-
-  local subSheets = t.subSheets
-  if not subSheets then
-    return nil
-  end
-
-  local allIds = {}
+  allId = {}
 
   for index = 1, #subSheets do
     local subSheet = subSheets[index]
-    local data = subSheet.data
-    if not data then
-      data = require(subSheet.path)
-      subSheet.data = data
-    end
+    local data = self:GetOrLoadSubSheet(subSheet)
 
     if data then
-      local ids = data.ids
+      local ids = rawget(data,ConfigConst.ALL_ID_NAME)
       if ids then
         for k = 1, #ids do
-          table.insert(allIds, ids[k])
+          table.insert(allId, ids[k])
         end
       end
     end
   end
 
-  if #(allIds) > 50 then
-    error("You can't call getIDs because of the count is too large")
-  end
-
-  return allIds
+  return allId
 end
 
-
-ConfigSummarySheet = {
-  GetData = getData,
-  GetText = getText,
-  GetIds = getIds,
-}
-
-ConfigSummarySheet.__index = function(t,k)
-  local value = ConfigSummarySheet[k]
-  if value then
-    return value
-  end
-end
-
+ConfigSummarySheet.__index = ConfigSummarySheet
 ConfigSummarySheet.__newindex = function(t,k,v)
   error("Read only,so you can't add new key for it")
 end
-
 ConfigSummarySheet.__metatable = "locked"

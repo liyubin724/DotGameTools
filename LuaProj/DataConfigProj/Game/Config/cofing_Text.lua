@@ -1,3 +1,5 @@
+require("Dot/Config/ConfigTextSheet")
+
 local cofing_Text = {
     [1] = {
         ID = 1,
@@ -10,4 +12,5 @@ local cofing_Text = {
         en = [[Yesterday]],
     },
 }
+setmetatable(cofing_Text,ConfigTextSheet)
 return cofing_Text
