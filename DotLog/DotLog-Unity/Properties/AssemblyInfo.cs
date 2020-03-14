@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Snappy")]
+[assembly: AssemblyTitle("DotLog-Unity")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Snappy")]
+[assembly: AssemblyProduct("DotLog-Unity")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("23afed69-2969-4f9f-9724-3a561cf26efc")]
+[assembly: Guid("a954c8d3-001b-4acb-b30d-ac796527d557")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

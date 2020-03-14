@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotLog
+namespace Dot.Log
 {
-    public class Class1
+    public static class LogUtil
     {
     }
 }

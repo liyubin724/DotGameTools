@@ -7,7 +7,7 @@
     <ProjectGuid>{56689479-66E1-435D-959D-4C09B99787BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dot</RootNamespace>
+    <RootNamespace>Dot.Net</RootNamespace>
     <AssemblyName>DotNet</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotCrypto">
+      <HintPath>..\..\DotLibs\DotCrypto.dll</HintPath>
+    </Reference>
+    <Reference Include="DotSnappy">
+      <HintPath>..\..\DotLibs\DotSnappy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,29 +47,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Crypto\AESCrypto.cs" />
-    <Compile Include="Crypto\CryptoHelper.cs" />
-    <Compile Include="Crypto\DESCrypto.cs" />
-    <Compile Include="Crypto\MD5Crypto.cs" />
-    <Compile Include="Net\Client\ClientNet.cs" />
-    <Compile Include="Net\Client\ClientNetConst.cs" />
-    <Compile Include="Net\Client\ClientNetSession.cs" />
-    <Compile Include="Net\Client\Receiver\ClientNetDataReceiver.cs" />
-    <Compile Include="Net\Message\Compressor\SnappyMessageCompressor.cs" />
-    <Compile Include="Net\Message\Crypto\AESMessageCrypto.cs" />
-    <Compile Include="Net\Message\IMessageCompressor.cs" />
-    <Compile Include="Net\Message\IMessageCrypto.cs" />
-    <Compile Include="Net\Message\IMessageWriter.cs" />
-    <Compile Include="Net\Message\MessageConst.cs" />
-    <Compile Include="Net\Message\Writer\AMessageWriter.cs" />
-    <Compile Include="Net\Message\Writer\JsonMessageWriter.cs" />
-    <Compile Include="Net\NetManager.cs" />
+    <Compile Include="Client\ClientNet.cs" />
+    <Compile Include="Client\ClientNetConst.cs" />
+    <Compile Include="Client\ClientNetSession.cs" />
+    <Compile Include="Client\Receiver\ClientNetDataReceiver.cs" />
+    <Compile Include="Message\Compressor\SnappyMessageCompressor.cs" />
+    <Compile Include="Message\Crypto\AESMessageCrypto.cs" />
+    <Compile Include="Message\IMessageCompressor.cs" />
+    <Compile Include="Message\IMessageCrypto.cs" />
+    <Compile Include="Message\IMessageWriter.cs" />
+    <Compile Include="Message\MessageConst.cs" />
+    <Compile Include="Message\Writer\AMessageWriter.cs" />
+    <Compile Include="Message\Writer\JsonMessageWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Net\Stream\BufferStream.cs" />
-    <Compile Include="Net\Stream\MemoryStreamEx.cs" />
+    <Compile Include="Stream\BufferStream.cs" />
+    <Compile Include="Stream\MemoryStreamEx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Net\Server\" />
+    <Folder Include="Server\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
