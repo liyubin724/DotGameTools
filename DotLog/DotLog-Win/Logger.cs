@@ -7,12 +7,12 @@ using ILog4NetLog = log4net.ILog;
 
 namespace Dot.Log
 {
-    public class Log4NetLogger : IDotLog
+    public class Logger : IDotLog
     {
         private static string DEFAULT_LOGGER_NAME = "Log";
         private bool isInited = false;
 
-        public Log4NetLogger()
+        public Logger()
         {
         }
 
@@ -163,7 +163,7 @@ namespace Dot.Log
 
         public void LogInfo(string tagName, string msg)
         {
-            GetLogger(tagName).Info(msg);
+            GetLogger(tagName)?.Info(msg);
         }
 
         public void LogInfoFormat(string msgFormat, params object[] args)
@@ -178,7 +178,7 @@ namespace Dot.Log
 
         public void LogInfoFormat(string tagName, string msgFormat, params object[] args)
         {
-            GetLogger(tagName).InfoFormat(msgFormat, args);
+            GetLogger(tagName)?.InfoFormat(msgFormat, args);
         }
 
         public void LogWarning(string msg)
@@ -193,7 +193,7 @@ namespace Dot.Log
 
         public void LogWarning(string tagName, string msg)
         {
-            GetLogger(tagName).Warn(msg);
+            GetLogger(tagName)?.Warn(msg);
         }
 
         public void LogWarningFormat(string msgFormat, params object[] args)
@@ -208,7 +208,7 @@ namespace Dot.Log
 
         public void LogWarningFormat(string tagName, string msgFormat, params object[] args)
         {
-            GetLogger(tagName).WarnFormat(msgFormat, args);
+            GetLogger(tagName)?.WarnFormat(msgFormat, args);
         }
 
         private ILog4NetLog GetLogger(string loggerName)
