@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Protobuf", "Google.Protobuf\Google.Protobuf.csproj", "{A5E26069-834B-4A0E-9F69-0B112E0C4B27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressBook", "AddressBook\AddressBook.csproj", "{6A698463-722B-4FFD-9B40-2FDD81EAD9ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5E26069-834B-4A0E-9F69-0B112E0C4B27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E26069-834B-4A0E-9F69-0B112E0C4B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E26069-834B-4A0E-9F69-0B112E0C4B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5E26069-834B-4A0E-9F69-0B112E0C4B27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A698463-722B-4FFD-9B40-2FDD81EAD9ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A698463-722B-4FFD-9B40-2FDD81EAD9ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A698463-722B-4FFD-9B40-2FDD81EAD9ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A698463-722B-4FFD-9B40-2FDD81EAD9ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {629DF4E2-49E3-4A27-8FE9-415C137BD290}
+	EndGlobalSection
+EndGlobal
