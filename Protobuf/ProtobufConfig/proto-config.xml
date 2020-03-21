@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protos namespace = "Game.Net.Proto">
+
+    <c2s name = "C2SProto">
+        <message_group name = "Login">
+            <message name = "C2S_LOGIN" value = "10001" comment = "登录信息" class = "LoginRequest" enable = "true"/>
+        </message_group>
+        <message_group name = "Shop">
+            <message name = "C2S_SHOP_LIST" value = "10002" comment = "获取商店物品列表" class = "ShopListRequest" enable = "true"/>
+        </message_group>
+    </c2s>
+
+    <s2c name = "S2CProto">
+        <message_group name = "Login">
+            <message name = "S2C_LOGIN" value = "1" comment = "返回登录结果" class = "LoginResponse" enable = "true"/>
+        </message_group>
+        <message_group name = "Shop">
+            <message name = "S2C_SHOP_LIST" value = "2" comment = "返回商店物品列表" class = "ShopListResponse" enable = "true"/>
+        </message_group>
+    </s2c>
+
+</protos>
