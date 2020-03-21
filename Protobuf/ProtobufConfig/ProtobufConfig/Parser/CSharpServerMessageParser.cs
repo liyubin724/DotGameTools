@@ -70,7 +70,7 @@ namespace Dot.Tool.Proto
 
         private static void BeginWriteMessageParser(ref int indent, TextWriter writer, ProtoMessage message)
         {
-            writer.WriteLine($"{GetIndent(indent)}private static object Parse_{message.ClassName}(int netID,int messageID,byte[] msgBytes)");
+            writer.WriteLine($"{GetIndent(indent)}private static object Parse_{message.ClassName}(int messageID,byte[] msgBytes)");
             writer.WriteLine($"{GetIndent(indent)}{{");
             ++indent;
         }
@@ -83,7 +83,7 @@ namespace Dot.Tool.Proto
 
         private static void WriterRegisteMessage(ref int indent, TextWriter writer, ProtoGroup protoGroup, ProtoMessage message)
         {
-            writer.WriteLine($"{GetIndent(indent)}serverNetListener.RegisterParser({protoGroup.Name}.{message.Name},Parse_{message.ClassName});");
+            writer.WriteLine($"{GetIndent(indent)}serverNetListener.RegisterMessageParser({protoGroup.Name}.{message.Name},Parse_{message.ClassName});");
         }
 
         private static void BeginWriteRegister(ref int indent, TextWriter writer)

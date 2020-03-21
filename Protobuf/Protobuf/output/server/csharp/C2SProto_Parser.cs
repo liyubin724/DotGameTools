@@ -13,8 +13,8 @@ namespace Game.Net.Proto
     {
         public static void RegisterParser(Dot.Net.Server.ServerNetListener serverNetListener)
         {
-            serverNetListener.RegisterParser(C2SProto.C2S_LOGIN,Parse_LoginRequest);
-            serverNetListener.RegisterParser(C2SProto.C2S_SHOP_LIST,Parse_ShopListRequest);
+            serverNetListener.RegisterMessageParser(C2SProto.C2S_LOGIN,Parse_LoginRequest);
+            serverNetListener.RegisterMessageParser(C2SProto.C2S_SHOP_LIST,Parse_ShopListRequest);
         }
 
         private static object Parse_LoginRequest(int netID,int messageID,byte[] msgBytes)

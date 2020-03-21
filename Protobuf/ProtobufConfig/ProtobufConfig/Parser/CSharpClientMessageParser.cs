@@ -83,7 +83,7 @@ namespace Dot.Tool.Proto
 
         private static void WriterRegisteMessage(ref int indent,TextWriter writer,ProtoGroup protoGroup,ProtoMessage message)
         {
-            writer.WriteLine($"{GetIndent(indent)}clientNet.RegisterParser({protoGroup.Name}.{message.Name},Parse_{message.ClassName});");
+            writer.WriteLine($"{GetIndent(indent)}clientNet.RegisterMessageParser({protoGroup.Name}.{message.Name},Parse_{message.ClassName});");
         }
 
         private static void BeginWriteRegister(ref int indent,TextWriter writer)
